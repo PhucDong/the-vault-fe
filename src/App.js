@@ -1,58 +1,44 @@
-import React from 'react';
-import logo from './logo.svg';
-import { Counter } from './features/counter/Counter';
-import './App.css';
+import {
+  createBrowserRouter,
+  createRoutesFromElements,
+  Route,
+  RouterProvider,
+} from "react-router-dom";
+import RootLayout from "./layouts/RootLayout";
+import GuestHomePage from "./pages/GuestHomePage";
+import UserHomePage from "./pages/UserHomePage";
+import DetailedTVShowInfoPage from "./pages/DetailedTVShowInfoPage";
+import ScrollToTopLayout from "./layouts/ScrollToTopLayout";
+import SearchResultsPageLayout from "./layouts/SearchResultsPageLayout";
+import SearchBarResultsPage from "./pages/SearchBarResultsPage";
+import TVShowGenreResultsPage from "./pages/TVShowGenreResultsPage";
+
+const router = createBrowserRouter(
+  createRoutesFromElements(
+    <Route element={<ScrollToTopLayout />}>
+      <Route path="/" element={<RootLayout />}>
+        <Route index element={<GuestHomePage />} />
+        <Route path="browse" element={<UserHomePage />} />
+        <Route
+          path="browse/tVShows/:tVShowIdParam"
+          element={<DetailedTVShowInfoPage />}
+        />
+
+        <Route path="search" element={<SearchResultsPageLayout />}>
+          <Route path="tVShows" element={<SearchBarResultsPage />} />
+          <Route
+            path="tVShowGenres/:tVShowGenreIdParam"
+            element={<TVShowGenreResultsPage />}
+          />
+        </Route>
+        <Route path="detailed" element={<DetailedTVShowInfoPage />} />
+      </Route>
+    </Route>
+  )
+);
 
 function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <Counter />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <span>
-          <span>Learn </span>
-          <a
-            className="App-link"
-            href="https://reactjs.org/"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            React
-          </a>
-          <span>, </span>
-          <a
-            className="App-link"
-            href="https://redux.js.org/"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Redux
-          </a>
-          <span>, </span>
-          <a
-            className="App-link"
-            href="https://redux-toolkit.js.org/"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Redux Toolkit
-          </a>
-          ,<span> and </span>
-          <a
-            className="App-link"
-            href="https://react-redux.js.org/"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            React Redux
-          </a>
-        </span>
-      </header>
-    </div>
-  );
+  return <RouterProvider router={router} />;
 }
 
 export default App;
