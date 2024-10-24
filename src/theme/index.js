@@ -3,6 +3,7 @@ import { CssBaseline, ThemeProvider as MUIThemeProvider } from "@mui/material";
 
 const primary = {
   main: "#111111",
+  light: "#616060",
 };
 
 const secondary = {
@@ -24,6 +25,9 @@ const theme = createTheme({
     success: success,
     error: error,
     info: info,
+  },
+  typography: {
+    fontFamily: "Noto Sans, sans-serif",
   },
   components: {
     MuiCssBaseline: {

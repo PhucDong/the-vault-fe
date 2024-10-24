@@ -1,0 +1,214 @@
+{
+  "animeCategoryList": [
+    {
+      "heading": "Trending Now",
+      "category": "trending",
+      "animeList": [
+        {
+          "title": "Jujutsu Kaisen",
+          "description": "bla bla bla bla",
+          "episodeDuration": 24,
+          "airedDate": "10 Oct 2020"
+        },
+        {
+          "title": "Naruto",
+          "description": "bla bla bla bla",
+          "episodeDuration": 24,
+          "airedDate": "5 Jun 2010"
+        },
+        {
+          "title": "One Punch Man",
+          "description": "bla bla bla bla",
+          "episodeDuration": 24,
+          "airedDate": "15 Jul 2018"
+        },
+        {
+          "title": "Love in the air",
+          "description": "bla bla bla bla",
+          "episodeDuration": 24,
+          "airedDate": "10 Oct 2020"
+        },
+        {
+          "title": "Prison School",
+          "description": "bla bla bla bla",
+          "episodeDuration": 24,
+          "airedDate": "10 Oct 2002"
+        },
+        {
+          "title": "Highschool of the dead",
+          "description": "bla bla bla bla",
+          "episodeDuration": 24,
+          "airedDate": "1 May 2016"
+        }
+      ]
+    },
+    {
+      "heading": "Popular This Season",
+      "category": "this-season",
+      "animeList": [
+        {
+          "title": "Jujutsu Kaisen",
+          "description": "bla bla bla bla",
+          "episodeDuration": 24,
+          "airedDate": "10 Oct 2020"
+        },
+        {
+          "title": "Naruto",
+          "description": "bla bla bla bla",
+          "episodeDuration": 24,
+          "airedDate": "5 Jun 2010"
+        },
+        {
+          "title": "One Punch Man",
+          "description": "bla bla bla bla",
+          "episodeDuration": 24,
+          "airedDate": "15 Jul 2018"
+        },
+        {
+          "title": "Love in the air",
+          "description": "bla bla bla bla",
+          "episodeDuration": 24,
+          "airedDate": "10 Oct 2020"
+        },
+        {
+          "title": "Prison School",
+          "description": "bla bla bla bla",
+          "episodeDuration": 24,
+          "airedDate": "10 Oct 2002"
+        },
+        {
+          "title": "Highschool of the dead",
+          "description": "bla bla bla bla",
+          "episodeDuration": 24,
+          "airedDate": "1 May 2016"
+        }
+      ]
+    },
+    {
+      "heading": "Upcoming Next Season",
+      "category": "next-season",
+      "animeList": [
+        {
+          "title": "Jujutsu Kaisen",
+          "description": "bla bla bla bla",
+          "episodeDuration": 24,
+          "airedDate": "10 Oct 2020"
+        },
+        {
+          "title": "Naruto",
+          "description": "bla bla bla bla",
+          "episodeDuration": 24,
+          "airedDate": "5 Jun 2010"
+        },
+        {
+          "title": "One Punch Man",
+          "description": "bla bla bla bla",
+          "episodeDuration": 24,
+          "airedDate": "15 Jul 2018"
+        },
+        {
+          "title": "Love in the air",
+          "description": "bla bla bla bla",
+          "episodeDuration": 24,
+          "airedDate": "10 Oct 2020"
+        },
+        {
+          "title": "Prison School",
+          "description": "bla bla bla bla",
+          "episodeDuration": 24,
+          "airedDate": "10 Oct 2002"
+        },
+        {
+          "title": "Highschool of the dead",
+          "description": "bla bla bla bla",
+          "episodeDuration": 24,
+          "airedDate": "1 May 2016"
+        }
+      ]
+    },
+    {
+      "heading": "All Time Popular",
+      "category": "popular",
+      "animeList": [
+        {
+          "title": "Jujutsu Kaisen",
+          "description": "bla bla bla bla",
+          "episodeDuration": 24,
+          "airedDate": "10 Oct 2020"
+        },
+        {
+          "title": "Naruto",
+          "description": "bla bla bla bla",
+          "episodeDuration": 24,
+          "airedDate": "5 Jun 2010"
+        },
+        {
+          "title": "One Punch Man",
+          "description": "bla bla bla bla",
+          "episodeDuration": 24,
+          "airedDate": "15 Jul 2018"
+        },
+        {
+          "title": "Love in the air",
+          "description": "bla bla bla bla",
+          "episodeDuration": 24,
+          "airedDate": "10 Oct 2020"
+        },
+        {
+          "title": "Prison School",
+          "description": "bla bla bla bla",
+          "episodeDuration": 24,
+          "airedDate": "10 Oct 2002"
+        },
+        {
+          "title": "Highschool of the dead",
+          "description": "bla bla bla bla",
+          "episodeDuration": 24,
+          "airedDate": "1 May 2016"
+        }
+      ]
+    },
+    {
+      "heading": "Top 100 Animes",
+      "category": "top-100-animes",
+      "animeList": [
+        {
+          "title": "Jujutsu Kaisen",
+          "description": "bla bla bla bla",
+          "episodeDuration": 24,
+          "airedDate": "10 Oct 2020"
+        },
+        {
+          "title": "Naruto",
+          "description": "bla bla bla bla",
+          "episodeDuration": 24,
+          "airedDate": "5 Jun 2010"
+        },
+        {
+          "title": "One Punch Man",
+          "description": "bla bla bla bla",
+          "episodeDuration": 24,
+          "airedDate": "15 Jul 2018"
+        },
+        {
+          "title": "Love in the air",
+          "description": "bla bla bla bla",
+          "episodeDuration": 24,
+          "airedDate": "10 Oct 2020"
+        },
+        {
+          "title": "Prison School",
+          "description": "bla bla bla bla",
+          "episodeDuration": 24,
+          "airedDate": "10 Oct 2002"
+        },
+        {
+          "title": "Highschool of the dead",
+          "description": "bla bla bla bla",
+          "episodeDuration": 24,
+          "airedDate": "1 May 2016"
+        }
+      ]
+    }
+  ]
+}
