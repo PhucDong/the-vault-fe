@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useRef, useState } from "react";
 import KeyboardArrowRightIcon from "@mui/icons-material/KeyboardArrowRight";
 import {
   Box,
@@ -7,26 +7,40 @@ import {
   MenuItem,
   TextField,
 } from "@mui/material";
-import { useLocation, useNavigate, useParams } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 
 function BrowseCategory() {
   const location = useLocation();
-  const { categoryName } = useParams();
-  const [browseCategory, setBrowseCategory] = useState(
-    "Anime"
-    //   () => {
-    //   if (location.pathname.indexOf("/animes") > -1) {
-    //     return "Anime";
-    //   } else if (location.pathname.indexOf("/mangas") > -1) {
-    //     return "Manga";
-    //   } else {
-    //     return "";
-    //   }
-    // }
-  );
+  const [browseCategory, setBrowseCategory] = useState(() => {
+    if (
+      location.pathname === "/" ||
+      location.pathname.indexOf("/animes") > -1
+    ) {
+      localStorage.clear();
+      return "Anime";
+    } else if (location.pathname.indexOf("/mangas") > -1) {
+      localStorage.clear();
+      return "Manga";
+    } else {
+      if (localStorage.getItem("category")) {
+        return localStorage.getItem("category");
+      } else {
+        return "Anime";
+      }
+    }
+  });
   const navigate = useNavigate();
+  const browseCategoryRef = useRef("Anime");
 
   const handleChangeBrowseCategory = (event) => {
+    localStorage.setItem("category", event.target.value);
+    browseCategoryRef.current = event.target.value;
+
+    if (event.target.value === "Manga") {
+      navigate("mangas");
+    } else if (event.target.value === "Anime") {
+      navigate("animes");
+    }
     setBrowseCategory(event.target.value);
   };
 
@@ -40,12 +54,6 @@ function BrowseCategory() {
   const handleCloseBrowseCategoryDropdownMenu = () => {
     setOpenBrowseCategoryDropdownMenu(false);
   };
-
-  useEffect(() => {
-    if (browseCategory === "Manga") {
-      navigate("mangas");
-    }
-  }, [browseCategory, navigate]);
 
   return (
     <Box
