@@ -22,7 +22,7 @@ function AnimeListByCategoryPage() {
 
       return filteredAnimeCategory;
     } else {
-      throw new Error("Category doesn't exist");
+      throw new Error(`Category ${categoryName} doesn't exist`);
     }
   }, [categoryName, animeCategoryList]);
 
@@ -42,13 +42,3 @@ function AnimeListByCategoryPage() {
 }
 
 export default AnimeListByCategoryPage;
-
-// export const animeCategoryListLoader = async () => {
-//   const response = await fetch("http://localhost:4000/animeCategoryList");
-
-//   if (!response.ok) {
-//     throw new Error("Failed to fetch anime category list");
-//   }
-
-//   return response.json();
-// };
