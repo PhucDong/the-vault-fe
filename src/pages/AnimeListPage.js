@@ -6,8 +6,6 @@ function AnimeListPage() {
   const animeCategoryList = useLoaderData();
   const location = useLocation();
 
-  console.log("Anime list page!");
-
   return (
     <Box
       sx={{
