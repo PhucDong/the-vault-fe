@@ -13,6 +13,7 @@ import AnimeListByCategoryPage from "./pages/AnimeListByCategoryPage";
 import AnimeListPage, { animeCategoryListLoader } from "./pages/AnimeListPage";
 import MangaListPage, { mangaCategoryListLoader } from "./pages/MangaListPage";
 import CustomItemListLayout from "./layouts/CustomItemListLayout";
+import MangaListByCategoryPage from "./pages/MangaListByCategoryPage";
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -40,6 +41,12 @@ const router = createBrowserRouter(
           <Route
             index
             element={<MangaListPage />}
+            loader={mangaCategoryListLoader}
+          />
+
+          <Route
+            path=":categoryName"
+            element={<MangaListByCategoryPage />}
             loader={mangaCategoryListLoader}
           />
         </Route>
