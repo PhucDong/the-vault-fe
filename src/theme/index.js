@@ -3,7 +3,8 @@ import { CssBaseline, ThemeProvider as MUIThemeProvider } from "@mui/material";
 
 const primary = {
   main: "#111111",
-  light: "#616060",
+  light: "#ababab",
+  dark: "#616060",
 };
 
 const secondary = {
