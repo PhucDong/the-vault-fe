@@ -7,13 +7,15 @@ import {
 import MainLayout from "./layouts/MainLayout";
 import ErrorPage from "./pages/ErrorPage";
 import VisitorPage from "./pages/VisitorPage";
-import LoginPage from "./pages/LoginPage";
+import LoginPage, { userAccountListLoader } from "./pages/LoginPage";
 import RegisterPage from "./pages/RegisterPage";
 import AnimeListByCategoryPage from "./pages/AnimeListByCategoryPage";
 import AnimeListPage, { animeCategoryListLoader } from "./pages/AnimeListPage";
 import MangaListPage, { mangaCategoryListLoader } from "./pages/MangaListPage";
 import CustomItemListLayout from "./layouts/CustomItemListLayout";
 import MangaListByCategoryPage from "./pages/MangaListByCategoryPage";
+import RegisterLogInLayout from "./layouts/RegisterLogInLayout";
+import HomePage from "./pages/HomePage";
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -23,9 +25,9 @@ const router = createBrowserRouter(
         element={<VisitorPage />}
         loader={animeCategoryListLoader}
       >
-        <Route path="animes" element={<CustomItemListLayout />}>
+        <Route element={<CustomItemListLayout />}>
           <Route
-            index
+            path="animes"
             element={<AnimeListPage />}
             loader={animeCategoryListLoader}
           />
@@ -37,9 +39,9 @@ const router = createBrowserRouter(
           />
         </Route>
 
-        <Route path="mangas" element={<CustomItemListLayout />}>
+        <Route element={<CustomItemListLayout />}>
           <Route
-            index
+            path="mangas"
             element={<MangaListPage />}
             loader={mangaCategoryListLoader}
           />
@@ -52,8 +54,20 @@ const router = createBrowserRouter(
         </Route>
       </Route>
 
-      <Route path="auth/login" element={<LoginPage />} />
-      <Route path="users" element={<RegisterPage />} />
+      <Route element={<RegisterLogInLayout />}>
+        <Route
+          path="auth/login"
+          element={<LoginPage />}
+          loader={userAccountListLoader}
+        />
+        <Route
+          path="users"
+          element={<RegisterPage />}
+          loader={userAccountListLoader}
+        />
+      </Route>
+
+      <Route path="/home" element={<HomePage />} />
 
       {/* Visitor Page */}
       {/* Browse category */}
