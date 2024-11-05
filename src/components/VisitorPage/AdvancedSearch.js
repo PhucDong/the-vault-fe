@@ -24,20 +24,20 @@ function AdvancedSearch() {
             : handleOpenAdvancedSearch
         }
         sx={{
-          marginTop: "16px",
-          
+          marginTop: { xs: "16px", md: "8px" },
           padding: 0,
           color: "primary.main",
           "& .MuiTypography-root": {
             textTransform: "capitalize",
+            fontSize: "1rem",
           },
           "& .MuiSvgIcon-root": {
-            fontSize: "1.875rem",
+            fontSize: "1.8rem",
             transform: openAdvancedSearch && "rotate(90deg)",
           },
         }}
       >
-        <Typography sx={{ marginRight: "4px" }}>Advanced Search</Typography>
+        <Typography>Advanced Search</Typography>
         <KeyboardArrowRightIcon />
       </Button>
 
