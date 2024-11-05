@@ -1,15 +1,20 @@
-import { Box } from "@mui/material";
+import { Box, useMediaQuery } from "@mui/material";
 import BrowseCategory from "./BrowseCategory";
 import SearchBar from "./SearchBar";
 
 function BrowseSection() {
+  const isTabletScreenWidthAndAbove = useMediaQuery((theme) =>
+    theme.breakpoints.up("md")
+  );
+
   return (
     <Box
       sx={{
-        padding: "0 22px",
+        marginTop: { sm: "32px", md: "52px", lg: "72px" },
+        marginBottom: { xs: "28px", md: "44px", lg: "56px" },
       }}
     >
-      <BrowseCategory />
+      {isTabletScreenWidthAndAbove ? null : <BrowseCategory />}
       <SearchBar />
     </Box>
   );
