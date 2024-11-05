@@ -6,23 +6,41 @@ function ProjectFeature(children) {
       sx={{
         display: "flex",
         justifyContent: "space-between",
-        alignItems: "flex-start",
-        gap: "10px",
+        flexDirection: { xs: "row", md: "column" },
+        alignItems: "center",
+        gap: { xs: "20px", md: "8px" },
         "& .MuiTypography-root": {
           color: "secondary.main",
+          textAlign: { xs: "left", md: "center" },
         },
-        "& .MuiSvgIcon-root": { fontSize: "2.85rem" },
+        "& .MuiSvgIcon-root": {
+          fontSize: { xs: "2.8rem", sm: "3.2rem", md: "3.4rem", lg: "3.6rem" },
+        },
       }}
     >
       {children.icon}
 
-      <Box>
+      <Box
+        sx={{
+          flex: 1,
+          display: { xs: "block", md: "flex" },
+          flexDirection: { md: "column" },
+        }}
+      >
         <Typography
-          sx={{ marginBottom: "4px", fontSize: "1.2rem", fontWeight: 600 }}
+          sx={{
+            marginBottom: { xs: "4px", md: "8px" },
+            fontSize: { xs: "1.2rem", md: "1.4rem", lg: "1.6rem" },
+            lineHeight: { xs: "100%", md: 1.25 },
+            fontWeight: 600,
+            flex: 1,
+          }}
         >
           {children.heading}
         </Typography>
-        <Typography sx={{ fontSize: "1rem", lineHeight: "1.25" }}>
+        <Typography
+          sx={{ fontSize: { xs: "1rem", lg: "1.2rem" }, lineHeight: "1.5" }}
+        >
           {children.body}
         </Typography>
       </Box>
