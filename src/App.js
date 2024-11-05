@@ -12,56 +12,51 @@ import RegisterPage from "./pages/RegisterPage";
 import AnimeListByCategoryPage from "./pages/AnimeListByCategoryPage";
 import AnimeListPage, { animeCategoryListLoader } from "./pages/AnimeListPage";
 import MangaListPage, { mangaCategoryListLoader } from "./pages/MangaListPage";
-import CustomItemListLayout from "./layouts/CustomItemListLayout";
 import MangaListByCategoryPage from "./pages/MangaListByCategoryPage";
 import RegisterLogInLayout from "./layouts/RegisterLogInLayout";
 import HomePage from "./pages/HomePage";
 
 const router = createBrowserRouter(
   createRoutesFromElements(
-    <Route path="/" element={<MainLayout />} errorElement={<ErrorPage />}>
+    <Route element={<MainLayout />} errorElement={<ErrorPage />}>
       <Route
         path="/"
         element={<VisitorPage />}
         loader={animeCategoryListLoader}
       >
-        <Route element={<CustomItemListLayout />}>
-          <Route
-            path="animes"
-            element={<AnimeListPage />}
-            loader={animeCategoryListLoader}
-          />
+        <Route
+          path="animes"
+          element={<AnimeListPage />}
+          loader={animeCategoryListLoader}
+        />
 
-          <Route
-            path=":categoryName"
-            element={<AnimeListByCategoryPage />}
-            loader={animeCategoryListLoader}
-          />
-        </Route>
+        <Route
+          path="animes/:categoryName"
+          element={<AnimeListByCategoryPage />}
+          loader={animeCategoryListLoader}
+        />
 
-        <Route element={<CustomItemListLayout />}>
-          <Route
-            path="mangas"
-            element={<MangaListPage />}
-            loader={mangaCategoryListLoader}
-          />
+        <Route
+          path="mangas"
+          element={<MangaListPage />}
+          loader={mangaCategoryListLoader}
+        />
 
-          <Route
-            path=":categoryName"
-            element={<MangaListByCategoryPage />}
-            loader={mangaCategoryListLoader}
-          />
-        </Route>
+        <Route
+          path="mangas/:categoryName"
+          element={<MangaListByCategoryPage />}
+          loader={mangaCategoryListLoader}
+        />
       </Route>
 
       <Route element={<RegisterLogInLayout />}>
         <Route
-          path="auth/login"
+          path="login"
           element={<LoginPage />}
           loader={userAccountListLoader}
         />
         <Route
-          path="users"
+          path="register"
           element={<RegisterPage />}
           loader={userAccountListLoader}
         />
