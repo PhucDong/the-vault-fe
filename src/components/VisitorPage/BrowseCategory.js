@@ -1,4 +1,4 @@
-import { useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import KeyboardArrowRightIcon from "@mui/icons-material/KeyboardArrowRight";
 import {
   Box,
@@ -12,13 +12,10 @@ import { useLocation, useNavigate } from "react-router-dom";
 function BrowseCategory() {
   const location = useLocation();
   const [browseCategory, setBrowseCategory] = useState(() => {
-    if (
-      location.pathname === "/" ||
-      location.pathname.indexOf("/animes") > -1
-    ) {
+    if (location.pathname === "/" || location.pathname.includes("/animes")) {
       localStorage.clear();
       return "Anime";
-    } else if (location.pathname.indexOf("/mangas") > -1) {
+    } else if (location.pathname.includes("/mangas")) {
       localStorage.clear();
       return "Manga";
     } else {
@@ -30,16 +27,14 @@ function BrowseCategory() {
     }
   });
   const navigate = useNavigate();
-  const browseCategoryRef = useRef("Anime");
 
   const handleChangeBrowseCategory = (event) => {
     localStorage.setItem("category", event.target.value);
-    browseCategoryRef.current = event.target.value;
 
     if (event.target.value === "Manga") {
-      navigate("mangas");
+      navigate("/mangas");
     } else if (event.target.value === "Anime") {
-      navigate("animes");
+      navigate("/animes");
     }
     setBrowseCategory(event.target.value);
   };
@@ -55,6 +50,12 @@ function BrowseCategory() {
     setOpenBrowseCategoryDropdownMenu(false);
   };
 
+  useEffect(() => {
+    if (location.pathname === "/" || location.pathname.includes("/animes"))
+      setBrowseCategory("Anime");
+    else if (location.pathname.includes("/mangas")) setBrowseCategory("Manga");
+  }, [location.pathname]);
+
   return (
     <Box
       sx={{
@@ -67,7 +68,12 @@ function BrowseCategory() {
       <InputLabel
         id="browse-label"
         className="section-label"
-        sx={{ color: "primary.main", fontWeight: 550, fontSize: "1.25rem" }}
+        sx={{
+          color: "primary.main",
+          fontWeight: 550,
+          fontSize: { xs: "1.4rem", sm: "1.6rem" },
+          lineHeight: "100%",
+        }}
       >
         Browse
       </InputLabel>
@@ -89,7 +95,6 @@ function BrowseCategory() {
             MenuProps: {
               PaperProps: {
                 sx: {
-                  padding: "8px 0",
                   boxShadow: "0 2px 4px 0 rgba(0, 0, 0, 0.2)",
                 },
               },
@@ -100,17 +105,22 @@ function BrowseCategory() {
                 "& .MuiMenu-list": {
                   padding: 0,
                   "& .MuiMenuItem-root": {
-                    padding: "12px 20px",
+                    padding: "16px",
                     minHeight: "100%",
                     "& .MuiCheckbox-root": {
                       padding: 0,
                     },
                     "& .MuiTypography-root": {
-                      fontSize: "1rem",
+                      fontSize: { xs: "1rem", sm: "1.2rem" },
                       fontWeight: 550,
                     },
                     "&.Mui-selected": {
                       color: "info.main",
+                      backgroundColor: "rgba(17, 17, 17, 0.08)",
+
+                      "&:hover": {
+                        backgroundColor: "rgba(17, 17, 17, 0.08)",
+                      },
                     },
                   },
                 },
@@ -133,7 +143,7 @@ function BrowseCategory() {
             "& .MuiOutlinedInput-notchedOutline": { border: "none" },
             "& .MuiInputBase-input": {
               "&.MuiOutlinedInput-input": {
-                fontSize: "1.2rem",
+                fontSize: { xs: "1.2rem", sm: "1.4rem" },
                 padding: 0,
                 minHeight: "100%",
                 height: "100%",
