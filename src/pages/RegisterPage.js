@@ -26,7 +26,7 @@ function RegisterPage() {
           "& a": { color: "primary.main", fontWeight: 600 },
         }}
       >
-        Already have an account? <NavLink to="/auth/login">Log in</NavLink>
+        Already have an account? <NavLink to="/login">Log in</NavLink>
       </Typography>
     </Box>
   );
