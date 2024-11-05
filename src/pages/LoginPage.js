@@ -26,7 +26,7 @@ function LoginPage() {
           "& a": { color: "primary.main", fontWeight: 600 },
         }}
       >
-        Don't have an account? <NavLink to="/users">Register</NavLink>
+        Don't have an account? <NavLink to="/register">Register</NavLink>
       </Typography>
     </Box>
   );
