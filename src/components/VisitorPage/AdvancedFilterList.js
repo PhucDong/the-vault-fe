@@ -21,7 +21,6 @@ const advancedFilterList = [
   },
   {
     filterName: "Year",
-    options: ["2025", "2024", "2023", "2022", "2021", "2020"],
   },
   {
     filterName: "Studios",
@@ -51,8 +50,11 @@ function AdvancedFilterList() {
     <Box
       sx={{
         display: "flex",
-        flexDirection: "column",
-        gap: "12px",
+        flexDirection: { xs: "column", sm: "row" },
+        justifyContent: { sm: "space-between" },
+        flexWrap: { sm: "wrap" },
+        gap: { xs: "12px", sm: 0 },
+        rowGap: { sm: "12px", md: "16px" },
         marginTop: "8px",
       }}
     >
