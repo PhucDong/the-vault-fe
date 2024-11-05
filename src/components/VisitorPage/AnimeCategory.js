@@ -1,4 +1,5 @@
 import { Box, Typography } from "@mui/material";
+// import Grid from "@mui/material/Grid2";
 import { Link, useLocation, useParams } from "react-router-dom";
 import AnimeItem from "./AnimeItem";
 
@@ -8,23 +9,25 @@ function AnimeCategory({ animeCategory }) {
 
   return (
     <Box>
+      {/* Header */}
       <Box
         sx={{
           display: "flex",
           justifyContent: "space-between",
           alignItems: "center",
-          marginBottom: "8px",
+          marginBottom: { xs: "8px", sm: "12px", lg: "16px" },
           "& .MuiTypography-root": {
-            fontSize: "1.125rem",
+            fontSize: { xs: "1.1rem", sm: "1.2rem" },
             fontWeight: 600,
             color: "primary.main",
+            textTransform: "uppercase",
           },
           "& a": {
             textDecoration: "none",
             color: "info.main",
             fontWeight: 550,
             lineHeight: "100%",
-            fontSize: "1.125rem",
+            fontSize: { xs: "1rem", sm: "1.125rem" },
           },
         }}
       >
@@ -42,12 +45,17 @@ function AnimeCategory({ animeCategory }) {
         )}
       </Box>
 
+      {/* Body */}
       <Box
         sx={{
-          display: "flex",
-          flexWrap: "wrap",
-          alignItems: "stretch",
-          gap: "12px 8px",
+          display: "grid",
+          gridTemplateColumns: {
+            xs: "repeat(3, 1fr)",
+            sm: "repeat(3, 1fr)",
+            md: "repeat(5, 1fr)",
+            lg: "repeat(6, 1fr)",
+          },
+          gap: { xs: "12px 8px", sm: "16px 12px" }, // Sets consistent gap between items
         }}
       >
         {animeCategory.animeList.map((anime, index) => (
