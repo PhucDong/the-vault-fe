@@ -9,10 +9,10 @@ function CustomStyledSearchButton({ children, onClick }) {
         backgroundColor: "info.main",
         color: "secondary.main",
         textTransform: "capitalize",
-        fontSize: "1.25rem",
+        fontSize: { xs: "1.25rem", md: "1.5rem" },
         lineHeight: "100%",
-        width: "100%",
-        height: "42px",
+        width: { xs: "100%", sm: "30%" },
+        height: { xs: "42px", sm: "46px", md: "50px" },
         borderRadius: "12px",
       }}
     >
