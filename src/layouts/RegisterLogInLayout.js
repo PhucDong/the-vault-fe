@@ -4,7 +4,15 @@ import { Outlet } from "react-router-dom";
 
 function RegisterLogInLayout() {
   return (
-    <Box sx={{ padding: "82px 22px 0 22px" }}>
+    <Box
+      sx={{
+        padding: { xs: "82px 22px", md: "40px 0" },
+        height: "100%",
+        display: { xs: "block", md: "flex" },
+        justifyContent: { md: "center" },
+        alignItems: { md: "center" },
+      }}
+    >
       <Outlet />
     </Box>
   );

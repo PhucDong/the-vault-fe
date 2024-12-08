@@ -1,11 +1,13 @@
 import { Box } from "@mui/material";
-import { Outlet } from "react-router-dom";
+import { Outlet, useLocation, useParams } from "react-router-dom";
 import MainHeader from "../components/common/MainHeader";
 import MainFooter from "../components/common/MainFooter";
 import { useState } from "react";
 
 function MainLayout() {
   const [navHeight, setNavHeight] = useState(0);
+  const location = useLocation();
+  const { animeId, mangaId } = useParams();
 
   return (
     <Box
@@ -22,10 +24,18 @@ function MainLayout() {
         sx={{
           flex: 1,
           marginTop: { xs: 0, md: `${navHeight}px` },
-          marginBottom: { xs: "52px", md: "60px", lg: "68px" },
+          marginBottom:
+            location.pathname.includes("register") ||
+            location.pathname.includes("login")
+              ? 0
+              : { xs: "52px", md: "60px", lg: "68px" },
           display: "flex",
           flexDirection: "column",
-          gap: { xs: "52px", md: "60px", lg: "68px" },
+          gap:
+            location.pathname.includes(animeId) ||
+            location.pathname.includes(mangaId)
+              ? 0
+              : { xs: "52px", md: "60px", lg: "68px" },
         }}
       >
         <Outlet />

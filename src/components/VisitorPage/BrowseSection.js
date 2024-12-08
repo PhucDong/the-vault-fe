@@ -3,7 +3,7 @@ import BrowseCategory from "./BrowseCategory";
 import SearchBar from "./SearchBar";
 
 function BrowseSection() {
-  const isTabletScreenWidthAndAbove = useMediaQuery((theme) =>
+  const isMediumScreenWidthAndAbove = useMediaQuery((theme) =>
     theme.breakpoints.up("md")
   );
 
@@ -14,7 +14,7 @@ function BrowseSection() {
         marginBottom: { xs: "28px", md: "44px", lg: "56px" },
       }}
     >
-      {isTabletScreenWidthAndAbove ? null : <BrowseCategory />}
+      {isMediumScreenWidthAndAbove ? null : <BrowseCategory />}
       <SearchBar />
     </Box>
   );

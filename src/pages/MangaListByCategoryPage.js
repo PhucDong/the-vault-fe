@@ -1,16 +1,17 @@
 import { Box } from "@mui/material";
-import AnimeCategory from "../components/VisitorPage/AnimeCategory";
+import AnimeCategory from "../components/VisitorPage/ItemCategory";
 import { useLoaderData, useParams } from "react-router-dom";
 import { useCallback } from "react";
 
 function MangaListByCategoryPage() {
   const { categoryName } = useParams();
-  const mangaCategoryList = useLoaderData();
+  // const mangaCategoryList = useLoaderData();
+  const mangaCategoryList = localStorage.getItem("mangaCategoryList");
 
   const getMangaCategoryList = useCallback(() => {
     const allowedMangaCategoryList = ["trending", "popular", "top-100-mangas"];
     if (categoryName && allowedMangaCategoryList.includes(categoryName)) {
-      const filteredAnimeCategory = mangaCategoryList.filter(
+      const filteredAnimeCategory = JSON.parse(mangaCategoryList).filter(
         (category) => category.category === categoryName
       );
 

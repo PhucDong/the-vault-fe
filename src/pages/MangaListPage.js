@@ -1,9 +1,35 @@
 import { Box } from "@mui/material";
-import AnimeCategory from "../components/VisitorPage/AnimeCategory";
+import ItemCategory from "../components/VisitorPage/ItemCategory";
 import { useLoaderData } from "react-router-dom";
 
+const mangaCategoryList = [
+  {
+    heading: "Trending Now",
+    category: "trending",
+    format: "manga",
+  },
+  {
+    heading: "All Time Popular",
+    category: "popular",
+  },
+  {
+    heading: "Top 100 Mangas",
+    category: "top-100-mangas",
+  },
+];
+
 function MangaListPage() {
-  const mangaCategoryList = useLoaderData();
+  const mangaList = useLoaderData();
+
+  mangaCategoryList.forEach((mangaCategory) => {
+    const filteredMangaList = mangaList.filter((anime) =>
+      anime.categoryList.includes(mangaCategory.category)
+    );
+
+    mangaCategory.animeList = filteredMangaList;
+  });
+
+  localStorage.setItem("mangaCategoryList", JSON.stringify(mangaCategoryList));
 
   return (
     <Box
@@ -13,8 +39,8 @@ function MangaListPage() {
         gap: { xs: "48px", md: "60px" },
       }}
     >
-      {mangaCategoryList.map((animeCategory, index) => (
-        <AnimeCategory key={index} animeCategory={animeCategory} />
+      {mangaCategoryList.map((mangaCategory, index) => (
+        <ItemCategory key={index} itemCategory={mangaCategory} />
       ))}
     </Box>
   );
@@ -22,11 +48,11 @@ function MangaListPage() {
 
 export default MangaListPage;
 
-export const mangaCategoryListLoader = async () => {
-  const response = await fetch("http://localhost:5000/mangaCategoryList");
+export const mangaListLoader = async () => {
+  const response = await fetch("http://localhost:3300/mangaList");
 
   if (!response.ok) {
-    throw new Error("Failed to fetch manga category list");
+    throw new Error("Failed to fetch manga list");
   }
 
   return response.json();

@@ -8,8 +8,8 @@ function MainFooter({ navHeight }) {
         padding: {
           xs: "32px 0",
           sm: "32px 0",
-          md: "32px 60px",
-          lg: "32px 140px",
+          md: "32px 152px",
+          lg: "32px 192px",
         },
         marginBottom: { xs: `${navHeight}px`, md: 0 },
         backgroundColor: "primary.main",

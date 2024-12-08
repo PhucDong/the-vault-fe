@@ -1,11 +1,10 @@
 import { Box, Typography } from "@mui/material";
 // import Grid from "@mui/material/Grid2";
-import { Link, useLocation, useParams } from "react-router-dom";
-import AnimeItem from "./AnimeItem";
+import { Link, useParams } from "react-router-dom";
+import ItemCard from "./ItemCard";
 
-function AnimeCategory({ animeCategory }) {
+function ItemCategory({ itemCategory }) {
   const { categoryName } = useParams();
-  const location = useLocation();
 
   return (
     <Box>
@@ -31,13 +30,14 @@ function AnimeCategory({ animeCategory }) {
           },
         }}
       >
-        <Typography>{animeCategory.heading}</Typography>
+        <Typography>{itemCategory.heading}</Typography>
+
         {!categoryName && (
           <Link
             to={
-              location.pathname === "/"
-                ? `animes/${animeCategory.category}`
-                : `${animeCategory.category}`
+              itemCategory.format === "anime"
+                ? `/search/animes/${itemCategory.category}`
+                : `/search/mangas/${itemCategory.category}`
             }
           >
             View All
@@ -58,12 +58,12 @@ function AnimeCategory({ animeCategory }) {
           gap: { xs: "12px 8px", sm: "16px 12px" }, // Sets consistent gap between items
         }}
       >
-        {animeCategory.animeList.map((anime, index) => (
-          <AnimeItem key={index} anime={anime} />
+        {itemCategory.animeList.map((anime, index) => (
+          <ItemCard key={index} item={anime} format={itemCategory.format} />
         ))}
       </Box>
     </Box>
   );
 }
 
-export default AnimeCategory;
+export default ItemCategory;

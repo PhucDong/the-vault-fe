@@ -1,11 +1,22 @@
 import { Box, Typography } from "@mui/material";
+import { useNavigate } from "react-router-dom";
 
-function AnimeItem({ anime }) {
+function ItemCard({ item, format }) {
+  const navigate = useNavigate();
+
   return (
     <Box
       sx={{
         width: "100%", // Takes full width of the Grid item
+        "&:hover": {
+          cursor: "pointer",
+        },
       }}
+      onClick={() =>
+        navigate(
+          format === "anime" ? `/animes/${item.id}` : `/mangas/${item.id}`
+        )
+      }
     >
       {/* Item image */}
       <Box
@@ -14,6 +25,7 @@ function AnimeItem({ anime }) {
           aspectRatio: "5 / 6.5", // Maintains a consistent aspect ratio
           backgroundColor: "#ABABAB",
           marginBottom: "6px",
+          borderRadius: "8px",
         }}
       ></Box>
 
@@ -28,11 +40,11 @@ function AnimeItem({ anime }) {
             textOverflow: "ellipsis", // Prevents long titles from breaking layout
           }}
         >
-          {anime.title}
+          {item.title}
         </Typography>
       </Box>
     </Box>
   );
 }
 
-export default AnimeItem;
+export default ItemCard;

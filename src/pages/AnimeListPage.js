@@ -1,9 +1,47 @@
 import { Box } from "@mui/material";
-import AnimeCategory from "../components/VisitorPage/AnimeCategory";
+import ItemCategory from "../components/VisitorPage/ItemCategory";
 import { useLoaderData } from "react-router-dom";
 
+const animeCategoryList = [
+  {
+    heading: "Trending Now",
+    category: "trending",
+    format: "anime",
+  },
+  {
+    heading: "Popular This Season",
+    category: "this-season",
+    format: "anime",
+  },
+  {
+    heading: "Upcoming Next Season",
+    category: "next-season",
+    format: "anime",
+  },
+  {
+    heading: "All Time Popular",
+    category: "popular",
+    format: "anime",
+  },
+  {
+    heading: "Top 100 Animes",
+    category: "top-100-animes",
+    format: "anime",
+  },
+];
+
 function AnimeListPage() {
-  const animeCategoryList = useLoaderData();
+  const animeList = useLoaderData();
+
+  animeCategoryList.forEach((animeCategory) => {
+    const filteredAnimeList = animeList.filter((anime) =>
+      anime.categoryList.includes(animeCategory.category)
+    );
+
+    animeCategory.animeList = filteredAnimeList;
+  });
+
+  localStorage.setItem("animeCategoryList", JSON.stringify(animeCategoryList));
 
   return (
     <Box
@@ -14,7 +52,7 @@ function AnimeListPage() {
       }}
     >
       {animeCategoryList.map((animeCategory, index) => (
-        <AnimeCategory key={index} animeCategory={animeCategory} />
+        <ItemCategory key={index} itemCategory={animeCategory} />
       ))}
     </Box>
   );
@@ -22,11 +60,11 @@ function AnimeListPage() {
 
 export default AnimeListPage;
 
-export const animeCategoryListLoader = async () => {
-  const response = await fetch("http://localhost:4000/animeCategoryList");
+export const animeListLoader = async () => {
+  const response = await fetch("http://localhost:3200/animeList");
 
   if (!response.ok) {
-    throw new Error("Failed to fetch anime category list");
+    throw new Error("Failed to fetch anime list");
   }
 
   return response.json();

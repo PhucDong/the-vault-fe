@@ -21,7 +21,7 @@ function MainHeader({ setNavHeight }) {
     else if (location.pathname === "/login") return 4;
   });
 
-  const isTabletScreenWidthAndAbove = useMediaQuery((theme) =>
+  const isMediumScreenWidthAndAbove = useMediaQuery((theme) =>
     theme.breakpoints.up("md")
   );
   const navigate = useNavigate();
@@ -47,10 +47,10 @@ function MainHeader({ setNavHeight }) {
       sx={{
         gap: { xs: "8px", md: 0 },
         padding: {
-          xs: "8px 0",
-          sm: "12px 0",
-          md: "16px 60px",
-          lg: "24px 80px",
+          xs: "8px 32px",
+          sm: "12px 56px",
+          md: "16px 152px",
+          lg: "24px 192px",
         },
         maxHeight: "unset", // Remove any max height restriction
         height: "auto", // Allow height to wrap around content
@@ -89,15 +89,15 @@ function MainHeader({ setNavHeight }) {
         "& .top-brand-logo": { marginRight: { md: "140px", lg: "160px" } },
         "& .top-brand-logo .MuiBottomNavigationAction-label": {
           fontSize: { md: "2rem", lg: "2.1rem" },
-          color: "primary.main",
+          color: { md: "primary.main" },
         },
       }}
     >
       <BottomNavigationAction
         className="top-brand-logo"
         value={0}
-        label={isTabletScreenWidthAndAbove ? "The Vault" : "Home"}
-        icon={isTabletScreenWidthAndAbove ? null : <HomeIcon />}
+        label={isMediumScreenWidthAndAbove ? "The Vault" : "Home"}
+        icon={isMediumScreenWidthAndAbove ? null : <HomeIcon />}
         onClick={() => navigate("/")}
       />
 
@@ -105,27 +105,27 @@ function MainHeader({ setNavHeight }) {
         className="marginRight-NavItem"
         value={1}
         label="Anime"
-        icon={isTabletScreenWidthAndAbove ? null : <MovieIcon />}
+        icon={isMediumScreenWidthAndAbove ? null : <MovieIcon />}
         onClick={() => navigate("/animes")}
       />
       <BottomNavigationAction
         className="marginRight-NavItem"
         value={2}
         label="Manga"
-        icon={isTabletScreenWidthAndAbove ? null : <MenuBookIcon />}
+        icon={isMediumScreenWidthAndAbove ? null : <MenuBookIcon />}
         onClick={() => navigate("/mangas")}
       />
       <BottomNavigationAction
         className="marginRight-NavItem"
         value={3}
         label="Register"
-        icon={isTabletScreenWidthAndAbove ? null : <AppRegistrationIcon />}
+        icon={isMediumScreenWidthAndAbove ? null : <AppRegistrationIcon />}
         onClick={() => navigate("/register")}
       />
       <BottomNavigationAction
         value={4}
         label="Log In"
-        icon={isTabletScreenWidthAndAbove ? null : <LoginIcon />}
+        icon={isMediumScreenWidthAndAbove ? null : <LoginIcon />}
         onClick={() => navigate("/login")}
       />
     </BottomNavigation>

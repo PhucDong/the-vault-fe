@@ -10,44 +10,89 @@ import VisitorPage from "./pages/VisitorPage";
 import LoginPage, { userAccountListLoader } from "./pages/LoginPage";
 import RegisterPage from "./pages/RegisterPage";
 import AnimeListByCategoryPage from "./pages/AnimeListByCategoryPage";
-import AnimeListPage, { animeCategoryListLoader } from "./pages/AnimeListPage";
-import MangaListPage, { mangaCategoryListLoader } from "./pages/MangaListPage";
+import AnimeListPage, { animeListLoader } from "./pages/AnimeListPage";
+import MangaListPage, { mangaListLoader } from "./pages/MangaListPage";
 import MangaListByCategoryPage from "./pages/MangaListByCategoryPage";
 import RegisterLogInLayout from "./layouts/RegisterLogInLayout";
 import HomePage from "./pages/HomePage";
+import AnimeDetailedInfoPage, {
+  animeDetailLoader,
+} from "./pages/AnimeDetailedInfoPage";
+import MangaDetailedInfoPage, {
+  mangaDetailLoader,
+} from "./pages/MangaDetailedInfoPage";
+import CharacterDetailedInfoPage, {
+  characterDetailLoader,
+} from "./pages/CharacterDetailedInfoPage/CharacterDetailedInfoPage";
+import StaffDetailedInfoPage, {
+  staffDetailLoader,
+} from "./pages/StaffDetailedInfoPage/StaffDetailedInfoPage";
+import ReviewDetailedInfoPage, {
+  reviewDetailLoader,
+} from "./pages/ReviewDetailedInfoPage/ReviewDetailedInfoPage";
 
 const router = createBrowserRouter(
   createRoutesFromElements(
     <Route element={<MainLayout />} errorElement={<ErrorPage />}>
-      <Route
-        path="/"
-        element={<VisitorPage />}
-        loader={animeCategoryListLoader}
-      >
+      <Route path="/" element={<VisitorPage />} loader={animeListLoader}>
         <Route
           path="animes"
           element={<AnimeListPage />}
-          loader={animeCategoryListLoader}
+          loader={animeListLoader}
         />
 
         <Route
-          path="animes/:categoryName"
+          path="search/animes/:categoryName"
           element={<AnimeListByCategoryPage />}
-          loader={animeCategoryListLoader}
         />
 
         <Route
           path="mangas"
           element={<MangaListPage />}
-          loader={mangaCategoryListLoader}
+          loader={mangaListLoader}
         />
 
         <Route
-          path="mangas/:categoryName"
+          path="search/mangas/:categoryName"
           element={<MangaListByCategoryPage />}
-          loader={mangaCategoryListLoader}
         />
       </Route>
+
+      <Route
+        path="animes/:animeId"
+        element={<AnimeDetailedInfoPage />}
+        loader={animeDetailLoader}
+      />
+
+      <Route
+        path="animes/related/:itemId"
+        element={<AnimeDetailedInfoPage />}
+        loader={animeDetailLoader}
+      />
+
+      <Route
+        path="mangas/:mangaId"
+        element={<MangaDetailedInfoPage />}
+        loader={mangaDetailLoader}
+      />
+
+      <Route
+        path="characters/:characterId"
+        element={<CharacterDetailedInfoPage />}
+        loader={characterDetailLoader}
+      />
+
+      <Route
+        path="staff/:staffId"
+        element={<StaffDetailedInfoPage />}
+        loader={staffDetailLoader}
+      />
+
+      <Route
+        path="reviews/:reviewId"
+        element={<ReviewDetailedInfoPage />}
+        loader={reviewDetailLoader}
+      />
 
       <Route element={<RegisterLogInLayout />}>
         <Route

@@ -2,7 +2,7 @@ import HeroSection from "../components/VisitorPage/HeroSection";
 import BrowseSection from "../components/VisitorPage/BrowseSection";
 import AnimeListPage from "./AnimeListPage";
 import { Outlet, useLocation } from "react-router-dom";
-import { Box } from "@mui/material";
+import CustomPaddingLayout from "../components/common/CustomPaddingLayout";
 
 function VisitorPage() {
   const location = useLocation();
@@ -10,19 +10,12 @@ function VisitorPage() {
   return (
     <>
       {location.pathname === "/" && <HeroSection />}
-      <Box
-        sx={{
-          padding: {
-            xs: "0 22px",
-            md: "0 60px",
-            lg: "0 80px",
-          },
-        }}
-      >
+      <CustomPaddingLayout>
         <BrowseSection />
+
         {location.pathname === "/" && <AnimeListPage />}
         <Outlet />
-      </Box>
+      </CustomPaddingLayout>
     </>
   );
 }
