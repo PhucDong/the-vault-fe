@@ -29,7 +29,7 @@ function MangaListPage() {
     mangaCategory.animeList = filteredMangaList;
   });
 
-  localStorage.setItem("mangaCategoryList", JSON.stringify(mangaCategoryList));
+  // localStorage.setItem("mangaCategoryList", JSON.stringify(mangaCategoryList));
 
   return (
     <Box
@@ -40,7 +40,11 @@ function MangaListPage() {
       }}
     >
       {mangaCategoryList.map((mangaCategory, index) => (
-        <ItemCategory key={index} itemCategory={mangaCategory} />
+        <ItemCategory
+          key={index}
+          itemCategory={mangaCategory}
+          itemCategoryList={mangaCategoryList}
+        />
       ))}
     </Box>
   );

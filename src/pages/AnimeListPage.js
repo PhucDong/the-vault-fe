@@ -41,8 +41,6 @@ function AnimeListPage() {
     animeCategory.animeList = filteredAnimeList;
   });
 
-  localStorage.setItem("animeCategoryList", JSON.stringify(animeCategoryList));
-
   return (
     <Box
       sx={{
@@ -52,7 +50,11 @@ function AnimeListPage() {
       }}
     >
       {animeCategoryList.map((animeCategory, index) => (
-        <ItemCategory key={index} itemCategory={animeCategory} />
+        <ItemCategory
+          key={index}
+          itemCategory={animeCategory}
+          itemCategoryList={animeCategoryList}
+        />
       ))}
     </Box>
   );

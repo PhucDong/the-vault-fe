@@ -87,7 +87,7 @@ function RegisterForm() {
     }
 
     try {
-      const response = await fetch("http://localhost:5500/userAccountList", {
+      const response = await fetch("http://localhost:3900/userAccountList", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

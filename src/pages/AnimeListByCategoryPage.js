@@ -1,17 +1,11 @@
 import { Box } from "@mui/material";
-import AnimeCategory from "../components/VisitorPage/ItemCategory";
-import { useParams } from "react-router-dom";
+import ItemCategory from "../components/VisitorPage/ItemCategory";
+import { useLocation, useParams } from "react-router-dom";
 import { useCallback } from "react";
 
 function AnimeListByCategoryPage() {
   const { categoryName } = useParams();
-  // const animeCategoryList = useLoaderData();
-  const animeCategoryList = localStorage.getItem("animeCategoryList");
-
-  // When route search/animes/categoryName displays
-  // The component is rendered:
-  // It takes animeList data in Redux store
-  // Renders those data
+  const location = useLocation();
 
   const getAnimeCategoryList = useCallback(() => {
     const allowedAnimeCategoryList = [
@@ -21,8 +15,11 @@ function AnimeListByCategoryPage() {
       "next-season",
       "top-100-animes",
     ];
-    if (categoryName && allowedAnimeCategoryList.includes(categoryName)) {
-      const filteredAnimeCategory = JSON.parse(animeCategoryList).filter(
+    if (
+      location.state.itemCategoryList &&
+      allowedAnimeCategoryList.includes(categoryName)
+    ) {
+      const filteredAnimeCategory = location.state.itemCategoryList.filter(
         (category) => category.category === categoryName
       );
 
@@ -30,7 +27,9 @@ function AnimeListByCategoryPage() {
     } else {
       throw new Error(`Category ${categoryName} doesn't exist`);
     }
-  }, [categoryName, animeCategoryList]);
+  }, [categoryName, location.state.itemCategoryList]);
+
+  // console.log("Anime category list: ", getAnimeCategoryList());
 
   return (
     <Box
@@ -41,7 +40,7 @@ function AnimeListByCategoryPage() {
       }}
     >
       {getAnimeCategoryList().map((animeCategory, index) => (
-        <AnimeCategory key={index} animeCategory={animeCategory} />
+        <ItemCategory key={index} itemCategory={animeCategory} />
       ))}
     </Box>
   );

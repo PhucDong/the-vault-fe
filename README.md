@@ -17,6 +17,7 @@ Latest update: **24 Oct 2024**
 - Staff: json-server -p 3600 -w ./data/staffListData.json
 - Stats: json-server -p 3700 -w ./data/statListData.json
 - Reviews: json-server -p 3800 -w ./data/reviewListData.json
+- Users: json-server -p 3900 -w ./data/userAccountListData.json
 
 ## Tasks
 - Mangas: test detailed info pages of characters, reviews, and staff (done)

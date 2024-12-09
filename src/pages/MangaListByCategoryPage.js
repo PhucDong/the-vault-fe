@@ -1,17 +1,19 @@
 import { Box } from "@mui/material";
-import AnimeCategory from "../components/VisitorPage/ItemCategory";
-import { useLoaderData, useParams } from "react-router-dom";
+import ItemCategory from "../components/VisitorPage/ItemCategory";
+import { useLocation, useParams } from "react-router-dom";
 import { useCallback } from "react";
 
 function MangaListByCategoryPage() {
   const { categoryName } = useParams();
-  // const mangaCategoryList = useLoaderData();
-  const mangaCategoryList = localStorage.getItem("mangaCategoryList");
+  const location = useLocation();
 
   const getMangaCategoryList = useCallback(() => {
     const allowedMangaCategoryList = ["trending", "popular", "top-100-mangas"];
-    if (categoryName && allowedMangaCategoryList.includes(categoryName)) {
-      const filteredAnimeCategory = JSON.parse(mangaCategoryList).filter(
+    if (
+      location.state.itemCategoryList &&
+      allowedMangaCategoryList.includes(categoryName)
+    ) {
+      const filteredAnimeCategory = location.state.itemCategoryList.filter(
         (category) => category.category === categoryName
       );
 
@@ -19,7 +21,7 @@ function MangaListByCategoryPage() {
     } else {
       throw new Error(`Category ${categoryName} doesn't exist`);
     }
-  }, [categoryName, mangaCategoryList]);
+  }, [categoryName, location.state.itemCategoryList]);
 
   return (
     <Box
@@ -29,8 +31,8 @@ function MangaListByCategoryPage() {
         gap: "40px",
       }}
     >
-      {getMangaCategoryList().map((animeCategory, index) => (
-        <AnimeCategory key={index} animeCategory={animeCategory} />
+      {getMangaCategoryList().map((mangaCategory, index) => (
+        <ItemCategory key={index} itemCategory={mangaCategory} />
       ))}
     </Box>
   );
