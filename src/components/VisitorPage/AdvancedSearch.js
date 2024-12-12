@@ -8,7 +8,6 @@ function AdvancedSearch() {
 
   const handleOpenAdvancedSearch = () => {
     setOpenAdvancedSearch(true);
-    console.log("Open!");
   };
 
   const handleCloseAdvancedSearch = () => {
