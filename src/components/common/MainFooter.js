@@ -51,8 +51,8 @@ function MainFooter({ navHeight }) {
           }}
         >
           <NavLink to="/">Home</NavLink>
-          <NavLink to="auth/login">Log In</NavLink>
-          <NavLink to="users">Register</NavLink>
+          <NavLink to="/login">Log In</NavLink>
+          <NavLink to="/register">Register</NavLink>
         </Box>
       </Box>
       <Box sx={{ marginTop: { xs: "20px", md: "40px" } }}>

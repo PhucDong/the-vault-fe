@@ -19,6 +19,7 @@ function MainLayout() {
         justifyContent: "space-between",
       }}
     >
+      {/* <MainHeader setNavHeight={setNavHeight} /> */}
       <MainHeader setNavHeight={setNavHeight} />
       <Box
         sx={{

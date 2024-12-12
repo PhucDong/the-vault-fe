@@ -1,134 +1,167 @@
-import {
-  BottomNavigation,
-  BottomNavigationAction,
-  useMediaQuery,
-} from "@mui/material";
-import { useEffect, useRef, useState } from "react";
 import MenuBookIcon from "@mui/icons-material/MenuBook";
 import MovieIcon from "@mui/icons-material/Movie";
 import HomeIcon from "@mui/icons-material/Home";
-import AppRegistrationIcon from "@mui/icons-material/AppRegistration";
+// import AppRegistrationIcon from "@mui/icons-material/AppRegistration";
 import LoginIcon from "@mui/icons-material/Login";
+import CustomPaddingLayout from "./CustomPaddingLayout";
+import { Box, Typography, useMediaQuery } from "@mui/material";
+import styled from "@emotion/styled";
+import { useEffect, useRef, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 
-function MainHeader({ setNavHeight }) {
-  const location = useLocation();
-  const [bottomNavItemValue, setBottomNavItemValue] = useState(() => {
-    if (location.pathname === "/") return 0;
-    else if (location.pathname.includes("/animes")) return 1;
-    else if (location.pathname.includes("/mangas")) return 2;
-    else if (location.pathname === "/register") return 3;
-    else if (location.pathname === "/login") return 4;
-  });
+const CustomStyledNavBarItem = styled(Box, {
+  shouldForwardProp: (prop) =>
+    prop !== "isNavBarItemActive" && prop !== "navBarItem",
+})(({ navBarItem, isNavBarItemActive, theme }) => ({
+  color: isNavBarItemActive
+    ? theme.palette.primary.main
+    : theme.palette.primary.light,
+  display: "flex",
+  alignItems: "center",
+  "& .MuiTypography-root": {
+    fontWeight: 550,
+  },
+  [theme.breakpoints.up("xs")]: {
+    flexDirection: "column",
+    gap: "4px",
+    "& .MuiSvgIcon-root": { fontSize: "2rem" },
+    "& .MuiTypography-root": {
+      fontSize: "1rem",
+    },
+  },
+  [theme.breakpoints.up("sm")]: {
+    gap: 0,
+    "& .MuiSvgIcon-root": { fontSize: "2.2rem" },
+    "& .MuiTypography-root": {
+      fontSize: "1.1rem",
+    },
+  },
+  [theme.breakpoints.up("md")]: {
+    flexDirection: "row",
+    cursor: "pointer",
+    "& .MuiTypography-root": {
+      fontSize: navBarItem ? "2rem" : "1.2rem",
+    },
+  },
+  [theme.breakpoints.up("lg")]: {
+    "& .MuiTypography-root": {
+      fontSize: navBarItem ? "2rem" : "1.2rem",
+    },
+  },
+}));
 
+const navBarItemList = [
+  { icon: <HomeIcon />, label: "Home" },
+  { icon: <MovieIcon />, label: "Anime" },
+  { icon: <MenuBookIcon />, label: "Manga" },
+  { icon: <LoginIcon />, label: "Log In" },
+];
+
+function MainHeader(props) {
+  const { setNavHeight } = props;
+  const [navBarItem, setNavBarItem] = useState("Home");
+  const navigate = useNavigate();
+  const location = useLocation();
   const isMediumScreenWidthAndAbove = useMediaQuery((theme) =>
     theme.breakpoints.up("md")
   );
-  const navigate = useNavigate();
-  const navRef = useRef(null);
+
+  const handleChangeIsNavBarItemActive = (navBarItem) => {
+    if (navBarItem === "Home") navigate("/");
+    else if (navBarItem === "Anime") navigate("/animes");
+    else if (navBarItem === "Manga") navigate("/mangas");
+    else if (navBarItem === "Log In") navigate("/login");
+    setNavBarItem(navBarItem);
+  };
 
   useEffect(() => {
-    if (navRef.current) {
-      setNavHeight(navRef.current.offsetHeight);
-    }
-  }, [setNavHeight]);
-
-  useEffect(() => {
-    if (location.pathname.includes("/animes")) setBottomNavItemValue(1);
-    else if (location.pathname.includes("/mangas")) setBottomNavItemValue(2);
+    if (location.pathname.startsWith("/animes")) setNavBarItem("Anime");
+    else if (location.pathname.startsWith("/mangas")) setNavBarItem("Manga");
+    else if (location.pathname.startsWith("/login")) setNavBarItem("Log In");
+    else if (location.pathname.startsWith("/register")) setNavBarItem("");
+    else if (location.pathname.startsWith("/")) setNavBarItem("Home");
   }, [location.pathname]);
 
   return (
-    <BottomNavigation
-      ref={navRef}
-      showLabels
-      value={bottomNavItemValue}
-      onChange={(event, value) => setBottomNavItemValue(value)}
+    <CustomPaddingLayout
+      setNavHeight={setNavHeight}
       sx={{
-        gap: { xs: "8px", md: 0 },
         padding: {
-          xs: "8px 32px",
-          sm: "12px 56px",
-          md: "16px 152px",
-          lg: "24px 192px",
+          xs: "12px 32px",
+          sm: "16px 56px",
+          md: "20px 152px",
+          lg: "28px 192px",
         },
-        maxHeight: "unset", // Remove any max height restriction
-        height: "auto", // Allow height to wrap around content
-        position: "fixed",
-        bottom: { xs: 0, md: "unset" },
-        top: { xs: "unset", md: 0 },
-        left: 0,
-        right: 0,
-        zIndex: 1,
         boxShadow: {
           xs: "0 -2px 4px 0 rgba(0, 0, 0, .2)",
           md: "0 2px 4px 0 rgba(0, 0, 0, .2)",
         },
-        justifyContent: { xs: "center", md: "flex-start" },
-        "& .MuiButtonBase-root": {
-          color: "primary.light",
-          padding: 0,
-          gap: { xs: "4px", sm: 0 },
-          maxWidth: "auto",
-          minWidth: "auto",
-          flexDirection: { xs: "column", md: "row" },
-          flex: { xs: 1, md: "none" },
-          "& .MuiSvgIcon-root": { fontSize: { xs: "2rem", sm: "2.2rem" } },
-          "& .MuiBottomNavigationAction-label": {
-            fontWeight: 550,
-            fontSize: { xs: "1rem", sm: "1.1rem", md: "1.2rem", lg: "1.3rem" },
-            lineHeight: "100%",
-          },
-          "&.Mui-selected": {
-            color: "primary.main",
-          },
-        },
-        "& .marginRight-NavItem": {
-          marginRight: { md: "32px" },
-        },
-        "& .top-brand-logo": { marginRight: { md: "140px", lg: "160px" } },
-        "& .top-brand-logo .MuiBottomNavigationAction-label": {
-          fontSize: { md: "2rem", lg: "2.1rem" },
-          color: { md: "primary.main" },
-        },
+        position: "fixed",
+        bottom: { xs: 0, md: "unset" },
+        top: { xs: "unset", md: 0 },
+        width: "100%",
+        backgroundColor: "#fff",
+        zIndex: 1,
       }}
     >
-      <BottomNavigationAction
-        className="top-brand-logo"
-        value={0}
-        label={isMediumScreenWidthAndAbove ? "The Vault" : "Home"}
-        icon={isMediumScreenWidthAndAbove ? null : <HomeIcon />}
-        onClick={() => navigate("/")}
-      />
+      <Box
+        sx={{
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "center",
+        }}
+      >
+        {!isMediumScreenWidthAndAbove ? (
+          navBarItemList.map((item) => (
+            <CustomStyledNavBarItem
+              key={item.label}
+              isNavBarItemActive={navBarItem === item.label}
+              onClick={() => handleChangeIsNavBarItemActive(item.label)}
+            >
+              {item.icon}
+              <Typography>{item.label}</Typography>
+            </CustomStyledNavBarItem>
+          ))
+        ) : (
+          <>
+            <Box sx={{ display: "flex", gap: { md: "80px" } }}>
+              {/* Home */}
+              <CustomStyledNavBarItem
+                navBarItem={navBarItem}
+                isNavBarItemActive={navBarItem === "Home"}
+                onClick={() => handleChangeIsNavBarItemActive("Home")}
+              >
+                <Typography>The Vault</Typography>
+              </CustomStyledNavBarItem>
 
-      <BottomNavigationAction
-        className="marginRight-NavItem"
-        value={1}
-        label="Anime"
-        icon={isMediumScreenWidthAndAbove ? null : <MovieIcon />}
-        onClick={() => navigate("/animes")}
-      />
-      <BottomNavigationAction
-        className="marginRight-NavItem"
-        value={2}
-        label="Manga"
-        icon={isMediumScreenWidthAndAbove ? null : <MenuBookIcon />}
-        onClick={() => navigate("/mangas")}
-      />
-      <BottomNavigationAction
-        className="marginRight-NavItem"
-        value={3}
-        label="Register"
-        icon={isMediumScreenWidthAndAbove ? null : <AppRegistrationIcon />}
-        onClick={() => navigate("/register")}
-      />
-      <BottomNavigationAction
-        value={4}
-        label="Log In"
-        icon={isMediumScreenWidthAndAbove ? null : <LoginIcon />}
-        onClick={() => navigate("/login")}
-      />
-    </BottomNavigation>
+              {/* Anime & Manga */}
+              <Box sx={{ display: "flex", gap: { xs: "8px", md: "32px" } }}>
+                <CustomStyledNavBarItem
+                  isNavBarItemActive={navBarItem === "Anime"}
+                  onClick={() => handleChangeIsNavBarItemActive("Anime")}
+                >
+                  <Typography>Anime</Typography>
+                </CustomStyledNavBarItem>
+                <CustomStyledNavBarItem
+                  isNavBarItemActive={navBarItem === "Manga"}
+                  onClick={() => handleChangeIsNavBarItemActive("Manga")}
+                >
+                  <Typography>Manga</Typography>
+                </CustomStyledNavBarItem>
+              </Box>
+            </Box>
+
+            {/* Login & register */}
+            <CustomStyledNavBarItem
+              isNavBarItemActive={navBarItem === "Log In"}
+              onClick={() => handleChangeIsNavBarItemActive("Log In")}
+            >
+              <Typography>Log In</Typography>
+            </CustomStyledNavBarItem>
+          </>
+        )}
+      </Box>
+    </CustomPaddingLayout>
   );
 }
 

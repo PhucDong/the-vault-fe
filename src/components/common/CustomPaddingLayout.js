@@ -1,7 +1,9 @@
 import { Box } from "@mui/material";
+import { useEffect, useRef } from "react";
 
 function CustomPaddingLayout(props) {
-  const { children, sx, ...other } = props;
+  const { children, sx, setNavHeight, ...other } = props;
+  const navBarRef = useRef(null);
 
   // Filter out unwanted props
   const {
@@ -12,8 +14,15 @@ function CustomPaddingLayout(props) {
     ...filteredProps
   } = other;
 
+  useEffect(() => {
+    if (navBarRef.current && setNavHeight) {
+      setNavHeight(navBarRef.current.offsetHeight);
+    }
+  }, [setNavHeight]);
+
   return (
     <Box
+      ref={navBarRef}
       sx={{
         padding: {
           xs: "0 32px",
