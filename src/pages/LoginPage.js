@@ -45,7 +45,7 @@ function LoginPage() {
 export default LoginPage;
 
 export const userAccountListLoader = async () => {
-  const response = await fetch("http://localhost:5000/userAccountList");
+  const response = await fetch("http://localhost:3900/userAccountList");
 
   if (!response.ok) {
     throw new Error("Failed to fetch user account list");
