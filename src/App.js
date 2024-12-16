@@ -30,6 +30,7 @@ import StaffDetailedInfoPage, {
 import ReviewDetailedInfoPage, {
   reviewDetailLoader,
 } from "./pages/ReviewDetailedInfoPage/ReviewDetailedInfoPage";
+import ReviewEditorPage from "./pages/ReviewEditorPage";
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -94,12 +95,10 @@ const router = createBrowserRouter(
         loader={reviewDetailLoader}
       />
 
+      <Route path="reviews/editor" element={<ReviewEditorPage />} />
+
       <Route element={<RegisterLogInLayout />}>
-        <Route
-          path="login"
-          element={<LoginPage />}
-          loader={userAccountListLoader}
-        />
+        <Route path="login" element={<LoginPage />} />
         <Route
           path="register"
           element={<RegisterPage />}
@@ -108,13 +107,6 @@ const router = createBrowserRouter(
       </Route>
 
       <Route path="/home" element={<HomePage />} />
-
-      {/* Visitor Page */}
-      {/* Browse category */}
-      {/* Search bar & advanced search */}
-      {/* Notes: Use loader of React router */}
-      {/* Results: Router's loader works */}
-      {/* Try using Redux next */}
     </Route>
   )
 );
