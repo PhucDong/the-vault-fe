@@ -9,12 +9,37 @@ import CustomPaddingLayout from "../common/CustomPaddingLayout";
 import CustomDetailedItemButton from "./CustomDetailedItemButton";
 import ReadMoreButton from "./ReadMoreButton";
 import { useState } from "react";
+import LogInAlertModal from "./LogInAlertModal";
+import { useSelector } from "react-redux";
+import { selectIsUserLoggedIn } from "../../features/authentication/authenticationSlice";
+import AddToListForm from "./AddToListForm/AddToListForm";
+import { useNavigate } from "react-router-dom";
 
 function DetailedAnimeMangaHeader({ item }) {
   const isSmallScreenWidthAndAbove = useMediaQuery((theme) =>
     theme.breakpoints.up("sm")
   );
   const [expandedAccordion, setExpandedAccordion] = useState(false);
+  const isUserLoggedIn = useSelector(selectIsUserLoggedIn);
+  const [openLogInAlert, setOpenLogInAlert] = useState(false);
+  const [openAddToList, setOpenAddToList] = useState(false);
+  const navigate = useNavigate();
+
+  const handleOpenAddToList = () => {
+    if (!isUserLoggedIn) {
+      setOpenLogInAlert(true);
+    } else {
+      setOpenAddToList(true);
+    }
+  };
+
+  const handleOpenReview = () => {
+    if (!isUserLoggedIn) {
+      setOpenLogInAlert(true);
+    } else {
+      navigate("/reviews/editor");
+    }
+  };
 
   return (
     <Box sx={{ position: "relative" }}>
@@ -85,12 +110,22 @@ function DetailedAnimeMangaHeader({ item }) {
                 flexDirection: { xs: "row", sm: "column" },
               }}
             >
-              <CustomDetailedItemButton onClick={() => console.log("Added!")}>
+              <CustomDetailedItemButton onClick={handleOpenAddToList}>
                 Add to list
               </CustomDetailedItemButton>
-              <CustomDetailedItemButton onClick={() => console.log("Wrote!")}>
+              <CustomDetailedItemButton onClick={handleOpenReview}>
                 Write review
               </CustomDetailedItemButton>
+
+              <LogInAlertModal
+                openLogInAlert={openLogInAlert}
+                setOpenLogInAlert={setOpenLogInAlert}
+              />
+              <AddToListForm
+                itemTitle={item.title}
+                openAddToList={openAddToList}
+                setOpenAddToList={setOpenAddToList}
+              />
             </Box>
           </Box>
         </Box>
