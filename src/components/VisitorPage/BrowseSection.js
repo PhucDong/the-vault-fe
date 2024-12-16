@@ -10,7 +10,7 @@ function BrowseSection() {
   return (
     <Box
       sx={{
-        marginTop: { sm: "32px", md: "52px", lg: "72px" },
+        marginTop: { xs: "24px", sm: "32px", md: "52px", lg: "72px" },
         marginBottom: { xs: "28px", md: "44px", lg: "56px" },
       }}
     >
