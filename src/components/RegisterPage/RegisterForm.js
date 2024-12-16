@@ -1,12 +1,21 @@
 import { Box, IconButton, InputAdornment } from "@mui/material";
 import CustomStyledInputLabel from "../common/CustomStyledInputLabel";
 import CustomStyledTextField from "../common/CustomStyledTextField";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
 import RegisterLoginFormButton from "../common/RegisterLoginFormButton";
-import { useLoaderData, useNavigate } from "react-router-dom";
 import { faker } from "@faker-js/faker";
+import {
+  selectErrorMessages,
+  selectIsUserRegistered,
+} from "../../features/user/userSlice";
+import {
+  useAppSelector,
+  useAuthAppDispatch,
+  useUserAppDispatch,
+} from "../../app/hooks";
+import { useLocation, useNavigate } from "react-router-dom";
 
 function RegisterForm() {
   const [emailValue, setEmailValue] = useState("");
@@ -16,14 +25,12 @@ function RegisterForm() {
   const [showPassword, setShowPassword] = useState(false);
   const [showPasswordConfirmation, setShowPasswordConfirmation] =
     useState(false);
-  const [errors, setErrors] = useState({
-    email: "",
-    username: "",
-    password: "",
-    passwordConfirmation: "",
-  });
-  const userAccountList = useLoaderData();
+  const errorMessages = useAppSelector(selectErrorMessages);
+  const { register } = useUserAppDispatch();
+  const { resetState } = useAuthAppDispatch();
+  const isUserRegistered = useAppSelector(selectIsUserRegistered);
   const navigate = useNavigate();
+  const location = useLocation();
 
   const handleChangeEmailValue = (event) => setEmailValue(event.target.value);
   const handleChangeUsernameValue = (event) =>
@@ -50,66 +57,17 @@ function RegisterForm() {
     event.preventDefault();
   };
 
-  const registerUser = async () => {
-    const passwordRegex =
-      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
-    const emailRegex = /^[\w\.\+%-]+@[a-zA-Z\d\.-]+\.[a-zA-Z]{2,}$/;
-    const newErrors = {};
-
-    if (!emailValue) newErrors.email = "Email is required.";
-    if (emailValue && !emailRegex.test(emailValue))
-      newErrors.email = "Email is not valid.";
-    if (!usernameValue) newErrors.username = "Username is required.";
-    if (!passwordValue) newErrors.password = "Password is required.";
-    if (passwordValue && !passwordRegex.test(passwordValue))
-      newErrors.password = "Password is not strong enough.";
-    if (!passwordConfirmation)
-      newErrors.passwordConfirmation = "Please confirm your password.";
-    if (passwordConfirmation && !passwordRegex.test(passwordConfirmation))
-      newErrors.passwordConfirmation = "Password is not strong enough.";
-    if (passwordConfirmation && passwordValue !== passwordConfirmation) {
-      newErrors.passwordConfirmation = "Password does not match.";
+  useEffect(() => {
+    if (isUserRegistered) {
+      navigate("/");
     }
+  }, [isUserRegistered, navigate]);
 
-    if (userAccountList.length > 0) {
-      userAccountList.forEach((userAccount) => {
-        if (emailValue === userAccount.email) {
-          newErrors.email = "Email was already used.";
-        } else if (usernameValue === userAccount.username) {
-          newErrors.username = "Username was already used.";
-        }
-      });
+  useEffect(() => {
+    if (location.pathname.startsWith("/register")) {
+      resetState();
     }
-
-    if (Object.keys(newErrors).length > 0) {
-      setErrors(newErrors);
-      return false;
-    }
-
-    try {
-      const response = await fetch("http://localhost:5500/userAccountList", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          id: faker.string.uuid(),
-          email: emailValue,
-          username: usernameValue,
-          password: passwordValue,
-        }),
-      });
-
-      if (!response.ok) {
-        throw new Error("Failed to register user");
-      }
-
-      setErrors({});
-      navigate("/home");
-    } catch (error) {
-      console.error(error.message);
-    }
-  };
+  }, [location.pathname, resetState]);
 
   return (
     <>
@@ -124,8 +82,8 @@ function RegisterForm() {
             placeholder="Please enter your email"
             value={emailValue}
             onChange={handleChangeEmailValue}
-            error={!!errors.email}
-            helperText={errors.email}
+            error={!!errorMessages.email}
+            helperText={errorMessages.email}
           />
         </Box>
 
@@ -141,8 +99,8 @@ function RegisterForm() {
             placeholder="Please enter your username"
             value={usernameValue}
             onChange={handleChangeUsernameValue}
-            error={!!errors.username}
-            helperText={errors.username}
+            error={!!errorMessages.username}
+            helperText={errorMessages.username}
           />
         </Box>
 
@@ -158,8 +116,8 @@ function RegisterForm() {
             placeholder="Please enter your password"
             value={passwordValue}
             onChange={handleChangePasswordValue}
-            error={!!errors.password}
-            helperText={errors.password}
+            error={!!errorMessages.password}
+            helperText={errorMessages.password}
             type={showPassword ? "text" : "password"}
             slotProps={{
               input: {
@@ -196,8 +154,8 @@ function RegisterForm() {
             placeholder="Please confirm your password"
             value={passwordConfirmation}
             onChange={handleChangePasswordConfirmation}
-            error={!!errors.passwordConfirmation}
-            helperText={errors.passwordConfirmation}
+            error={!!errorMessages.passwordConfirmation}
+            helperText={errorMessages.passwordConfirmation}
             type={showPasswordConfirmation ? "text" : "password"}
             slotProps={{
               input: {
@@ -223,7 +181,17 @@ function RegisterForm() {
         </Box>
       </Box>
 
-      <RegisterLoginFormButton onClick={registerUser}>
+      <RegisterLoginFormButton
+        onClick={() =>
+          register({
+            id: faker.string.uuid(),
+            email: emailValue,
+            password: passwordValue,
+            username: usernameValue,
+            passwordConfirmation,
+          })
+        }
+      >
         Register
       </RegisterLoginFormButton>
     </>

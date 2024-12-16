@@ -1,22 +1,31 @@
 import { Box, IconButton, InputAdornment } from "@mui/material";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import CustomStyledInputLabel from "../common/CustomStyledInputLabel";
 import CustomStyledTextField from "../common/CustomStyledTextField";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
-import { useLoaderData, useNavigate } from "react-router-dom";
 import RegisterLoginFormButton from "../common/RegisterLoginFormButton";
+import {
+  useAppSelector,
+  useAuthAppDispatch,
+  useUserAppDispatch,
+} from "../../app/hooks";
+import {
+  selectErrorMessages,
+  selectIsUserLoggedIn,
+} from "../../features/authentication/authenticationSlice";
+import { useLocation, useNavigate } from "react-router-dom";
 
 function LoginForm() {
   const [emailValue, setEmailValue] = useState("");
   const [passwordValue, setPasswordValue] = useState("");
   const [showPassword, setShowPassword] = useState(false);
-  const userAccountList = useLoaderData();
+  const { login } = useAuthAppDispatch();
+  const { resetState } = useUserAppDispatch();
+  const errorMessages = useAppSelector(selectErrorMessages);
+  const location = useLocation();
+  const isUserLoggedIn = useAppSelector(selectIsUserLoggedIn);
   const navigate = useNavigate();
-  const [errors, setErrors] = useState({
-    email: "",
-    password: "",
-  });
 
   const handleChangeEmailValue = (event) => setEmailValue(event.target.value);
   const handleChangePasswordValue = (event) =>
@@ -30,39 +39,17 @@ function LoginForm() {
     event.preventDefault();
   };
 
-  const authenticateUserAccount = () => {
-    const newErrors = {};
-
-    if (!emailValue) newErrors.email = "Email is required.";
-    if (!passwordValue) newErrors.password = "Password is required.";
-
-    for (const userAccount of userAccountList) {
-      if (
-        userAccount.email === emailValue &&
-        userAccount.password === passwordValue
-      ) {
-        setErrors({ email: "", password: "" });
-        navigate("/home");
-        break;
-      } else if (
-        emailValue &&
-        userAccount.email !== emailValue &&
-        passwordValue &&
-        userAccount.password !== passwordValue
-      ) {
-        newErrors.email = "Incorrect email.";
-        newErrors.password = "Incorrect password.";
-      } else if (emailValue && userAccount.email !== emailValue) {
-        newErrors.email = "Incorrect email.";
-      } else if (passwordValue && userAccount.password !== passwordValue) {
-        newErrors.password = "Incorrect password.";
-      }
+  useEffect(() => {
+    if (location.pathname.startsWith("/login")) {
+      resetState();
     }
+  }, [location.pathname, resetState]);
 
-    if (Object.keys(newErrors).length > 0) {
-      setErrors(newErrors);
+  useEffect(() => {
+    if (isUserLoggedIn) {
+      navigate(-1);
     }
-  };
+  }, [isUserLoggedIn, navigate]);
 
   return (
     <>
@@ -77,8 +64,8 @@ function LoginForm() {
             placeholder="Please enter your email"
             value={emailValue}
             onChange={handleChangeEmailValue}
-            error={!!errors.email}
-            helperText={errors.email}
+            error={!!errorMessages.email}
+            helperText={errorMessages.email}
           />
         </Box>
 
@@ -95,8 +82,8 @@ function LoginForm() {
             value={passwordValue}
             onChange={handleChangePasswordValue}
             type={showPassword ? "text" : "password"}
-            error={!!errors.password}
-            helperText={errors.password}
+            error={!!errorMessages.password}
+            helperText={errorMessages.password}
             slotProps={{
               input: {
                 endAdornment: (
@@ -121,7 +108,14 @@ function LoginForm() {
         </Box>
       </Box>
 
-      <RegisterLoginFormButton onClick={authenticateUserAccount}>
+      <RegisterLoginFormButton
+        onClick={() =>
+          login({
+            email: emailValue,
+            password: passwordValue,
+          })
+        }
+      >
         Log In
       </RegisterLoginFormButton>
     </>
@@ -131,7 +125,7 @@ function LoginForm() {
 export default LoginForm;
 
 export const userAccountListLoader = async () => {
-  const response = await fetch("http://localhost:6000/userAccountList");
+  const response = await fetch("http://localhost:3900/userAccountList");
 
   if (!response.ok) {
     throw new Error("Failed to fetch user account list");
