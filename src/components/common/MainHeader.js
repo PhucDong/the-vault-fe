@@ -6,7 +6,7 @@ import LoginIcon from "@mui/icons-material/Login";
 import CustomPaddingLayout from "./CustomPaddingLayout";
 import { Box, Typography, useMediaQuery } from "@mui/material";
 import styled from "@emotion/styled";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 
 const CustomStyledNavBarItem = styled(Box, {
@@ -78,7 +78,6 @@ function MainHeader(props) {
     if (location.pathname.startsWith("/animes")) setNavBarItem("Anime");
     else if (location.pathname.startsWith("/mangas")) setNavBarItem("Manga");
     else if (location.pathname.startsWith("/login")) setNavBarItem("Log In");
-    else if (location.pathname.startsWith("/register")) setNavBarItem("");
     else if (location.pathname.startsWith("/")) setNavBarItem("Home");
   }, [location.pathname]);
 
