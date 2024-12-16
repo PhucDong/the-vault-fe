@@ -41,8 +41,6 @@ function AnimeListPage() {
     animeCategory.animeList = filteredAnimeList;
   });
 
-  localStorage.setItem("animeCategoryList", JSON.stringify(animeCategoryList));
-
   return (
     <Box
       sx={{
