@@ -1,9 +1,9 @@
 import { Box, Typography } from "@mui/material";
-// import Grid from "@mui/material/Grid2";
 import { Link, useParams } from "react-router-dom";
 import ItemCard from "./ItemCard";
 
-function ItemCategory({ itemCategory }) {
+function ItemCategory(props) {
+  const { itemCategory } = props;
   const { categoryName } = useParams();
 
   return (
