@@ -1,6 +1,9 @@
 import { Box } from "@mui/material";
 import ItemCategory from "../components/VisitorPage/ItemCategory";
 import { useLoaderData } from "react-router-dom";
+import { useSelector } from "react-redux";
+import { selectMangaSearchResultList } from "../features/manga/mangaSlice";
+import ItemCard from "../components/VisitorPage/ItemCard";
 
 const mangaCategoryList = [
   {
@@ -20,6 +23,7 @@ const mangaCategoryList = [
 
 function MangaListPage() {
   const mangaList = useLoaderData();
+  const mangaSearchResultList = useSelector(selectMangaSearchResultList);
 
   mangaCategoryList.forEach((mangaCategory) => {
     const filteredMangaList = mangaList.filter((anime) =>
@@ -29,19 +33,40 @@ function MangaListPage() {
     mangaCategory.animeList = filteredMangaList;
   });
 
-  localStorage.setItem("mangaCategoryList", JSON.stringify(mangaCategoryList));
-
   return (
     <Box
       sx={{
-        display: "flex",
+        display: mangaSearchResultList ? "block" : "flex",
         flexDirection: "column",
         gap: { xs: "48px", md: "60px" },
       }}
     >
-      {mangaCategoryList.map((mangaCategory, index) => (
-        <ItemCategory key={index} itemCategory={mangaCategory} />
-      ))}
+      {!mangaSearchResultList ? (
+        mangaCategoryList.map((mangaCategory, index) => (
+          <ItemCategory key={index} itemCategory={mangaCategory} />
+        ))
+      ) : (
+        <Box
+          sx={{
+            display: "grid",
+            gridTemplateColumns: {
+              xs: "repeat(3, 1fr)",
+              sm: "repeat(3, 1fr)",
+              md: "repeat(5, 1fr)",
+              lg: "repeat(6, 1fr)",
+            },
+            gap: { xs: "12px 8px", sm: "16px 12px" }, // Sets consistent gap between items
+          }}
+        >
+          {mangaSearchResultList.map((mangaSearchResult, index) => (
+            <ItemCard
+              key={index}
+              item={mangaSearchResult}
+              format={mangaSearchResult.format}
+            />
+          ))}
+        </Box>
+      )}
     </Box>
   );
 }
