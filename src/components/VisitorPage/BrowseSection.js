@@ -1,6 +1,6 @@
 import { Box, useMediaQuery } from "@mui/material";
 import BrowseCategory from "./BrowseCategory";
-import SearchBar from "./SearchBar";
+import SearchBar from "../common/SearchBar";
 
 function BrowseSection() {
   const isMediumScreenWidthAndAbove = useMediaQuery((theme) =>
