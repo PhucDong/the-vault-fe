@@ -14,7 +14,7 @@ function ItemCard({ item, format }) {
       }}
       onClick={() =>
         navigate(
-          format === "anime" ? `/animes/${item.id}` : `/mangas/${item.id}`
+          format === "TV" ? `/animes/${item.id}` : `/mangas/${item.id}`
         )
       }
     >
