@@ -1,49 +1,26 @@
 import { Box } from "@mui/material";
 import ItemCategory from "../components/VisitorPage/ItemCategory";
-import { useLoaderData } from "react-router-dom";
 import { useSelector } from "react-redux";
 import ItemCard from "../components/VisitorPage/ItemCard";
-import { selectAnimeSearchResultList } from "../features/anime/animeSlice";
-
-const animeCategoryList = [
-  {
-    heading: "Trending Now",
-    category: "trending",
-    format: "TV",
-  },
-  {
-    heading: "Popular This Season",
-    category: "this-season",
-    format: "TV",
-  },
-  {
-    heading: "Upcoming Next Season",
-    category: "next-season",
-    format: "TV",
-  },
-  {
-    heading: "All Time Popular",
-    category: "popular",
-    format: "TV",
-  },
-  {
-    heading: "Top 100 Animes",
-    category: "top-100-animes",
-    format: "TV",
-  },
-];
+import {
+  selectAnimeSearchResultList,
+  selectCategorizedAnimeList,
+} from "../features/anime/animeSlice";
+import { useEffect } from "react";
+import { useAnimeAppDispatch } from "../app/hooks";
+import NoSearchResultAlert from "../components/common/NoSearchResultAlert";
 
 function AnimeListPage() {
-  const animeList = useLoaderData();
+  const { fetchCategorizedAnimeList } = useAnimeAppDispatch();
+  const categorizedAnimeList = useSelector(selectCategorizedAnimeList);
   const animeSearchResultList = useSelector(selectAnimeSearchResultList);
+  // console.log("Anime search results: ", animeSearchResultList);
 
-  animeCategoryList.forEach((animeCategory) => {
-    const filteredAnimeList = animeList.filter((anime) =>
-      anime.categoryList.includes(animeCategory.category)
-    );
-
-    animeCategory.animeList = filteredAnimeList;
-  });
+  useEffect(() => {
+    if (!animeSearchResultList) {
+      fetchCategorizedAnimeList({});
+    }
+  }, [animeSearchResultList]);
 
   return (
     <Box
@@ -53,10 +30,14 @@ function AnimeListPage() {
         gap: { xs: "48px", md: "60px" },
       }}
     >
-      {!animeSearchResultList ? (
-        animeCategoryList.map((animeCategory, index) => (
+      {!animeSearchResultList &&
+      categorizedAnimeList &&
+      categorizedAnimeList.length > 0 ? (
+        categorizedAnimeList?.map((animeCategory, index) => (
           <ItemCategory key={index} itemCategory={animeCategory} />
         ))
+      ) : animeSearchResultList?.length === 0 ? (
+        <NoSearchResultAlert />
       ) : (
         <Box
           sx={{
@@ -70,7 +51,7 @@ function AnimeListPage() {
             gap: { xs: "12px 8px", sm: "16px 12px" }, // Sets consistent gap between items
           }}
         >
-          {animeSearchResultList.map((animeSearchResult, index) => (
+          {animeSearchResultList?.map((animeSearchResult, index) => (
             <ItemCard
               key={index}
               item={animeSearchResult}
@@ -84,13 +65,3 @@ function AnimeListPage() {
 }
 
 export default AnimeListPage;
-
-export const animeListLoader = async () => {
-  const response = await fetch("http://localhost:3200/animeList");
-
-  if (!response.ok) {
-    throw new Error("Failed to fetch anime list");
-  }
-
-  return response.json();
-};

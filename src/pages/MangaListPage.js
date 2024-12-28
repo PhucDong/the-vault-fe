@@ -1,37 +1,27 @@
 import { Box } from "@mui/material";
 import ItemCategory from "../components/VisitorPage/ItemCategory";
-import { useLoaderData } from "react-router-dom";
 import { useSelector } from "react-redux";
-import { selectMangaSearchResultList } from "../features/manga/mangaSlice";
+import {
+  selectCategorizedMangaList,
+  selectMangaSearchResultList,
+} from "../features/manga/mangaSlice";
 import ItemCard from "../components/VisitorPage/ItemCard";
-
-const mangaCategoryList = [
-  {
-    heading: "Trending Now",
-    category: "trending",
-    format: "manga",
-  },
-  {
-    heading: "All Time Popular",
-    category: "popular",
-  },
-  {
-    heading: "Top 100 Mangas",
-    category: "top-100-mangas",
-  },
-];
+import { useMangaAppDispatch } from "../app/hooks";
+import { useEffect } from "react";
+import NoSearchResultAlert from "../components/common/NoSearchResultAlert";
 
 function MangaListPage() {
-  const mangaList = useLoaderData();
+  // const mangaList = useLoaderData();
+  const { fetchCategorizedMangaList } = useMangaAppDispatch();
+  const categorizedMangaList = useSelector(selectCategorizedMangaList);
   const mangaSearchResultList = useSelector(selectMangaSearchResultList);
+  // console.log("Manga search results: ", mangaSearchResultList);
 
-  mangaCategoryList.forEach((mangaCategory) => {
-    const filteredMangaList = mangaList.filter((anime) =>
-      anime.categoryList.includes(mangaCategory.category)
-    );
-
-    mangaCategory.animeList = filteredMangaList;
-  });
+  useEffect(() => {
+    if (!mangaSearchResultList) {
+      fetchCategorizedMangaList({});
+    }
+  }, [mangaSearchResultList]);
 
   return (
     <Box
@@ -41,10 +31,14 @@ function MangaListPage() {
         gap: { xs: "48px", md: "60px" },
       }}
     >
-      {!mangaSearchResultList ? (
-        mangaCategoryList.map((mangaCategory, index) => (
+      {!mangaSearchResultList &&
+      categorizedMangaList &&
+      categorizedMangaList.length > 0 ? (
+        categorizedMangaList?.map((mangaCategory, index) => (
           <ItemCategory key={index} itemCategory={mangaCategory} />
         ))
+      ) : mangaSearchResultList?.length === 0 ? (
+        <NoSearchResultAlert />
       ) : (
         <Box
           sx={{
@@ -58,7 +52,7 @@ function MangaListPage() {
             gap: { xs: "12px 8px", sm: "16px 12px" }, // Sets consistent gap between items
           }}
         >
-          {mangaSearchResultList.map((mangaSearchResult, index) => (
+          {mangaSearchResultList?.map((mangaSearchResult, index) => (
             <ItemCard
               key={index}
               item={mangaSearchResult}
@@ -72,13 +66,3 @@ function MangaListPage() {
 }
 
 export default MangaListPage;
-
-export const mangaListLoader = async () => {
-  const response = await fetch("http://localhost:3300/mangaList");
-
-  if (!response.ok) {
-    throw new Error("Failed to fetch manga list");
-  }
-
-  return response.json();
-};
