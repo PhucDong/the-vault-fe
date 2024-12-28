@@ -75,8 +75,16 @@ function MainHeader(props) {
   };
 
   useEffect(() => {
-    if (location.pathname.startsWith("/animes")) setNavBarItem("Anime");
-    else if (location.pathname.startsWith("/mangas")) setNavBarItem("Manga");
+    if (
+      location.pathname.startsWith("/animes") ||
+      location.pathname.startsWith("/search/animes")
+    )
+      setNavBarItem("Anime");
+    else if (
+      location.pathname.startsWith("/mangas") ||
+      location.pathname.startsWith("/search/mangas")
+    )
+      setNavBarItem("Manga");
     else if (location.pathname.startsWith("/login")) setNavBarItem("Log In");
     else if (location.pathname.startsWith("/")) setNavBarItem("Home");
   }, [location.pathname]);
