@@ -1,36 +1,32 @@
 import { Box } from "@mui/material";
-import AnimeCategory from "../components/VisitorPage/ItemCategory";
+import ItemCategory from "../components/VisitorPage/ItemCategory";
 import { useParams } from "react-router-dom";
-import { useCallback } from "react";
+import { useCallback, useEffect } from "react";
+import { useSelector } from "react-redux";
+import {
+  selectAnimeSearchResultList,
+  selectCategorizedAnimeList,
+} from "../features/anime/animeSlice";
+import { useAnimeAppDispatch } from "../app/hooks";
+import NoSearchResultAlert from "../components/common/NoSearchResultAlert";
+import ItemCard from "../components/VisitorPage/ItemCard";
 
 function AnimeListByCategoryPage() {
   const { categoryName } = useParams();
   // const animeCategoryList = useLoaderData();
-  const animeCategoryList = localStorage.getItem("animeCategoryList");
+  const categorizedAnimeList = useSelector(selectCategorizedAnimeList);
+  const animeSearchResultList = useSelector(selectAnimeSearchResultList);
+  const { fetchCategorizedAnimeList } = useAnimeAppDispatch();
 
-  // When route search/animes/categoryName displays
-  // The component is rendered:
-  // It takes animeList data in Redux store
-  // Renders those data
+  // console.log("Anime search results: ", animeSearchResultList);
 
-  const getAnimeCategoryList = useCallback(() => {
-    const allowedAnimeCategoryList = [
-      "trending",
-      "popular",
-      "this-season",
-      "next-season",
-      "top-100-animes",
-    ];
-    if (categoryName && allowedAnimeCategoryList.includes(categoryName)) {
-      const filteredAnimeCategory = JSON.parse(animeCategoryList).filter(
-        (category) => category.category === categoryName
-      );
-
-      return filteredAnimeCategory;
-    } else {
-      throw new Error(`Category ${categoryName} doesn't exist`);
+  useEffect(() => {
+    if (categoryName) {
+      // console.log("Category name: ", categoryName);
+      // console.log("Categorized anime list: ", categorizedAnimeList);
+      fetchCategorizedAnimeList({ categoryName });
     }
-  }, [categoryName, animeCategoryList]);
+  }, [categoryName]);
 
   return (
     <Box
@@ -40,9 +36,34 @@ function AnimeListByCategoryPage() {
         gap: "40px",
       }}
     >
-      {getAnimeCategoryList().map((animeCategory, index) => (
-        <AnimeCategory key={index} animeCategory={animeCategory} />
-      ))}
+      {animeSearchResultList?.length === 0 ? (
+        <NoSearchResultAlert />
+      ) : animeSearchResultList?.length > 0 ? (
+        <Box
+          sx={{
+            display: "grid",
+            gridTemplateColumns: {
+              xs: "repeat(3, 1fr)",
+              sm: "repeat(3, 1fr)",
+              md: "repeat(5, 1fr)",
+              lg: "repeat(6, 1fr)",
+            },
+            gap: { xs: "12px 8px", sm: "16px 12px" }, // Sets consistent gap between items
+          }}
+        >
+          {animeSearchResultList?.map((animeSearchResult, index) => (
+            <ItemCard
+              key={index}
+              item={animeSearchResult}
+              format={animeSearchResult.format}
+            />
+          ))}
+        </Box>
+      ) : (
+        categorizedAnimeList?.map((animeCategory, index) => (
+          <ItemCategory key={index} itemCategory={animeCategory} />
+        ))
+      )}
     </Box>
   );
 }
