@@ -28,7 +28,16 @@
       "members": 25000,
       "format": "TV",
       "status": "finished",
-      "genres": ["action", "drama", "supernatural"]
+      "genres": ["action", "drama", "supernatural"],
+      "studio": "Production I.G",
+      "producers": [
+        "Dentsu",
+        "Fuji TV",
+        "Nitroplus",
+        "Sony Music Entertainment",
+        "TOHO animation"
+      ],
+      "season": "winter"
     },
     {
       "id": 3,
@@ -58,7 +67,16 @@
       "members": 25000,
       "format": "TV",
       "status": "finished",
-      "genres": ["action", "drama", "supernatural"]
+      "genres": ["action", "drama", "supernatural"],
+      "studio": "Production I.G",
+      "producers": [
+        "Dentsu",
+        "Fuji TV",
+        "Nitroplus",
+        "Sony Music Entertainment",
+        "TOHO animation"
+      ],
+      "season": "spring"
     },
     {
       "id": 18,
@@ -88,7 +106,16 @@
       "members": 25000,
       "format": "TV",
       "status": "finished",
-      "genres": ["action", "drama", "supernatural"]
+      "genres": ["action", "drama", "supernatural"],
+      "studio": "Production I.G",
+      "producers": [
+        "Dentsu",
+        "Fuji TV",
+        "Nitroplus",
+        "Sony Music Entertainment",
+        "TOHO animation"
+      ],
+      "season": "summer"
     },
     {
       "id": 19,
@@ -118,14 +145,23 @@
       "members": 25000,
       "format": "TV",
       "status": "finished",
-      "genres": ["action", "drama", "supernatural"]
+      "genres": ["action", "drama", "supernatural"],
+      "studio": "Production I.G",
+      "producers": [
+        "Dentsu",
+        "Fuji TV",
+        "Nitroplus",
+        "Sony Music Entertainment",
+        "TOHO animation"
+      ],
+      "season": "fall"
     },
     {
       "id": 24,
-      "title": "Love In The Air",
+      "title": "Love In The Air Season 2",
       "description": "Lorem ipsum dolor sit amet consectetur adipisicing elit. Dolorem perferendis libero rerum. Nam ipsa cupiditate voluptatem voluptatum nisi dolore beatae, expedita quaerat Sesse recusandae deserunt sed in dignissimos incidunt nihil. Expedita quaerat esse recusandae deserunt sed in dignissimos incidunt nihil fefjkjwjewke fwenk dekern ewjrw eirwo fweroorknk.",
-      "chapters": 40,
-      "publishingDate": "10 Oct 2010",
+      "chapters": 30,
+      "publishingDate": "10 Oct 2024",
       "categoryList": ["trending", "this-season"],
       "score": 9.5,
       "rank": 10,
@@ -133,7 +169,16 @@
       "members": 25000,
       "format": "TV",
       "status": "Manga",
-      "genres": ["action", "drama", "supernatural"]
+      "genres": ["action", "drama", "supernatural"],
+      "studio": "Production I.G",
+      "producers": [
+        "Dentsu",
+        "Fuji TV",
+        "Nitroplus",
+        "Sony Music Entertainment",
+        "TOHO animation"
+      ],
+      "season": "spring"
     },
     {
       "id": 5,
@@ -148,7 +193,16 @@
       "members": 25000,
       "format": "TV",
       "status": "finished",
-      "genres": ["action", "drama", "supernatural"]
+      "genres": ["action", "drama", "supernatural"],
+      "studio": "Production I.G",
+      "producers": [
+        "Dentsu",
+        "Fuji TV",
+        "Nitroplus",
+        "Sony Music Entertainment",
+        "TOHO animation"
+      ],
+      "season": "winter"
     },
     {
       "id": 25,
@@ -178,7 +232,16 @@
       "members": 25000,
       "format": "TV",
       "status": "finished",
-      "genres": ["action", "drama", "supernatural"]
+      "genres": ["action", "drama", "supernatural"],
+      "studio": "Production I.G",
+      "producers": [
+        "Dentsu",
+        "Fuji TV",
+        "Nitroplus",
+        "Sony Music Entertainment",
+        "TOHO animation"
+      ],
+      "season": "summer"
     },
     {
       "id": 6,
@@ -193,7 +256,16 @@
       "members": 25000,
       "format": "TV",
       "status": "finished",
-      "genres": ["action", "drama", "supernatural"]
+      "genres": ["action", "drama", "supernatural"],
+      "studio": "Production I.G",
+      "producers": [
+        "Dentsu",
+        "Fuji TV",
+        "Nitroplus",
+        "Sony Music Entertainment",
+        "TOHO animation"
+      ],
+      "season": "summer"
     },
     {
       "id": 12,
@@ -223,7 +295,16 @@
       "members": 25000,
       "format": "TV",
       "status": "finished",
-      "genres": ["action", "drama", "supernatural"]
+      "genres": ["action", "drama", "supernatural"],
+      "studio": "Production I.G",
+      "producers": [
+        "Dentsu",
+        "Fuji TV",
+        "Nitroplus",
+        "Sony Music Entertainment",
+        "TOHO animation"
+      ],
+      "season": "spring"
     },
     {
       "id": 27,
@@ -268,7 +349,16 @@
       "members": 25000,
       "format": "TV",
       "status": "finished",
-      "genres": ["action", "drama", "supernatural"]
+      "genres": ["action", "drama", "supernatural"],
+      "studio": "Production I.G",
+      "producers": [
+        "Dentsu",
+        "Fuji TV",
+        "Nitroplus",
+        "Sony Music Entertainment",
+        "TOHO animation"
+      ],
+      "season": "fall"
     },
     {
       "id": 28,
@@ -328,7 +418,16 @@
       "members": 25000,
       "format": "TV",
       "status": "finished",
-      "genres": ["action", "drama", "supernatural"]
+      "genres": ["action", "drama", "supernatural"],
+      "studio": "Production I.G",
+      "producers": [
+        "Dentsu",
+        "Fuji TV",
+        "Nitroplus",
+        "Sony Music Entertainment",
+        "TOHO animation"
+      ],
+      "season": "winter"
     },
     {
       "id": 10,
@@ -343,7 +442,16 @@
       "members": 25000,
       "format": "TV",
       "status": "finished",
-      "genres": ["action", "drama", "supernatural"]
+      "genres": ["action", "drama", "supernatural"],
+      "studio": "Production I.G",
+      "producers": [
+        "Dentsu",
+        "Fuji TV",
+        "Nitroplus",
+        "Sony Music Entertainment",
+        "TOHO animation"
+      ],
+      "season": "spring"
     },
     {
       "id": 11,
@@ -358,7 +466,16 @@
       "members": 25000,
       "format": "TV",
       "status": "finished",
-      "genres": ["action", "drama", "supernatural"]
+      "genres": ["action", "drama", "supernatural"],
+      "studio": "Production I.G",
+      "producers": [
+        "Dentsu",
+        "Fuji TV",
+        "Nitroplus",
+        "Sony Music Entertainment",
+        "TOHO animation"
+      ],
+      "season": "summer"
     },
     {
       "id": 120,
@@ -373,7 +490,16 @@
       "members": 25000,
       "format": "TV",
       "status": "finished",
-      "genres": ["action", "drama", "supernatural"]
+      "genres": ["action", "drama", "supernatural"],
+      "studio": "Production I.G",
+      "producers": [
+        "Dentsu",
+        "Fuji TV",
+        "Nitroplus",
+        "Sony Music Entertainment",
+        "TOHO animation"
+      ],
+      "season": "fall"
     },
     {
       "id": 13,
@@ -388,7 +514,16 @@
       "members": 25000,
       "format": "TV",
       "status": "finished",
-      "genres": ["action", "drama", "supernatural"]
+      "genres": ["action", "drama", "supernatural"],
+      "studio": "Production I.G",
+      "producers": [
+        "Dentsu",
+        "Fuji TV",
+        "Nitroplus",
+        "Sony Music Entertainment",
+        "TOHO animation"
+      ],
+      "season": "winter"
     },
     {
       "id": 14,
@@ -403,7 +538,16 @@
       "members": 25000,
       "format": "TV",
       "status": "finished",
-      "genres": ["action", "drama", "supernatural"]
+      "genres": ["action", "drama", "supernatural"],
+      "studio": "Production I.G",
+      "producers": [
+        "Dentsu",
+        "Fuji TV",
+        "Nitroplus",
+        "Sony Music Entertainment",
+        "TOHO animation"
+      ],
+      "season": "spring"
     },
     {
       "id": 15,
@@ -418,7 +562,16 @@
       "members": 25000,
       "format": "TV",
       "status": "finished",
-      "genres": ["action", "drama", "supernatural"]
+      "genres": ["action", "drama", "supernatural"],
+      "studio": "Production I.G",
+      "producers": [
+        "Dentsu",
+        "Fuji TV",
+        "Nitroplus",
+        "Sony Music Entertainment",
+        "TOHO animation"
+      ],
+      "season": "summer"
     },
     {
       "id": 16,
@@ -433,7 +586,16 @@
       "members": 25000,
       "format": "TV",
       "status": "finished",
-      "genres": ["action", "drama", "supernatural"]
+      "genres": ["action", "drama", "supernatural"],
+      "studio": "Production I.G",
+      "producers": [
+        "Dentsu",
+        "Fuji TV",
+        "Nitroplus",
+        "Sony Music Entertainment",
+        "TOHO animation"
+      ],
+      "season": "fall"
     },
     {
       "id": 17,
@@ -448,7 +610,16 @@
       "members": 25000,
       "format": "TV",
       "status": "finished",
-      "genres": ["action", "drama", "supernatural"]
+      "genres": ["action", "drama", "supernatural"],
+      "studio": "Production I.G",
+      "producers": [
+        "Dentsu",
+        "Fuji TV",
+        "Nitroplus",
+        "Sony Music Entertainment",
+        "TOHO animation"
+      ],
+      "season": "winter"
     }
   ]
 }
