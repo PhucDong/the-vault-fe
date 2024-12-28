@@ -9,7 +9,7 @@ import {
 import { useState } from "react";
 import KeyboardArrowRightIcon from "@mui/icons-material/KeyboardArrowRight";
 
-const genreOptionList = [
+const defaultGenreOptionList = [
   "Adventure",
   "Action",
   "Drama",
@@ -25,9 +25,9 @@ const genreOptionList = [
 ];
 
 function GenreFilter(props) {
-  const { genreOption, setGenreOption, sx } = props;
-  const handleChangeGenreFilter = (event) => setGenreOption(event.target.value);
-
+  const { genreOptionList, setGenreOptionList, sx } = props;
+  const handleChangeGenreFilter = (event) =>
+    setGenreOptionList(event.target.value);
   const [openAdvancedFilterDropdownMenu, setOpenAdvancedFilterDropdownMenu] =
     useState(false);
 
@@ -57,7 +57,7 @@ function GenreFilter(props) {
         required
         select
         hiddenLabel
-        value={genreOption}
+        value={genreOptionList}
         onChange={handleChangeGenreFilter}
         slotProps={{
           select: {
@@ -144,12 +144,12 @@ function GenreFilter(props) {
           },
         }}
       >
-        {genreOptionList.map((option) => (
+        {defaultGenreOptionList.map((option) => (
           <MenuItem key={option} value={option}>
             <Checkbox
               id={option}
               name={option}
-              checked={genreOption.indexOf(option) > -1}
+              checked={genreOptionList.indexOf(option) > -1}
             />
             <ListItemText primary={option} />
           </MenuItem>
