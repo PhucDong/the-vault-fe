@@ -1,10 +1,13 @@
 import { Button, Typography } from "@mui/material";
 import KeyboardArrowRightIcon from "@mui/icons-material/KeyboardArrowRight";
 import { useState } from "react";
-import AdvancedFilterList from "./AdvancedFilterList";
+import AnimeAdvancedFilterList from "./AnimeAdvancedFilterList";
+import { useLocation } from "react-router-dom";
+import MangaAdvancedFilterList from "./MangaAdvancedFilterList";
 
 function AdvancedSearch() {
   const [openAdvancedSearch, setOpenAdvancedSearch] = useState(false);
+  const location = useLocation();
 
   const handleOpenAdvancedSearch = () => {
     setOpenAdvancedSearch(true);
@@ -40,7 +43,18 @@ function AdvancedSearch() {
         <KeyboardArrowRightIcon />
       </Button>
 
-      {openAdvancedSearch && <AdvancedFilterList />}
+      {openAdvancedSearch &&
+        (location.pathname === "/" ||
+          location.pathname.startsWith("/animes") ||
+          location.pathname.startsWith("/search/animes")) && (
+          <AnimeAdvancedFilterList />
+        )}
+
+      {openAdvancedSearch &&
+        (location.pathname.startsWith("/mangas") ||
+          location.pathname.startsWith("/search/mangas")) && (
+          <MangaAdvancedFilterList />
+        )}
     </>
   );
 }
