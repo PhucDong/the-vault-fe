@@ -26,8 +26,14 @@ const studioOptionList = [
 
 function StudioFilter(props) {
   const { studioOption, setStudioOption, sx } = props;
-  const handleChangeStudioFilter = (event) =>
-    setStudioOption(event.target.value);
+  
+  const handleChangeStudioFilter = (option) => {
+    if (studioOption === option) {
+      setStudioOption("");
+    } else {
+      setStudioOption(option);
+    }
+  };
 
   const [openAdvancedFilterDropdownMenu, setOpenAdvancedFilterDropdownMenu] =
     useState(false);
@@ -51,7 +57,7 @@ function StudioFilter(props) {
           marginBottom: "4px",
         }}
       >
-        Studios
+        Studio
       </InputLabel>
       <TextField
         id="studio-filter"
@@ -59,11 +65,10 @@ function StudioFilter(props) {
         select
         hiddenLabel
         value={studioOption}
-        onChange={handleChangeStudioFilter}
         slotProps={{
           select: {
-            multiple: true,
-            renderValue: (selected) => selected.map((item) => item).join(", "),
+            multiple: false,
+            renderValue: (selected) => selected,
             open: openAdvancedFilterDropdownMenu, // Controls the dropdown's visibility
             onOpen: handleOpenAdvancedFilterDropdownMenu,
             onClose: handleCloseAdvancedFilterDropdownMenu,
@@ -146,7 +151,11 @@ function StudioFilter(props) {
         }}
       >
         {studioOptionList.map((option) => (
-          <MenuItem key={option} value={option}>
+          <MenuItem
+            key={option}
+            value={option}
+            onClick={() => handleChangeStudioFilter(option)}
+          >
             <Checkbox
               id={option}
               name={option}
