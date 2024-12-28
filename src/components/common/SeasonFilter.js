@@ -9,13 +9,18 @@ import {
 import { useState } from "react";
 import KeyboardArrowRightIcon from "@mui/icons-material/KeyboardArrowRight";
 
-const seasonOptionList = ["Winter", "Spring", "Summer", "Fall"];
+const seasonOptionList = ["winter", "spring", "summer", "fall"];
 
 function SeasonFilter(props) {
   const { seasonOption, setSeasonOption, sx } = props;
 
-  const handleChangeSeasonFilter = (event) =>
-    setSeasonOption(event.target.value);
+  const handleChangeSeasonFilter = (option) => {
+    if (seasonOption === option) {
+      setSeasonOption("");
+    } else {
+      setSeasonOption(option);
+    }
+  };
 
   const [openAdvancedFilterDropdownMenu, setOpenAdvancedFilterDropdownMenu] =
     useState(false);
@@ -47,7 +52,7 @@ function SeasonFilter(props) {
         select
         hiddenLabel
         value={seasonOption}
-        onChange={handleChangeSeasonFilter}
+        // onChange={handleChangeSeasonFilter}
         slotProps={{
           select: {
             multiple: false,
@@ -123,6 +128,7 @@ function SeasonFilter(props) {
                 padding: 0,
                 minHeight: "100%",
                 height: "100%",
+                textTransform: "capitalize",
               },
             },
           },
@@ -134,13 +140,25 @@ function SeasonFilter(props) {
         }}
       >
         {seasonOptionList.map((option) => (
-          <MenuItem key={option} value={option}>
+          <MenuItem
+            key={option}
+            value={option}
+            onClick={() => handleChangeSeasonFilter(option)}
+          >
             <Checkbox
               id={option}
               name={option}
-              checked={seasonOption.indexOf(option) > -1}
+              checked={seasonOption === option}
             />
-            <ListItemText primary={option} />
+            <ListItemText
+              primary={option}
+              sx={{
+                "& .MuiTypography-root": {
+                  color: "primary.main",
+                  textTransform: "capitalize",
+                },
+              }}
+            />
           </MenuItem>
         ))}
       </TextField>
