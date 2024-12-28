@@ -31,7 +31,14 @@ function CustomTabPanel(props) {
       {value === index && (
         <>
           {/* Left column */}
-          <Box sx={{ display: "flex", flexDirection: "column", gap: "8px" }}>
+          <Box
+            sx={{
+              flex: 0,
+              display: "flex",
+              flexDirection: "column",
+              gap: "8px",
+            }}
+          >
             <DetailedItemHighlight item={item} />
             <DetailedItemExtraInfo item={item} />
           </Box>
