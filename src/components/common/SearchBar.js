@@ -54,26 +54,39 @@ function SearchBar() {
   };
 
   useEffect(() => {
+    // console.log("Search value: ", searchValue);
     if (searchValue.length > 0) {
       if (location.pathname === "/") {
-        fetchAnimeSearchResultList(searchValue);
+        fetchAnimeSearchResultList({ searchValue });
         navigate("/animes");
       }
       if (location.pathname.startsWith("/animes")) {
-        fetchAnimeSearchResultList(searchValue);
+        fetchAnimeSearchResultList({ searchValue });
+      }
+      if (location.pathname.startsWith("/search/animes")) {
+        fetchAnimeSearchResultList({ searchValue });
       }
       if (location.pathname.startsWith("/mangas")) {
-        fetchMangaSearchResultList(searchValue);
+        fetchMangaSearchResultList({ searchValue });
+      }
+      if (location.pathname.startsWith("/search/mangas")) {
+        fetchMangaSearchResultList({ searchValue });
       }
     } else {
       if (location.pathname.startsWith("/animes")) {
-        fetchAnimeSearchResultList();
+        fetchAnimeSearchResultList({});
+      }
+      if (location.pathname.startsWith("/search/animes")) {
+        fetchAnimeSearchResultList({});
       }
       if (location.pathname.startsWith("/mangas")) {
-        fetchMangaSearchResultList();
+        fetchMangaSearchResultList({});
+      }
+      if (location.pathname.startsWith("/search/mangas")) {
+        fetchMangaSearchResultList({});
       }
     }
-  }, [searchValue, location.pathname]);
+  }, [searchValue]);
 
   return (
     <>
