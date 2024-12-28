@@ -7,6 +7,8 @@ import { useState } from "react";
 
 function YearFilter(props) {
   const { yearOption, setYearOption, sx } = props;
+  const [clearedYearOption, setClearedYearOption] = useState(false);
+
   const handleChangeYearFilter = (newYear) => setYearOption(newYear);
 
   const [openAdvancedFilterDropdownMenu, setOpenAdvancedFilterDropdownMenu] =
@@ -62,6 +64,10 @@ function YearFilter(props) {
                   },
                 },
               },
+            },
+            field: {
+              clearable: true,
+              onClear: () => setClearedYearOption(true),
             },
           }}
           sx={{
