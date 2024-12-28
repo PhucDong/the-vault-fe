@@ -10,8 +10,8 @@ import VisitorPage from "./pages/VisitorPage";
 import LoginPage, { userAccountListLoader } from "./pages/LoginPage";
 import RegisterPage from "./pages/RegisterPage";
 import AnimeListByCategoryPage from "./pages/AnimeListByCategoryPage";
-import AnimeListPage, { animeListLoader } from "./pages/AnimeListPage";
-import MangaListPage, { mangaListLoader } from "./pages/MangaListPage";
+import AnimeListPage from "./pages/AnimeListPage";
+import MangaListPage from "./pages/MangaListPage";
 import MangaListByCategoryPage from "./pages/MangaListByCategoryPage";
 import RegisterLogInLayout from "./layouts/RegisterLogInLayout";
 import HomePage from "./pages/HomePage";
@@ -35,11 +35,11 @@ import ReviewEditorPage from "./pages/ReviewEditorPage";
 const router = createBrowserRouter(
   createRoutesFromElements(
     <Route element={<MainLayout />} errorElement={<ErrorPage />}>
-      <Route path="/" element={<VisitorPage />} loader={animeListLoader}>
+      <Route path="/" element={<VisitorPage />}>
         <Route
           path="animes"
           element={<AnimeListPage />}
-          loader={animeListLoader}
+          // loader={animeListLoader}
         />
 
         <Route
@@ -50,7 +50,7 @@ const router = createBrowserRouter(
         <Route
           path="mangas"
           element={<MangaListPage />}
-          loader={mangaListLoader}
+          // loader={mangaListLoader}
         />
 
         <Route
