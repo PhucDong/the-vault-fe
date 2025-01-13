@@ -1,8 +1,15 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import apiService from "../../../services/apiService";
+import dayjs from "dayjs";
 
 const initialState = {
   searchResultList: null,
   categorizedMangaList: null,
+  searchValue: "",
+  publishingStatusOption: "",
+  yearOption: null,
+  genreOptionList: [],
+  genreList: [],
 };
 
 export const fetchMangaSearchResultList = createAsyncThunk(
@@ -11,21 +18,18 @@ export const fetchMangaSearchResultList = createAsyncThunk(
     { searchValue, yearOption, publishingStatusOption, genreOptionList },
     { rejectWithValue }
   ) => {
-    let baseURL = "http://localhost:3300/mangaList";
+    let baseURL = "/mangas";
     let hasQuery = false;
 
     try {
       if (searchValue) {
-        // console.log("Search value: ", searchValue);
-        baseURL += `${hasQuery ? "&" : "?"}q=${encodeURIComponent(
+        baseURL += `${hasQuery ? "&" : "?"}title=${encodeURIComponent(
           searchValue
         )}`;
         hasQuery = true;
       }
       if (yearOption) {
-        baseURL += `${hasQuery ? "&" : "?"}year=${yearOption
-          .year()
-          .toString()}`;
+        baseURL += `${hasQuery ? "&" : "?"}year=${dayjs(yearOption).year()}`;
         hasQuery = true;
       }
       if (publishingStatusOption) {
@@ -33,33 +37,27 @@ export const fetchMangaSearchResultList = createAsyncThunk(
         hasQuery = true;
       }
 
-      const response = await fetch(`${baseURL}`);
+      const response = await apiService.get(`${baseURL}`);
 
-      if (!response.ok) {
-        throw new Error("Failed to fetch search results.");
-      }
-
-      const allMangas = await response.json();
       let filteredMangas = [];
 
       if (genreOptionList?.length > 0) {
-        const normalizedGenres = genreOptionList.map((genre) =>
-          genre.toLowerCase()
-        );
-        filteredMangas = allMangas.filter((manga) =>
-          normalizedGenres.every((genre) =>
-            manga.genres.map((g) => g.toLowerCase()).includes(genre)
-          )
+        filteredMangas = response.mangaList.filter((manga) =>
+          genreOptionList.every((genre) => manga.genres.includes(genre))
         );
       }
 
       if (genreOptionList?.length > 0) {
-        return { searchResultList: filteredMangas };
+        return {
+          searchResultList: filteredMangas,
+          genreList: response.genreList,
+        };
       } else if (searchValue || yearOption || publishingStatusOption) {
-        // console.log("Search results: ", allMangas);
-        return { searchResultList: allMangas };
+        return {
+          searchResultList: response.mangaList,
+          genreList: response.genreList,
+        };
       } else {
-        // console.log("Search results: ", allMangas);
         throw new Error("No search results found.");
       }
     } catch (error) {
@@ -72,12 +70,7 @@ export const fetchCategorizedMangaList = createAsyncThunk(
   "manga/fetchCategorizedMangaList",
   async ({ categoryName }, { rejectWithValue }) => {
     try {
-      const response = await fetch("http://localhost:3300/mangaList");
-      if (!response.ok) {
-        return rejectWithValue("Failed to fetch all mangas.");
-      }
-
-      const allMangas = await response.json();
+      const response = await apiService.get("/mangas");
 
       const mangaCategoryList = [
         {
@@ -96,7 +89,7 @@ export const fetchCategorizedMangaList = createAsyncThunk(
       ];
 
       mangaCategoryList.forEach((mangaCategory) => {
-        const filteredMangaList = allMangas.filter((manga) =>
+        const filteredMangaList = response.mangaList.filter((manga) =>
           manga.categoryList.includes(mangaCategory.category)
         );
 
@@ -104,17 +97,19 @@ export const fetchCategorizedMangaList = createAsyncThunk(
       });
 
       if (categoryName) {
-        // console.log("Category name: ", categoryName);
         const filteredMangaListByCategory = mangaCategoryList.filter(
           (mangaCategory) => mangaCategory.category === categoryName
         );
-        // console.log("Filtered list by category: ", filteredMangaListByCategory);
         return {
           categorizedMangaList: filteredMangaListByCategory,
+          genreList: response.genreList,
         };
       }
 
-      return { categorizedMangaList: mangaCategoryList };
+      return {
+        categorizedMangaList: mangaCategoryList,
+        genreList: response.genreList,
+      };
     } catch (error) {
       return rejectWithValue("An unexpected error occurred.");
     }
@@ -124,6 +119,23 @@ export const fetchCategorizedMangaList = createAsyncThunk(
 export const mangaSlice = createSlice({
   name: "manga",
   initialState,
+  reducers: {
+    updateMangaSearchValue(state, action) {
+      state.searchValue = action.payload;
+    },
+    updatePublishedYear(state, action) {
+      state.yearOption = action.payload;
+    },
+    updatePublishingStatus(state, action) {
+      state.publishingStatusOption = action.payload;
+    },
+    updateGenreOptionList(state, action) {
+      state.genreOptionList = action.payload;
+    },
+    clearCategorizedMangaList(state) {
+      state.categorizedMangaList = [];
+    },
+  },
   extraReducers: (builder) => {
     builder
       .addCase(fetchMangaSearchResultList.pending, (state) => {
@@ -132,6 +144,7 @@ export const mangaSlice = createSlice({
       .addCase(fetchMangaSearchResultList.fulfilled, (state, action) => {
         state.fetchResultStatus = "idle";
         state.searchResultList = action.payload?.searchResultList;
+        state.genreList = action.payload?.genreList;
       })
       .addCase(fetchMangaSearchResultList.rejected, (state, action) => {
         state.fetchResultStatus = "failed";
@@ -144,6 +157,7 @@ export const mangaSlice = createSlice({
       .addCase(fetchCategorizedMangaList.fulfilled, (state, action) => {
         state.fetchCategorizedMangaListStatus = "idle";
         state.categorizedMangaList = action.payload?.categorizedMangaList;
+        state.genreList = action.payload?.genreList;
       })
       .addCase(fetchCategorizedMangaList.rejected, (state, action) => {
         state.fetchCategorizedMangaListStatus = "failed";
@@ -152,6 +166,13 @@ export const mangaSlice = createSlice({
   },
 });
 
+export const {
+  updateMangaSearchValue,
+  updatePublishedYear,
+  updateGenreOptionList,
+  updatePublishingStatus,
+  clearCategorizedMangaList,
+} = mangaSlice.actions;
 export default mangaSlice.reducer;
 
 export const selectMangaSearchResultList = (state) =>

@@ -1,8 +1,17 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import dayjs from "dayjs";
+import apiService from "../../../services/apiService";
 
 const initialState = {
   searchResultList: null,
   categorizedAnimeList: null,
+  searchValue: "",
+  yearOption: null,
+  airingStatusOption: "",
+  seasonOption: "",
+  genreOptionList: [],
+  studioOption: "",
+  genreList: [],
 };
 
 export const fetchAnimeSearchResultList = createAsyncThunk(
@@ -18,13 +27,12 @@ export const fetchAnimeSearchResultList = createAsyncThunk(
     },
     { rejectWithValue }
   ) => {
-    let baseURL = "http://localhost:3200/animeList";
+    let baseURL = "/animes";
     let hasQuery = false;
 
     try {
       if (searchValue) {
-        // console.log("Search value: ", searchValue);
-        baseURL += `${hasQuery ? "&" : "?"}q=${encodeURIComponent(
+        baseURL += `${hasQuery ? "&" : "?"}title=${encodeURIComponent(
           searchValue
         )}`;
         hasQuery = true;
@@ -34,58 +42,49 @@ export const fetchAnimeSearchResultList = createAsyncThunk(
         hasQuery = true;
       }
       if (yearOption) {
-        baseURL += `${hasQuery ? "&" : "?"}year=${yearOption
-          .year()
-          .toString()}`;
+        baseURL += `${hasQuery ? "&" : "?"}year=${dayjs(yearOption).year()}`;
         hasQuery = true;
       }
       if (airingStatusOption) {
         baseURL += `${hasQuery ? "&" : "?"}status=${airingStatusOption}`;
         hasQuery = true;
       }
+
+      const response = await apiService.get(`${baseURL}`);
+
+      // Client-side filtering for genres & studio
+      let filteredAnimes = [];
+
+      // Filter by studio
       if (studioOption) {
-        baseURL += `${hasQuery ? "&" : "?"}studio=${encodeURIComponent(
-          studioOption
-        )}`;
-        hasQuery = true;
+        filteredAnimes = response.animeList.filter(
+          (anime) => anime.studio.name === studioOption
+        );
       }
-
-      const response = await fetch(`${baseURL}`);
-
-      if (!response.ok) {
-        throw new Error("Failed to fetch search results.");
-      }
-
-      const allAnimes = await response.json();
-
-      // Client-side filtering for genres
-      let filteredAnimes = allAnimes;
 
       // Filter by genres
       if (genreOptionList?.length > 0) {
-        const normalizedGenres = genreOptionList.map((genre) =>
-          genre.toLowerCase()
-        );
-        filteredAnimes = allAnimes.filter((anime) =>
-          normalizedGenres.every((genre) =>
-            anime.genres.map((g) => g.toLowerCase()).includes(genre)
-          )
+        filteredAnimes = response.animeList.filter((anime) =>
+          genreOptionList.every((genre) => anime.genres.includes(genre))
         );
       }
 
-      if (genreOptionList?.length > 0) {
-        return { searchResultList: filteredAnimes };
+      if (studioOption || genreOptionList?.length > 0) {
+        return {
+          searchResultList: filteredAnimes,
+          genreList: response.genreList,
+        };
       } else if (
         searchValue ||
         seasonOption ||
         yearOption ||
-        airingStatusOption ||
-        studioOption
+        airingStatusOption
       ) {
-        // console.log("Search results: ", allAnimes);
-        return { searchResultList: allAnimes };
+        return {
+          searchResultList: response.animeList,
+          genreList: response.genreList,
+        };
       } else {
-        // console.log("Search results: ", allAnimes);
         throw new Error("No search results found.");
       }
     } catch (error) {
@@ -98,12 +97,7 @@ export const fetchCategorizedAnimeList = createAsyncThunk(
   "anime/fetchCategorizedAnimeList",
   async ({ categoryName }, { rejectWithValue }) => {
     try {
-      const response = await fetch("http://localhost:3200/animeList");
-      if (!response.ok) {
-        throw new Error("Failed to fetch all animes.");
-      }
-
-      const allAnimes = await response.json();
+      const response = await apiService.get("/animes");
 
       const animeCategoryList = [
         {
@@ -134,7 +128,7 @@ export const fetchCategorizedAnimeList = createAsyncThunk(
       ];
 
       animeCategoryList.forEach((animeCategory) => {
-        const filteredAnimeList = allAnimes.filter((anime) =>
+        const filteredAnimeList = response.animeList.filter((anime) =>
           anime.categoryList.includes(animeCategory.category)
         );
 
@@ -142,17 +136,19 @@ export const fetchCategorizedAnimeList = createAsyncThunk(
       });
 
       if (categoryName) {
-        // console.log("Category name: ", categoryName);
         const filteredAnimeListByCategory = animeCategoryList.filter(
           (animeCategory) => animeCategory.category === categoryName
         );
-        // console.log("Filtered list by category: ", filteredAnimeListByCategory);
         return {
           categorizedAnimeList: filteredAnimeListByCategory,
+          genreList: response.genreList,
         };
       }
 
-      return { categorizedAnimeList: animeCategoryList };
+      return {
+        categorizedAnimeList: animeCategoryList,
+        genreList: response.genreList,
+      };
     } catch (error) {
       return rejectWithValue(error.message);
     }
@@ -162,6 +158,29 @@ export const fetchCategorizedAnimeList = createAsyncThunk(
 export const animeSlice = createSlice({
   name: "anime",
   initialState,
+  reducers: {
+    updateAnimeSearchValue(state, action) {
+      state.searchValue = action.payload;
+    },
+    updateAiredYear(state, action) {
+      state.yearOption = action.payload;
+    },
+    updateAiringStatus(state, action) {
+      state.airingStatusOption = action.payload;
+    },
+    updateSeasonOption(state, action) {
+      state.seasonOption = action.payload;
+    },
+    updateGenreOptionList(state, action) {
+      state.genreOptionList = action.payload;
+    },
+    updateStudioOption(state, action) {
+      state.studioOption = action.payload;
+    },
+    clearCategorizedAnimeList(state) {
+      state.categorizedAnimeList = [];
+    },
+  },
   extraReducers: (builder) => {
     builder
       .addCase(fetchAnimeSearchResultList.pending, (state) => {
@@ -170,6 +189,7 @@ export const animeSlice = createSlice({
       .addCase(fetchAnimeSearchResultList.fulfilled, (state, action) => {
         state.fetchSearchResultStatus = "idle";
         state.searchResultList = action.payload?.searchResultList;
+        state.genreList = action.payload?.genreList;
       })
       .addCase(fetchAnimeSearchResultList.rejected, (state, action) => {
         state.fetchSearchResultStatus = "failed";
@@ -182,6 +202,7 @@ export const animeSlice = createSlice({
       .addCase(fetchCategorizedAnimeList.fulfilled, (state, action) => {
         state.fetchCategorizedAnimeListStatus = "idle";
         state.categorizedAnimeList = action.payload?.categorizedAnimeList;
+        state.genreList = action.payload?.genreList;
       })
       .addCase(fetchCategorizedAnimeList.rejected, (state, action) => {
         state.fetchCategorizedAnimeListStatus = "failed";
@@ -190,6 +211,15 @@ export const animeSlice = createSlice({
   },
 });
 
+export const {
+  updateAnimeSearchValue,
+  updateAiredYear,
+  updateAiringStatus,
+  updateSeasonOption,
+  updateGenreOptionList,
+  updateStudioOption,
+  clearCategorizedAnimeList,
+} = animeSlice.actions;
 export default animeSlice.reducer;
 
 export const selectAnimeSearchResultList = (state) =>
