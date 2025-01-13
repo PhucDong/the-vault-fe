@@ -8,17 +8,32 @@ import {
 } from "@mui/material";
 import { useState } from "react";
 import KeyboardArrowRightIcon from "@mui/icons-material/KeyboardArrowRight";
+import { useAnimeAppDispatch } from "../../services/hooks";
 
-const seasonOptionList = ["winter", "spring", "summer", "fall"];
+const studioOptionList = [
+  "Bones",
+  "A-1 Pictures",
+  "Toei Animation",
+  "Sunrise",
+  "MAPPA",
+  "ufotable",
+  "Madhouse",
+  "Kyoto Animation",
+  "Wit Studio",
+  "Production I.G",
+  "Studio Ghibli",
+  "CloverWorks",
+];
 
-function SeasonFilter(props) {
-  const { seasonOption, setSeasonOption, sx } = props;
+function AnimeStudioFilter(props) {
+  const { studioOption, sx } = props;
+  const { updateStudioOption } = useAnimeAppDispatch();
 
-  const handleChangeSeasonFilter = (option) => {
-    if (seasonOption === option) {
-      setSeasonOption("");
+  const handleChangeStudioFilter = (option) => {
+    if (studioOption === option) {
+      updateStudioOption("");
     } else {
-      setSeasonOption(option);
+      updateStudioOption(option);
     }
   };
 
@@ -36,7 +51,7 @@ function SeasonFilter(props) {
   return (
     <Box sx={sx}>
       <InputLabel
-        htmlFor="season-filter"
+        htmlFor="studio-filter"
         sx={{
           color: "#70787a",
           fontWeight: 600,
@@ -44,20 +59,19 @@ function SeasonFilter(props) {
           marginBottom: "4px",
         }}
       >
-        Season
+        Studio
       </InputLabel>
       <TextField
-        id="season-filter"
+        id="studio-filter"
         required
         select
         hiddenLabel
-        value={seasonOption}
-        // onChange={handleChangeSeasonFilter}
+        value={studioOption}
         slotProps={{
           select: {
             multiple: false,
             renderValue: (selected) => selected,
-            open: openAdvancedFilterDropdownMenu,
+            open: openAdvancedFilterDropdownMenu, // Controls the dropdown's visibility
             onOpen: handleOpenAdvancedFilterDropdownMenu,
             onClose: handleCloseAdvancedFilterDropdownMenu,
             IconComponent: KeyboardArrowRightIcon,
@@ -94,8 +108,8 @@ function SeasonFilter(props) {
             },
           },
           textField: {
-            id: "season-filter",
-            name: "season-filter",
+            id: "studio-filter",
+            name: "studio-filter",
             fullWidth: true,
             placeholder: "",
             InputProps: {
@@ -128,7 +142,6 @@ function SeasonFilter(props) {
                 padding: 0,
                 minHeight: "100%",
                 height: "100%",
-                textTransform: "capitalize",
               },
             },
           },
@@ -139,26 +152,18 @@ function SeasonFilter(props) {
           },
         }}
       >
-        {seasonOptionList.map((option) => (
+        {studioOptionList.map((option) => (
           <MenuItem
             key={option}
             value={option}
-            onClick={() => handleChangeSeasonFilter(option)}
+            onClick={() => handleChangeStudioFilter(option)}
           >
             <Checkbox
               id={option}
               name={option}
-              checked={seasonOption === option}
+              checked={studioOption?.indexOf(option) > -1}
             />
-            <ListItemText
-              primary={option}
-              sx={{
-                "& .MuiTypography-root": {
-                  color: "primary.main",
-                  textTransform: "capitalize",
-                },
-              }}
-            />
+            <ListItemText primary={option} />
           </MenuItem>
         ))}
       </TextField>
@@ -166,4 +171,4 @@ function SeasonFilter(props) {
   );
 }
 
-export default SeasonFilter;
+export default AnimeStudioFilter;

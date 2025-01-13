@@ -8,26 +8,22 @@ import {
 } from "@mui/material";
 import { useState } from "react";
 import KeyboardArrowRightIcon from "@mui/icons-material/KeyboardArrowRight";
+import { useAnimeAppDispatch } from "../../services/hooks";
 
-const defaultGenreOptionList = [
-  "Adventure",
-  "Action",
-  "Drama",
-  "Comedy",
-  "Fantasy",
-  "Ecchi",
-  "Mecha",
-  "Horror",
-  "Mystery",
-  "Music",
-  "Romance",
-  "Psychological",
-];
+const seasonOptionList = ["winter", "spring", "summer", "fall"];
 
-function GenreFilter(props) {
-  const { genreOptionList, setGenreOptionList, sx } = props;
-  const handleChangeGenreFilter = (event) =>
-    setGenreOptionList(event.target.value);
+function AnimeSeasonFilter(props) {
+  const { seasonOption, sx } = props;
+  const { updateSeasonOption } = useAnimeAppDispatch();
+
+  const handleChangeSeasonFilter = (option) => {
+    if (seasonOption === option) {
+      updateSeasonOption("");
+    } else {
+      updateSeasonOption(option);
+    }
+  };
+
   const [openAdvancedFilterDropdownMenu, setOpenAdvancedFilterDropdownMenu] =
     useState(false);
 
@@ -42,7 +38,7 @@ function GenreFilter(props) {
   return (
     <Box sx={sx}>
       <InputLabel
-        htmlFor="genre-filter"
+        htmlFor="season-filter"
         sx={{
           color: "#70787a",
           fontWeight: 600,
@@ -50,19 +46,19 @@ function GenreFilter(props) {
           marginBottom: "4px",
         }}
       >
-        Genres
+        Season
       </InputLabel>
       <TextField
-        id="genre-filter"
+        id="season-filter"
         required
         select
         hiddenLabel
-        value={genreOptionList}
-        onChange={handleChangeGenreFilter}
+        value={seasonOption}
+        // onChange={handleChangeSeasonFilter}
         slotProps={{
           select: {
-            multiple: true,
-            renderValue: (selected) => selected.map((item) => item).join(", "),
+            multiple: false,
+            renderValue: (selected) => selected,
             open: openAdvancedFilterDropdownMenu,
             onOpen: handleOpenAdvancedFilterDropdownMenu,
             onClose: handleCloseAdvancedFilterDropdownMenu,
@@ -100,8 +96,8 @@ function GenreFilter(props) {
             },
           },
           textField: {
-            id: "genre-filter",
-            name: "genre-filter",
+            id: "season-filter",
+            name: "season-filter",
             fullWidth: true,
             placeholder: "",
             InputProps: {
@@ -134,6 +130,7 @@ function GenreFilter(props) {
                 padding: 0,
                 minHeight: "100%",
                 height: "100%",
+                textTransform: "capitalize",
               },
             },
           },
@@ -144,14 +141,26 @@ function GenreFilter(props) {
           },
         }}
       >
-        {defaultGenreOptionList.map((option) => (
-          <MenuItem key={option} value={option}>
+        {seasonOptionList.map((option) => (
+          <MenuItem
+            key={option}
+            value={option}
+            onClick={() => handleChangeSeasonFilter(option)}
+          >
             <Checkbox
               id={option}
               name={option}
-              checked={genreOptionList.indexOf(option) > -1}
+              checked={seasonOption === option}
             />
-            <ListItemText primary={option} />
+            <ListItemText
+              primary={option}
+              sx={{
+                "& .MuiTypography-root": {
+                  color: "primary.main",
+                  textTransform: "capitalize",
+                },
+              }}
+            />
           </MenuItem>
         ))}
       </TextField>
@@ -159,4 +168,4 @@ function GenreFilter(props) {
   );
 }
 
-export default GenreFilter;
+export default AnimeSeasonFilter;

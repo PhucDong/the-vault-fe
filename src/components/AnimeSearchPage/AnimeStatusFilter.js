@@ -8,30 +8,17 @@ import {
 } from "@mui/material";
 import { useState } from "react";
 import KeyboardArrowRightIcon from "@mui/icons-material/KeyboardArrowRight";
+import { useAnimeAppDispatch } from "../../services/hooks";
 
-const studioOptionList = [
-  "Bones",
-  "A-1 Pictures",
-  "Toei Animation",
-  "Sunrise",
-  "MAPPA",
-  "ufotable",
-  "Madhouse",
-  "Kyoto Animation",
-  "Wit Studio",
-  "Production I.G",
-  "Studio Ghibli",
-  "CloverWorks",
-];
+function AnimeStatusFilter(props) {
+  const { statusOption, sx } = props;
+  const { updateAiringStatus } = useAnimeAppDispatch();
 
-function StudioFilter(props) {
-  const { studioOption, setStudioOption, sx } = props;
-  
-  const handleChangeStudioFilter = (option) => {
-    if (studioOption === option) {
-      setStudioOption("");
+  const handleChangeAiringStatusFilter = (option) => {
+    if (statusOption === option) {
+      updateAiringStatus("");
     } else {
-      setStudioOption(option);
+      updateAiringStatus(option);
     }
   };
 
@@ -49,7 +36,7 @@ function StudioFilter(props) {
   return (
     <Box sx={sx}>
       <InputLabel
-        htmlFor="studio-filter"
+        htmlFor="airing-status-filter"
         sx={{
           color: "#70787a",
           fontWeight: 600,
@@ -57,19 +44,19 @@ function StudioFilter(props) {
           marginBottom: "4px",
         }}
       >
-        Studio
+        Airing Status
       </InputLabel>
       <TextField
-        id="studio-filter"
+        id="airing-status-filter"
         required
         select
         hiddenLabel
-        value={studioOption}
+        value={statusOption}
         slotProps={{
           select: {
             multiple: false,
             renderValue: (selected) => selected,
-            open: openAdvancedFilterDropdownMenu, // Controls the dropdown's visibility
+            open: openAdvancedFilterDropdownMenu,
             onOpen: handleOpenAdvancedFilterDropdownMenu,
             onClose: handleCloseAdvancedFilterDropdownMenu,
             IconComponent: KeyboardArrowRightIcon,
@@ -106,8 +93,8 @@ function StudioFilter(props) {
             },
           },
           textField: {
-            id: "studio-filter",
-            name: "studio-filter",
+            id: "airing-status-filter",
+            name: "airing-status-filter",
             fullWidth: true,
             placeholder: "",
             InputProps: {
@@ -140,6 +127,7 @@ function StudioFilter(props) {
                 padding: 0,
                 minHeight: "100%",
                 height: "100%",
+                textTransform: "capitalize",
               },
             },
           },
@@ -150,18 +138,26 @@ function StudioFilter(props) {
           },
         }}
       >
-        {studioOptionList.map((option) => (
+        {["airing", "finished", "not yet aired", "cancelled"].map((option) => (
           <MenuItem
             key={option}
             value={option}
-            onClick={() => handleChangeStudioFilter(option)}
+            onClick={() => handleChangeAiringStatusFilter(option)}
           >
             <Checkbox
               id={option}
               name={option}
-              checked={studioOption.indexOf(option) > -1}
+              checked={statusOption === option}
             />
-            <ListItemText primary={option} />
+            <ListItemText
+              primary={option}
+              sx={{
+                "& .MuiTypography-root": {
+                  color: "primary.main",
+                  textTransform: "capitalize",
+                },
+              }}
+            />
           </MenuItem>
         ))}
       </TextField>
@@ -169,4 +165,4 @@ function StudioFilter(props) {
   );
 }
 
-export default StudioFilter;
+export default AnimeStatusFilter;

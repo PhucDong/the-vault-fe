@@ -6,52 +6,18 @@ import {
   MenuItem,
   TextField,
 } from "@mui/material";
-import { useMemo, useState } from "react";
+import { useState } from "react";
 import KeyboardArrowRightIcon from "@mui/icons-material/KeyboardArrowRight";
-import { useLocation } from "react-router-dom";
+import { useSelector } from "react-redux";
+import { useAnimeAppDispatch } from "../../services/hooks";
 
-function StatusFilter(props) {
-  const { statusOption, setStatusOption, sx } = props;
-  const location = useLocation();
+function AnimeGenreFilter(props) {
+  const { genreOptionList, sx } = props;
+  const { updateGenreOptionList } = useAnimeAppDispatch();
+  const genreList = useSelector((state) => state.anime.genreList);
 
-  const getStatusHeading = useMemo(() => {
-    if (
-      location.pathname === "/" ||
-      location.pathname.startsWith("/animes") ||
-      location.pathname.startsWith("/search/animes")
-    ) {
-      return "Airing Status";
-    } else {
-      return "Publishing Status";
-    }
-  }, [location.pathname]);
-
-  const getStatusOptionList = useMemo(() => {
-    if (
-      location.pathname === "/" ||
-      location.pathname.startsWith("/animes") ||
-      location.pathname.startsWith("/search/animes")
-    ) {
-      return ["airing", "finished", "not yet aired", "cancelled"];
-    } else {
-      return [
-        "releasing",
-        "finished",
-        "not yet released",
-        "hiatus",
-        "cancelled",
-      ];
-    }
-  }, [location.pathname]);
-
-  const handleChangeAiringStatusFilter = (option) => {
-    if (statusOption === option) {
-      setStatusOption("");
-    } else {
-      setStatusOption(option);
-    }
-  };
-
+  const handleChangeGenreFilter = (event) =>
+    updateGenreOptionList(event.target.value);
   const [openAdvancedFilterDropdownMenu, setOpenAdvancedFilterDropdownMenu] =
     useState(false);
 
@@ -66,7 +32,7 @@ function StatusFilter(props) {
   return (
     <Box sx={sx}>
       <InputLabel
-        htmlFor="airing-status-filter"
+        htmlFor="anime-genre-filter"
         sx={{
           color: "#70787a",
           fontWeight: 600,
@@ -74,18 +40,19 @@ function StatusFilter(props) {
           marginBottom: "4px",
         }}
       >
-        {getStatusHeading}
+        Genres
       </InputLabel>
       <TextField
-        id="airing-status-filter"
+        id="anime-genre-filter"
         required
         select
         hiddenLabel
-        value={statusOption}
+        value={genreOptionList}
+        onChange={handleChangeGenreFilter}
         slotProps={{
           select: {
-            multiple: false,
-            renderValue: (selected) => selected,
+            multiple: true,
+            renderValue: (selected) => selected.map((item) => item).join(", "),
             open: openAdvancedFilterDropdownMenu,
             onOpen: handleOpenAdvancedFilterDropdownMenu,
             onClose: handleCloseAdvancedFilterDropdownMenu,
@@ -123,8 +90,8 @@ function StatusFilter(props) {
             },
           },
           textField: {
-            id: "airing-status-filter",
-            name: "airing-status-filter",
+            id: "genre-filter",
+            name: "genre-filter",
             fullWidth: true,
             placeholder: "",
             InputProps: {
@@ -157,7 +124,6 @@ function StatusFilter(props) {
                 padding: 0,
                 minHeight: "100%",
                 height: "100%",
-                textTransform: "capitalize",
               },
             },
           },
@@ -168,26 +134,14 @@ function StatusFilter(props) {
           },
         }}
       >
-        {getStatusOptionList.map((option) => (
-          <MenuItem
-            key={option}
-            value={option}
-            onClick={() => handleChangeAiringStatusFilter(option)}
-          >
+        {genreList?.map((option) => (
+          <MenuItem key={option} value={option}>
             <Checkbox
               id={option}
               name={option}
-              checked={statusOption === option}
+              checked={genreOptionList?.indexOf(option) > -1}
             />
-            <ListItemText
-              primary={option}
-              sx={{
-                "& .MuiTypography-root": {
-                  color: "primary.main",
-                  textTransform: "capitalize",
-                },
-              }}
-            />
+            <ListItemText primary={option} />
           </MenuItem>
         ))}
       </TextField>
@@ -195,4 +149,4 @@ function StatusFilter(props) {
   );
 }
 
-export default StatusFilter;
+export default AnimeGenreFilter;

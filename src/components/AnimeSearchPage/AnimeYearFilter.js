@@ -4,12 +4,16 @@ import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import KeyboardArrowRightIcon from "@mui/icons-material/KeyboardArrowRight";
 import dayjs from "dayjs";
 import { useState } from "react";
+import { useAnimeAppDispatch } from "../../services/hooks";
 
-function YearFilter(props) {
-  const { yearOption, setYearOption, sx } = props;
+function AnimeYearFilter(props) {
+  const { yearOption, sx } = props;
+  const { updateAiredYear } = useAnimeAppDispatch();
   const [clearedYearOption, setClearedYearOption] = useState(false);
 
-  const handleChangeYearFilter = (newYear) => setYearOption(newYear);
+  const handleChangeYearFilter = (newYear) => {
+    updateAiredYear(newYear?.toISOString());
+  };
 
   const [openAdvancedFilterDropdownMenu, setOpenAdvancedFilterDropdownMenu] =
     useState(false);
@@ -40,7 +44,8 @@ function YearFilter(props) {
           views={["year"]}
           yearsOrder="desc"
           maxDate={dayjs()}
-          value={yearOption}
+          // value={dayjs(yearOption)}
+          value={yearOption ? dayjs(yearOption) : null}
           onChange={handleChangeYearFilter}
           slots={{ openPickerIcon: KeyboardArrowRightIcon }}
           open={openAdvancedFilterDropdownMenu} // Controls the dropdown's visibility
@@ -107,4 +112,4 @@ function YearFilter(props) {
   );
 }
 
-export default YearFilter;
+export default AnimeYearFilter;
