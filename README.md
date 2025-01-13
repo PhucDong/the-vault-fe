@@ -1,14 +1,18 @@
 # The Vault FE
-Latest update: **27 Dec 2024**
+Latest update: **13 Jan 2025**
 
 ## Description
 The vault is a personal project. It's a website for anime/manga lovers that allows them to search for their favorite titles, save their progress, and write reviews.
 
 ## Challenges
 
-- Persist advanced search filters after closing the advanced search or refreshing the browser
-- Whenever the browser is refreshed, associating components are not rendered
+- Persist search value & advanced filters after closing the advanced search or refreshing the browser
+  - Persist only some states, not EVERYTHING
+  - Persist states of certain location.pathname
 - How can I check similarity between 2 strings? Return a list of the most similar strings
+
+## Solutions
+- Use **redux-persist" to store Redux states to localStorage
 
 ## Mock JSON servers
 
@@ -27,6 +31,11 @@ The vault is a personal project. It's a website for anime/manga lovers that allo
 - Basic search feature
 - Search with advanced filters
 - Update producers & studios to animes
+
+## Challenges
+- Advanced filters: 
+  - Animes: genres, studio, year, & airing status
+  - Mangas: genres, year, & publishing status
 
 ## Future features
 
