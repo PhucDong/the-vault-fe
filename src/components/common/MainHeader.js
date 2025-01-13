@@ -67,10 +67,14 @@ function MainHeader(props) {
   );
 
   const handleChangeIsNavBarItemActive = (navBarItem) => {
-    if (navBarItem === "Home") navigate("/");
-    else if (navBarItem === "Anime") navigate("/animes");
-    else if (navBarItem === "Manga") navigate("/mangas");
-    else if (navBarItem === "Log In") navigate("/login");
+    if (navBarItem === "Home")
+      navigate("/", { state: { prevPathName: location.pathname } });
+    else if (navBarItem === "Anime")
+      navigate("/animes", { state: { prevPathName: location.pathname } });
+    else if (navBarItem === "Manga")
+      navigate("/mangas", { state: { prevPathName: location.pathname } });
+    else if (navBarItem === "Log In")
+      navigate("/login", { state: { prevPathName: location.pathname } });
     setNavBarItem(navBarItem);
   };
 
