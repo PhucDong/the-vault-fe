@@ -1,9 +1,9 @@
 import { Button, TextField } from "@mui/material";
 import React, { useState } from "react";
 import CustomPaddingLayout from "../components/common/CustomPaddingLayout";
-import { useAppSelector } from "../app/hooks";
-import { selectUsername } from "../features/authentication/authenticationSlice";
 import { useNavigate } from "react-router-dom";
+import { useAppSelector } from "../services/hooks";
+import { selectUsername } from "../store/slices/authentication/authenticationSlice";
 
 function ReviewEditorPage() {
   const [reviewText, setReviewText] = useState("");

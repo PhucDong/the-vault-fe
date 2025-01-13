@@ -1,25 +1,59 @@
 import { Box } from "@mui/material";
 import ItemCategory from "../components/VisitorPage/ItemCategory";
 import { useParams } from "react-router-dom";
-import { useCallback, useEffect } from "react";
+import { useEffect } from "react";
 import { useSelector } from "react-redux";
+import NoSearchResultAlert from "../components/common/NoSearchResultAlert";
+import ItemCard from "../components/VisitorPage/ItemCard";
+import storage from "redux-persist/lib/storage";
 import {
   selectCategorizedMangaList,
   selectMangaSearchResultList,
-} from "../features/manga/mangaSlice";
-import { useMangaAppDispatch } from "../app/hooks";
-import NoSearchResultAlert from "../components/common/NoSearchResultAlert";
-import ItemCard from "../components/VisitorPage/ItemCard";
+} from "../store/slices/manga/mangaSlice";
+import { useMangaAppDispatch } from "../services/hooks";
 
 function MangaListByCategoryPage() {
   const { categoryName } = useParams();
-  // const mangaCategoryList = useLoaderData();
   const categorizedMangaList = useSelector(selectCategorizedMangaList);
   const mangaSearchResultList = useSelector(selectMangaSearchResultList);
-  const { fetchCategorizedMangaList } = useMangaAppDispatch();
+  const {
+    fetchCategorizedMangaList,
+    fetchMangaSearchResultList,
+    clearCategorizedMangaList,
+  } = useMangaAppDispatch();
+  const yearOption = useSelector((state) => state.manga.yearOption);
+  const publishingStatusOption = useSelector(
+    (state) => state.manga.publishingStatusOption
+  );
+  const genreOptionList = useSelector((state) => state.manga.genreOptionList);
 
-  console.log("Categorized manga list: ", categorizedMangaList);
-  console.log("Manga search results: ", mangaSearchResultList);
+  useEffect(() => {
+    if (mangaSearchResultList) {
+      clearCategorizedMangaList();
+
+      // Clear only categorizedAnimeList from the persisted state
+      storage.getItem("persist:manga").then((persistedManga) => {
+        if (persistedManga) {
+          const parsedState = JSON.parse(persistedManga);
+          delete parsedState.categorizedMangaList;
+          storage.setItem("persist:manga", JSON.stringify(parsedState));
+        }
+      });
+    }
+  }, [mangaSearchResultList]);
+
+  useEffect(() => {
+    if (yearOption || genreOptionList?.length > 0 || publishingStatusOption) {
+      fetchMangaSearchResultList({
+        yearOption,
+        publishingStatusOption,
+        genreOptionList,
+      });
+    } else {
+      fetchCategorizedMangaList({ categoryName });
+      fetchMangaSearchResultList({});
+    }
+  }, [yearOption, publishingStatusOption, genreOptionList, categoryName]);
 
   useEffect(() => {
     if (categoryName) {
