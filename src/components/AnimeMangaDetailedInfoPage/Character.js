@@ -1,7 +1,8 @@
 import { Box, Typography } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 
-function AnimeCharacter({ animeCharacter }) {
+function Character(props) {
+  const { character } = props;
   const navigate = useNavigate();
 
   return (
@@ -16,7 +17,7 @@ function AnimeCharacter({ animeCharacter }) {
           cursor: "pointer",
         },
       }}
-      onClick={() => navigate(`/characters/${animeCharacter.id}`)}
+      onClick={() => navigate(`/characters/${character._id}`)}
     >
       {/* Image */}
       <Box
@@ -50,7 +51,7 @@ function AnimeCharacter({ animeCharacter }) {
               lineHeight: 1.25,
             }}
           >
-            {animeCharacter.name}
+            {character.name}
           </Typography>
           <Typography
             sx={{
@@ -60,7 +61,7 @@ function AnimeCharacter({ animeCharacter }) {
               textTransform: "capitalize",
             }}
           >
-            {animeCharacter.type}
+            {character.type}
           </Typography>
         </Box>
 
@@ -71,11 +72,11 @@ function AnimeCharacter({ animeCharacter }) {
             fontWeight: 520,
           }}
         >
-          {`VA: ${animeCharacter.va}`}
+          {`VA: ${character.va.name}`}
         </Typography>
       </Box>
     </Box>
   );
 }
 
-export default AnimeCharacter;
+export default Character;
