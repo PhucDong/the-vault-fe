@@ -1,23 +1,31 @@
 import { Box, Typography } from "@mui/material";
 import CustomPaddingLayout from "../common/CustomPaddingLayout";
 import { Link } from "react-router-dom";
-import { useEffect, useMemo, useState } from "react";
+import { useMemo } from "react";
 
 function DetailedItemSummaryStatList(props) {
   const { item, tabValue, setTabValue } = props;
-  const [statList, setStatList] = useState(null);
 
-  const getFilteredStatList = useMemo(() => {
-    if (item.stats && item.stats.length > 0 && statList) {
-      return statList.filter((stat) => item.stats.includes(stat.id));
+  const getNewStatObj = useMemo(() => {
+    const newStatObj = {};
+    if (item.format === "TV") {
+      newStatObj["Watching"] = Object.entries(item.stats)[0][1];
+      newStatObj["Completed"] = Object.entries(item.stats)[1][1];
+      newStatObj["On-hold"] = Object.entries(item.stats)[2][1];
+      newStatObj["Dropped"] = Object.entries(item.stats)[3][1];
+      newStatObj["Plan to watch"] = Object.entries(item.stats)[4][1];
+      newStatObj["Total"] = Object.entries(item.stats)[5][1];
+    } else if (item.format === "Manga") {
+      newStatObj["Reading"] = Object.entries(item.stats)[0][1];
+      newStatObj["Completed"] = Object.entries(item.stats)[1][1];
+      newStatObj["On-hold"] = Object.entries(item.stats)[2][1];
+      newStatObj["Dropped"] = Object.entries(item.stats)[3][1];
+      newStatObj["Plan to read"] = Object.entries(item.stats)[4][1];
+      newStatObj["Total"] = Object.entries(item.stats)[5][1];
     }
-  }, [item.stats, statList]);
 
-  useEffect(() => {
-    fetch("http://localhost:3700/statList")
-      .then((response) => response.json())
-      .then((data) => setStatList(data));
-  }, []);
+    return newStatObj;
+  }, [item.format]);
 
   return (
     <CustomPaddingLayout
@@ -59,8 +67,8 @@ function DetailedItemSummaryStatList(props) {
         </Box>
 
         <Box sx={{ display: "flex", flexDirection: "column", gap: "6px" }}>
-          {getFilteredStatList && getFilteredStatList.length > 0 ? (
-            getFilteredStatList[0].data.map((stat, index) => (
+          {Object.entries(getNewStatObj).length > 0 ? (
+            Object.entries(getNewStatObj).map((stat, index) => (
               <Box
                 key={index}
                 sx={{
@@ -76,14 +84,14 @@ function DetailedItemSummaryStatList(props) {
                     width: { xs: "36%", sm: "28%", md: "24%" },
                     fontSize: { xs: "1rem", md: "1.075rem" },
                   }}
-                >{`${stat.label}:`}</Typography>
+                >{`${stat[0]}:`}</Typography>
                 <Typography
                   sx={{
                     width: { xs: "64%", sm: "72%", md: "76%" },
                     fontSize: { xs: "1rem", md: "1.075rem" },
                   }}
                 >
-                  {stat.data}
+                  {stat[1]}
                 </Typography>
               </Box>
             ))

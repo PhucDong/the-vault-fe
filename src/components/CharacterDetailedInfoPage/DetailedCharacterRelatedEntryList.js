@@ -1,7 +1,7 @@
-import { useEffect, useMemo, useState } from "react";
+import { useState } from "react";
 import CustomPaddingLayout from "../common/CustomPaddingLayout";
 import { Box, Tab, Tabs, Typography } from "@mui/material";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import RelatedEntry from "../AnimeMangaDetailedInfoPage/RelatedEntry";
 
 function a11yProps(index) {
@@ -13,41 +13,12 @@ function a11yProps(index) {
 
 function DetailedCharacterRelatedEntryList(props) {
   const { item } = props;
-  const [relatedEntryListData, setRelatedEntryListData] = useState([]);
   const [value, setValue] = useState(0);
   const navigate = useNavigate();
-  const location = useLocation();
-
-  const getRelatedEntryList = useMemo(() => {
-    if (relatedEntryListData.length > 0 && item.relatedEntries) {
-      return relatedEntryListData.filter((entry) =>
-        item.relatedEntries.includes(entry.id)
-      );
-    } else if (relatedEntryListData.length > 0 && item.otherWorks) {
-      return relatedEntryListData.filter((entry) =>
-        item.otherWorks.includes(entry.id)
-      );
-    }
-    return null;
-  }, [item.relatedEntries, relatedEntryListData, item.otherWorks]);
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };
-
-  useEffect(() => {
-    fetch(`http://localhost:3400/relatedEntryList`)
-      .then((response) => {
-        if (!response.ok) {
-          throw new Error(`HTTP error! status: ${response.status}`);
-        }
-        return response.json();
-      })
-      .then((data) => setRelatedEntryListData(data))
-      .catch((error) =>
-        console.error("Error fetching related entry list: ", error)
-      );
-  }, []);
 
   return (
     <CustomPaddingLayout
@@ -70,18 +41,12 @@ function DetailedCharacterRelatedEntryList(props) {
             },
           }}
         >
-          <Typography>
-            {location.pathname.startsWith("/characters")
-              ? "Related Entries"
-              : "Other Works"}
-          </Typography>
+          <Typography>Related Entries</Typography>
         </Box>
 
-        {!getRelatedEntryList || getRelatedEntryList.length === 0 ? (
+        {!item.relatedEntries || item.relatedEntries.length === 0 ? (
           <Typography sx={{ fontSize: { xs: "0.95rem", sm: "1.1rem" } }}>
-            {location.pathname.startsWith("/characters")
-              ? "No related entries found."
-              : "No other works found."}
+            No related entries found.
           </Typography>
         ) : (
           <Tabs
@@ -109,19 +74,16 @@ function DetailedCharacterRelatedEntryList(props) {
               },
             }}
           >
-            {getRelatedEntryList.map((relatedEntry, index) => (
+            {item.relatedEntries.map((relatedEntry, index) => (
               <Tab
                 key={index}
                 label={<RelatedEntry item={relatedEntry} />}
                 {...a11yProps(index)}
                 onClick={() => {
                   if (relatedEntry.format === "TV") {
-                    navigate(`/animes/${relatedEntry.id}`);
-                  } else if (
-                    relatedEntry.format === "Light Novel" ||
-                    relatedEntry.format === "Manga"
-                  ) {
-                    navigate(`/mangas/${relatedEntry.id}`);
+                    navigate(`/animes/${relatedEntry._id}`);
+                  } else if (relatedEntry.format === "Manga") {
+                    navigate(`/mangas/${relatedEntry._id}`);
                   }
                 }}
               />

@@ -1,25 +1,10 @@
 import CustomPaddingLayout from "../common/CustomPaddingLayout";
 import { Box, Typography } from "@mui/material";
-import AnimeCharacter from "./AnimeCharacter";
+import Character from "./Character";
 import { Link } from "react-router-dom";
-import { useEffect, useMemo, useState } from "react";
 
-function DetailedItemCharacterList({ item, tabValue, setTabValue }) {
-  const [characterList, setCharacterList] = useState(null);
-
-  const getFilteredCharacterList = useMemo(() => {
-    if (item.characters?.length > 0 && characterList) {
-      return characterList.filter((character) =>
-        item.characters.includes(character.id)
-      );
-    }
-  }, [characterList, item.characters]);
-
-  useEffect(() => {
-    fetch("http://localhost:3500/characterList")
-      .then((response) => response.json())
-      .then((data) => setCharacterList(data));
-  }, []);
+function DetailedItemCharacterList(props) {
+  const { item, tabValue, setTabValue } = props;
 
   return (
     <CustomPaddingLayout
@@ -69,11 +54,11 @@ function DetailedItemCharacterList({ item, tabValue, setTabValue }) {
             gap: "8px",
           }}
         >
-          {getFilteredCharacterList && getFilteredCharacterList.length > 0 ? (
-            getFilteredCharacterList
+          {item.characters && item.characters.length > 0 ? (
+            item.characters
               .slice(0, 6)
-              .map((animeCharacter, index) => (
-                <AnimeCharacter key={index} animeCharacter={animeCharacter} />
+              .map((character, index) => (
+                <Character key={index} character={character} />
               ))
           ) : (
             <Typography sx={{ fontSize: { xs: "0.95rem", sm: "1.1rem" } }}>

@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useState } from "react";
 import CustomPaddingLayout from "../common/CustomPaddingLayout";
 import { Box, Typography, Tab, Tabs } from "@mui/material";
 import RelatedEntry from "./RelatedEntry";
@@ -13,37 +13,12 @@ function a11yProps(index) {
 
 function DetailedItemRelatedEntryList(props) {
   const { item, tabValue, setTabValue } = props;
-
-  const [relatedEntryListData, setRelatedEntryListData] = useState([]);
   const [value, setValue] = useState(0);
   const navigate = useNavigate();
-
-  const getRelatedEntryList = useMemo(() => {
-    if (relatedEntryListData.length > 0 && item.relatedEntries) {
-      return relatedEntryListData.filter((entry) =>
-        item.relatedEntries.includes(entry.id)
-      );
-    }
-    return null;
-  }, [item.relatedEntries, relatedEntryListData]);
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };
-
-  useEffect(() => {
-    fetch(`http://localhost:3400/relatedEntryList`)
-      .then((response) => {
-        if (!response.ok) {
-          throw new Error(`HTTP error! status: ${response.status}`);
-        }
-        return response.json();
-      })
-      .then((data) => setRelatedEntryListData(data))
-      .catch((error) =>
-        console.error("Error fetching related entry list: ", error)
-      );
-  }, []);
 
   return (
     <CustomPaddingLayout
@@ -86,7 +61,7 @@ function DetailedItemRelatedEntryList(props) {
           )}
         </Box>
 
-        {!getRelatedEntryList || getRelatedEntryList.length === 0 ? (
+        {!item.relatedEntries || item.relatedEntries.length === 0 ? (
           <Typography sx={{ fontSize: { xs: "0.95rem", sm: "1.1rem" } }}>
             No related entries found.
           </Typography>
@@ -117,7 +92,7 @@ function DetailedItemRelatedEntryList(props) {
               },
             }}
           >
-            {getRelatedEntryList.slice(0, 6).map((relatedEntry, index) => (
+            {item.relatedEntries.slice(0, 6).map((relatedEntry, index) => (
               <Tab
                 key={index}
                 label={<RelatedEntry item={relatedEntry} />}
@@ -125,12 +100,11 @@ function DetailedItemRelatedEntryList(props) {
                 onClick={() => {
                   window.scrollTo({ top: 0, behavior: "smooth" }); // Scrolls to the top of the page
                   if (relatedEntry.format === "TV") {
-                    navigate(`/animes/${relatedEntry.id}`);
+                    navigate(`/animes/${relatedEntry._id}`);
                   } else if (
-                    relatedEntry.format === "Light Novel" ||
                     relatedEntry.format === "Manga"
                   ) {
-                    navigate(`/mangas/${relatedEntry.id}`);
+                    navigate(`/mangas/${relatedEntry._id}`);
                   }
                 }}
               />

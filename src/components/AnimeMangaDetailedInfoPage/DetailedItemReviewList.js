@@ -1,24 +1,10 @@
 import { Box, Typography } from "@mui/material";
 import CustomPaddingLayout from "../common/CustomPaddingLayout";
 import { Link } from "react-router-dom";
-import AnimeReview from "./AnimeReview";
-import { useEffect, useMemo, useState } from "react";
+import Review from "./Review";
 
 function DetailedItemReviewList(props) {
   const { item, tabValue, setTabValue } = props;
-  const [reviewList, setReviewList] = useState(null);
-
-  const getFilteredReviewList = useMemo(() => {
-    if (item.reviews && item.reviews.length > 0 && reviewList) {
-      return reviewList.filter((review) => item.reviews.includes(review.id));
-    }
-  }, [item.reviews, reviewList]);
-
-  useEffect(() => {
-    fetch("http://localhost:3800/reviewList")
-      .then((response) => response.json())
-      .then((data) => setReviewList(data));
-  }, []);
 
   return (
     <CustomPaddingLayout
@@ -68,14 +54,14 @@ function DetailedItemReviewList(props) {
             gap: "8px",
           }}
         >
-          {getFilteredReviewList && getFilteredReviewList.length > 0 ? (
-            getFilteredReviewList
+          {item.reviews && item.reviews.length > 0 ? (
+            item.reviews
               .slice(0, 6)
-              .map((animeReview, index) => (
-                <AnimeReview
+              .map((review, index) => (
+                <Review
                   key={index}
                   item={item}
-                  animeReview={animeReview}
+                  review={review}
                 />
               ))
           ) : (

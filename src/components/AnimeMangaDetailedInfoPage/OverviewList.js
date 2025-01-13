@@ -1,8 +1,7 @@
-import { useEffect, useState } from "react";
 import DetailedItemDescription from "./DetailedItemDescription";
 import DetailedItemRelatedEntryList from "./DetailedItemRelatedEntryList";
 import DetailedItemCharacterList from "./DetailedItemCharacterList";
-import DetailedItemStaffList from "./DetailedItemStaffList";
+import DetailedItemStaffList from "./DetailedItemEmployeeList";
 import DetailedItemSummaryStatList from "./DetailedItemSummaryStatList";
 import DetailedItemReviewList from "./DetailedItemReviewList";
 import DetailedItemRecommendationList from "./DetailedItemRecommendationList";
@@ -10,24 +9,9 @@ import { useMediaQuery } from "@mui/material";
 import { Box } from "@mui/system";
 
 function OverviewList({ tabValue, setTabValue, item }) {
-  const [relatedEntryListData, setRelatedEntryListData] = useState([]);
   const isSmallScreenWidthAndAbove = useMediaQuery((theme) =>
     theme.breakpoints.up("sm")
   );
-
-  useEffect(() => {
-    fetch(`http://localhost:3400/relatedEntryList`)
-      .then((response) => {
-        if (!response.ok) {
-          throw new Error(`HTTP error! status: ${response.status}`);
-        }
-        return response.json();
-      })
-      .then((data) => setRelatedEntryListData(data))
-      .catch((error) =>
-        console.error("Error fetching related entry list: ", error)
-      );
-  }, []);
 
   return (
     <>
@@ -44,7 +28,6 @@ function OverviewList({ tabValue, setTabValue, item }) {
       >
         <DetailedItemRelatedEntryList
           item={item}
-          relatedEntryListData={relatedEntryListData}
           tabValue={tabValue}
           setTabValue={setTabValue}
         />

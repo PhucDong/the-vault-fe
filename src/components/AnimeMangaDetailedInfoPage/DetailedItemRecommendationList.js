@@ -1,8 +1,8 @@
 import { Box, Tab, Tabs, Typography } from "@mui/material";
 import CustomPaddingLayout from "../common/CustomPaddingLayout";
-import { Link, useLocation, useNavigate, useParams } from "react-router-dom";
-import { useEffect, useMemo, useState } from "react";
-import AnimeRecommendation from "./AnimeRecommendation";
+import { Link, useNavigate } from "react-router-dom";
+import { useState } from "react";
+import Recommendation from "./Recommendation";
 
 function a11yProps(index) {
   return {
@@ -14,38 +14,11 @@ function a11yProps(index) {
 function DetailedItemRecommendationList(props) {
   const { item, tabValue, setTabValue } = props;
   const [value, setValue] = useState(0);
-  const [itemList, setItemList] = useState(null);
   const navigate = useNavigate();
-  const location = useLocation();
-  const { animeId, mangaId } = useParams();
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };
-
-  const getFilteredItemList = useMemo(() => {
-    if (itemList) {
-      const newList = itemList.filter(
-        (fetchedItem) => fetchedItem.id !== item.id
-      );
-
-      return newList.filter((newItem) =>
-        newItem.genres.some((genre) => item.genres.includes(genre))
-      );
-    }
-  }, [itemList, item.genres, item.id]);
-
-  useEffect(() => {
-    if (location.pathname.includes(animeId)) {
-      fetch("http://localhost:3200/animeList")
-        .then((response) => response.json())
-        .then((data) => setItemList(data));
-    } else if (location.pathname.includes(mangaId)) {
-      fetch("http://localhost:3300/mangaList")
-        .then((response) => response.json())
-        .then((data) => setItemList(data));
-    }
-  }, [animeId, mangaId, location.pathname]);
 
   return (
     <CustomPaddingLayout
@@ -116,23 +89,22 @@ function DetailedItemRecommendationList(props) {
             },
           }}
         >
-          {getFilteredItemList && getFilteredItemList.length > 0 ? (
-            getFilteredItemList
+          {item.recommendations && item.recommendations.length > 0 ? (
+            item.recommendations
               .slice(0, 6)
-              .map((animeRecommendation, index) => (
+              .map((recommendation, index) => (
                 <Tab
                   key={index}
-                  label={<AnimeRecommendation item={animeRecommendation} />}
+                  label={<Recommendation item={recommendation} />}
                   {...a11yProps(index)}
                   onClick={() => {
                     window.scrollTo({ top: 0, behavior: "smooth" }); // Scrolls to the top of the page
-                    if (animeRecommendation.format === "TV") {
-                      navigate(`/animes/${animeRecommendation.id}`);
+                    if (recommendation.format === "TV") {
+                      navigate(`/animes/${recommendation._id}`);
                     } else if (
-                      animeRecommendation.format === "Light Novel" ||
-                      animeRecommendation.format === "Manga"
+                      recommendation.format === "Manga"
                     ) {
-                      navigate(`/mangas/${animeRecommendation.id}`);
+                      navigate(`/mangas/${recommendation._id}`);
                     }
                   }}
                 />
