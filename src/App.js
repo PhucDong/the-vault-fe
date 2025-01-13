@@ -5,22 +5,22 @@ import {
   RouterProvider,
 } from "react-router-dom";
 import MainLayout from "./layouts/MainLayout";
-import ErrorPage from "./pages/ErrorPage";
-import VisitorPage from "./pages/VisitorPage";
-import LoginPage, { userAccountListLoader } from "./pages/LoginPage";
-import RegisterPage from "./pages/RegisterPage";
-import AnimeListByCategoryPage from "./pages/AnimeListByCategoryPage";
-import AnimeListPage from "./pages/AnimeListPage";
-import MangaListPage from "./pages/MangaListPage";
-import MangaListByCategoryPage from "./pages/MangaListByCategoryPage";
+import ErrorPage from "./pages/Error.page.js";
+import VisitorPage from "./pages/Visitor.page.js";
+import LoginPage, { userAccountListLoader } from "./pages/Login.page.js";
+import RegisterPage from "./pages/Register.page.js";
+import AnimeListByCategoryPage from "./pages/AnimeListByCategory.page.js";
+import AnimeListPage from "./pages/AnimeList.page.js";
+import MangaListPage from "./pages/MangaList.page.js";
+import MangaListByCategoryPage from "./pages/MangaListByCategory.page.js";
 import RegisterLogInLayout from "./layouts/RegisterLogInLayout";
-import HomePage from "./pages/HomePage";
-import AnimeDetailedInfoPage from "./pages/AnimeDetailedInfoPage";
-import MangaDetailedInfoPage from "./pages/MangaDetailedInfoPage";
-import CharacterDetailedInfoPage from "./pages/CharacterDetailedInfoPage/CharacterDetailedInfoPage";
-import EmployeeDetailedInfoPage from "./pages/EmployeeDetailedInfoPage/EmployeeDetailedInfoPage";
-import ReviewDetailedInfoPage from "./pages/ReviewDetailedInfoPage/ReviewDetailedInfoPage";
-import ReviewEditorPage from "./pages/ReviewEditorPage";
+import HomePage from "./pages/Home.page.js";
+import AnimeDetailedInfoPage from "./pages/AnimeDetailedInfo.page.js";
+import MangaDetailedInfoPage from "./pages/MangaDetailedInfo.page.js";
+import CharacterDetailedInfoPage from "./pages/CharacterDetailedInfoPage/CharacterDetailedInfo.page.js";
+import EmployeeDetailedInfoPage from "./pages/EmployeeDetailedInfoPage/EmployeeDetailedInfo.page.js";
+import ReviewDetailedInfoPage from "./pages/ReviewDetailedInfoPage/ReviewDetailedInfo.page.js";
+import ReviewEditorPage from "./pages/ReviewEditor.page.js";
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -60,10 +60,7 @@ const router = createBrowserRouter(
         element={<EmployeeDetailedInfoPage />}
       />
 
-      <Route
-        path="reviews/:reviewId"
-        element={<ReviewDetailedInfoPage />}
-      />
+      <Route path="reviews/:reviewId" element={<ReviewDetailedInfoPage />} />
 
       <Route path="reviews/editor" element={<ReviewEditorPage />} />
 
