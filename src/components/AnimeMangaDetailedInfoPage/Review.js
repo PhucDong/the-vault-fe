@@ -2,7 +2,7 @@ import { Box, Typography } from "@mui/material";
 import ThumbUpIcon from "@mui/icons-material/ThumbUp";
 import { useNavigate } from "react-router-dom";
 
-function AnimeReview({ item, animeReview }) {
+function Review({ item, review }) {
   const navigate = useNavigate();
 
   return (
@@ -17,9 +17,7 @@ function AnimeReview({ item, animeReview }) {
           cursor: "pointer",
         },
       }}
-      onClick={() =>
-        navigate(`/reviews/${animeReview.id}`, { state: { item } })
-      }
+      onClick={() => navigate(`/reviews/${review._id}`)}
     >
       {/* Image */}
       <Box
@@ -52,7 +50,7 @@ function AnimeReview({ item, animeReview }) {
             lineHeight: 1.25,
           }}
         >
-          {`${animeReview.text.substring(0, 80)}...`}
+          {`${review.text.substring(0, 80)}...`}
         </Typography>
 
         <Box
@@ -70,7 +68,7 @@ function AnimeReview({ item, animeReview }) {
               textTransform: "capitalize",
             }}
           >
-            {animeReview.author}
+            {review.author.username}
           </Typography>
 
           <Box
@@ -85,7 +83,7 @@ function AnimeReview({ item, animeReview }) {
             }}
           >
             <ThumbUpIcon />
-            <Typography>{animeReview.likes}</Typography>
+            <Typography>{review.likes}</Typography>
           </Box>
         </Box>
       </Box>
@@ -93,4 +91,4 @@ function AnimeReview({ item, animeReview }) {
   );
 }
 
-export default AnimeReview;
+export default Review;
