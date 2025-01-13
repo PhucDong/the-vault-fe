@@ -1,7 +1,10 @@
 import { Box, Typography } from "@mui/material";
 import CustomPaddingLayout from "../common/CustomPaddingLayout";
+import { useParams } from "react-router-dom";
 
 function DetailedItemExtraInfo({ item }) {
+  const { animeId } = useParams();
+
   return (
     <CustomPaddingLayout
       sx={{
@@ -77,22 +80,28 @@ function DetailedItemExtraInfo({ item }) {
         </Box>
 
         {/* Studio */}
-        <Box className="extra-info-container">
-          <Typography className="extra-info-heading">Studio</Typography>
-          <Typography className="extra-info-data">{item.studio}</Typography>
-        </Box>
-
-        {/* Producers */}
-        <Box className="extra-info-container">
-          <Typography className="extra-info-heading">Producers</Typography>
-          <Box sx={{ display: "flex", flexDirection: "column", gap: "6px" }}>
-            {item.producers.map((producer, index) => (
-              <Typography key={index} className="extra-info-data">
-                {producer}
-              </Typography>
-            ))}
+        {animeId && (
+          <Box className="extra-info-container">
+            <Typography className="extra-info-heading">Studio</Typography>
+            <Typography className="extra-info-data">
+              {item.studio.name}
+            </Typography>
           </Box>
-        </Box>
+        )}
+
+        {/* Anime producers */}
+        {animeId && (
+          <Box className="extra-info-container">
+            <Typography className="extra-info-heading">Producers</Typography>
+            <Box sx={{ display: "flex", flexDirection: "column", gap: "6px" }}>
+              {item.producers.map((producer, index) => (
+                <Typography key={index} className="extra-info-data">
+                  {producer.name}
+                </Typography>
+              ))}
+            </Box>
+          </Box>
+        )}
 
         {/* Genres */}
         <Box className="extra-info-container">
@@ -100,7 +109,7 @@ function DetailedItemExtraInfo({ item }) {
           <Box sx={{ display: "flex", flexDirection: "column", gap: "6px" }}>
             {item.genres.map((genre, index) => (
               <Typography key={index} className="extra-info-data">
-                {genre}
+                {genre.name}
               </Typography>
             ))}
           </Box>
