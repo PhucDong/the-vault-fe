@@ -1,7 +1,7 @@
 import { Box, Typography } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 
-function AnimeStaff({ animeStaff }) {
+function Employee({ employee }) {
   const navigate = useNavigate();
 
   return (
@@ -16,7 +16,7 @@ function AnimeStaff({ animeStaff }) {
           cursor: "pointer",
         },
       }}
-      onClick={() => navigate(`/staff/${animeStaff.id}`)}
+      onClick={() => navigate(`/employees/${employee._id}`)}
     >
       {/* Image */}
       <Box
@@ -50,7 +50,7 @@ function AnimeStaff({ animeStaff }) {
               lineHeight: 1.25,
             }}
           >
-            {animeStaff.name}
+            {employee.name}
           </Typography>
         </Box>
 
@@ -62,11 +62,11 @@ function AnimeStaff({ animeStaff }) {
             textTransform: "capitalize",
           }}
         >
-          {animeStaff.role}
+          {employee.role}
         </Typography>
       </Box>
     </Box>
   );
 }
 
-export default AnimeStaff;
+export default Employee;
