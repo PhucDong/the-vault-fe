@@ -1,42 +1,44 @@
 import { Box } from "@mui/material";
-import { useEffect, useState } from "react";
-import YearFilter from "../common/YearFilter";
-import StatusFilter from "../common/StatusFilter";
-import SeasonFilter from "../common/SeasonFilter";
-import GenreFilter from "../common/GenreFilter";
-import StudioFilter from "../common/StudioFilter";
-import { useAnimeAppDispatch } from "../../app/hooks";
-import { useNavigate } from "react-router-dom";
+import { useEffect } from "react";
+import AnimeYearFilter from "../AnimeSearchPage/AnimeYearFilter";
+import AnimeStatusFilter from "../AnimeSearchPage/AnimeStatusFilter";
+import AnimeSeasonFilter from "../AnimeSearchPage/AnimeSeasonFilter";
+import AnimeGenreFilter from "../AnimeSearchPage/AnimeGenreFilter";
+import AnimeStudioFilter from "../AnimeSearchPage/AnimeStudioFilter";
+import { useLocation, useNavigate } from "react-router-dom";
+import { useSelector } from "react-redux";
 
 function AnimeAdvancedFilterList() {
-  const [yearOption, setYearOption] = useState(null);
-  const [airingStatusOption, setAiringStatusOption] = useState("");
-  const [seasonOption, setSeasonOption] = useState("");
-  const [genreOptionList, setGenreOptionList] = useState([]);
-  const [studioOption, setStudioOption] = useState("");
-  const { fetchAnimeSearchResultList } = useAnimeAppDispatch();
+  const yearOption = useSelector((state) => state.anime.yearOption);
+  const airingStatusOption = useSelector(
+    (state) => state.anime.airingStatusOption
+  );
+  const seasonOption = useSelector((state) => state.anime.seasonOption);
+  const genreOptionList = useSelector((state) => state.anime.genreOptionList);
+  const studioOption = useSelector((state) => state.anime.studioOption);
   const navigate = useNavigate();
+  const location = useLocation();
 
   useEffect(() => {
     if (
       yearOption ||
       airingStatusOption ||
       seasonOption ||
-      genreOptionList.length > 0 ||
+      genreOptionList?.length > 0 ||
       studioOption
     ) {
-      navigate("/animes");
-      fetchAnimeSearchResultList({
-        yearOption,
-        airingStatusOption,
-        seasonOption,
-        genreOptionList,
-        studioOption,
-      });
-    } else {
-      fetchAnimeSearchResultList({});
+      if (location.pathname === "/") {
+        navigate("/animes");
+      }
     }
-  }, [yearOption, airingStatusOption, seasonOption, genreOptionList, studioOption]);
+  }, [
+    yearOption,
+    airingStatusOption,
+    seasonOption,
+    genreOptionList,
+    studioOption,
+    location.pathname,
+  ]);
 
   return (
     <Box
@@ -57,18 +59,10 @@ function AnimeAdvancedFilterList() {
         }}
       >
         {/* Genres */}
-        <GenreFilter
-          sx={{ flex: 1 }}
-          genreOptionList={genreOptionList}
-          setGenreOptionList={setGenreOptionList}
-        />
+        <AnimeGenreFilter sx={{ flex: 1 }} genreOptionList={genreOptionList} />
 
         {/* Studios */}
-        <StudioFilter
-          sx={{ flex: 1 }}
-          studioOption={studioOption}
-          setStudioOption={setStudioOption}
-        />
+        <AnimeStudioFilter sx={{ flex: 1 }} studioOption={studioOption} />
       </Box>
 
       <Box
@@ -80,25 +74,13 @@ function AnimeAdvancedFilterList() {
         }}
       >
         {/* Year */}
-        <YearFilter
-          sx={{ flex: 1 }}
-          yearOption={yearOption}
-          setYearOption={setYearOption}
-        />
+        <AnimeYearFilter sx={{ flex: 1 }} yearOption={yearOption} />
 
         {/* Status */}
-        <StatusFilter
-          sx={{ flex: 1 }}
-          statusOption={airingStatusOption}
-          setStatusOption={setAiringStatusOption}
-        />
+        <AnimeStatusFilter sx={{ flex: 1 }} statusOption={airingStatusOption} />
 
         {/* Season */}
-        <SeasonFilter
-          sx={{ flex: 1 }}
-          seasonOption={seasonOption}
-          setSeasonOption={setSeasonOption}
-        />
+        <AnimeSeasonFilter sx={{ flex: 1 }} seasonOption={seasonOption} />
       </Box>
     </Box>
   );
