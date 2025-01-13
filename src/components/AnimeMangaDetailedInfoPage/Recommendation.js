@@ -1,6 +1,6 @@
 import { Box, Typography } from "@mui/material";
 
-function AnimeRecommendation({ item }) {
+function Recommendation({ item }) {
   return (
     <Box
       sx={{
@@ -36,4 +36,4 @@ function AnimeRecommendation({ item }) {
   );
 }
 
-export default AnimeRecommendation;
+export default Recommendation;
