@@ -11,9 +11,9 @@ import ReadMoreButton from "./ReadMoreButton";
 import { useState } from "react";
 import LogInAlertModal from "./LogInAlertModal";
 import { useSelector } from "react-redux";
-import { selectIsUserLoggedIn } from "../../features/authentication/authenticationSlice";
 import AddToListForm from "./AddToListForm/AddToListForm";
 import { useNavigate } from "react-router-dom";
+import { selectIsUserLoggedIn } from "../../store/slices/authentication/authenticationSlice";
 
 function DetailedAnimeMangaHeader({ item }) {
   const isSmallScreenWidthAndAbove = useMediaQuery((theme) =>

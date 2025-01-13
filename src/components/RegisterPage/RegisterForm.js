@@ -6,16 +6,16 @@ import VisibilityIcon from "@mui/icons-material/Visibility";
 import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
 import RegisterLoginFormButton from "../common/RegisterLoginFormButton";
 import { faker } from "@faker-js/faker";
+import { useLocation, useNavigate } from "react-router-dom";
 import {
   selectErrorMessages,
   selectIsUserRegistered,
-} from "../../features/user/userSlice";
+} from "../../store/slices/user/userSlice";
 import {
   useAppSelector,
   useAuthAppDispatch,
   useUserAppDispatch,
-} from "../../app/hooks";
-import { useLocation, useNavigate } from "react-router-dom";
+} from "../../services/hooks";
 
 function RegisterForm() {
   const [emailValue, setEmailValue] = useState("");

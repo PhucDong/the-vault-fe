@@ -3,25 +3,43 @@ import { useEffect, useState } from "react";
 import CustomStyledSearchButton from "./CustomStyledSearchButton";
 import SearchIcon from "@mui/icons-material/Search";
 import AdvancedSearch from "../VisitorPage/AdvancedSearch";
-import { useLocation, useNavigate } from "react-router-dom";
-import { useAnimeAppDispatch, useMangaAppDispatch } from "../../app/hooks";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
+import { useSelector } from "react-redux";
+import { useAnimeAppDispatch, useMangaAppDispatch } from "../../services/hooks";
 
 function SearchBar() {
-  const [searchValue, setSearchValue] = useState("");
+  const location = useLocation();
+  const animeSearchValue = useSelector((state) => state.anime.searchValue);
+  const mangaSearchValue = useSelector((state) => state.manga.searchValue);
   const [searchHistoryList, setSearchHistoryList] = useState([]);
   const [openSearchHistoryListOpen, setOpenSearchHistoryList] = useState(false);
   const [filteredSearchHistoryList, setFilteredSearchHistoryList] = useState(
     []
   );
-  const location = useLocation();
-  const { fetchAnimeSearchResultList } = useAnimeAppDispatch();
-  const { fetchMangaSearchResultList } = useMangaAppDispatch();
+  const {
+    fetchAnimeSearchResultList,
+    updateAnimeSearchValue,
+    fetchCategorizedAnimeList,
+  } = useAnimeAppDispatch();
+  const {
+    fetchMangaSearchResultList,
+    updateMangaSearchValue,
+    fetchCategorizedMangaList,
+  } = useMangaAppDispatch();
   const navigate = useNavigate();
+  const { categoryName } = useParams();
 
   const handleChangeSearchValue = (event) => {
     const { value } = event.target;
 
-    setSearchValue(value);
+    if (location.pathname === "/") {
+      updateAnimeSearchValue(value);
+      navigate("/animes", { state: { prevPathName: location.pathname } });
+    } else if (location.pathname.includes("/animes")) {
+      updateAnimeSearchValue(value);
+    } else if (location.pathname.includes("/mangas")) {
+      updateMangaSearchValue(value);
+    }
 
     if (value.length > 0) {
       setFilteredSearchHistoryList(
@@ -34,59 +52,85 @@ function SearchBar() {
   };
 
   const handleEnterSearchValue = (event) => {
-    if (event.key === "Enter" && searchValue) {
-      setSearchHistoryList((prevList) => {
-        if (!prevList.includes(searchValue)) {
-          return [searchValue, ...prevList];
-        }
-        return prevList;
-      });
+    const { value } = event.target;
+
+    if (event.key === "Enter") {
+      if (location.pathname.includes("/animes") && animeSearchValue) {
+        updateAnimeSearchValue(value);
+        setSearchHistoryList((prevList) => {
+          if (!prevList.includes(animeSearchValue)) {
+            return [animeSearchValue, ...prevList];
+          }
+          return prevList;
+        });
+      } else {
+        updateMangaSearchValue(value);
+        setSearchHistoryList((prevList) => {
+          if (!prevList.includes(mangaSearchValue)) {
+            return [mangaSearchValue, ...prevList];
+          }
+          return prevList;
+        });
+      }
     }
   };
 
   const handleSearchValue = () => {
     setSearchHistoryList((prevList) => {
-      if (!prevList.includes(searchValue)) {
-        return [searchValue, ...prevList];
+      if (location.pathname.includes("/animes")) {
+        if (!prevList.includes(animeSearchValue)) {
+          return [animeSearchValue, ...prevList];
+        }
+      } else {
+        if (!prevList.includes(mangaSearchValue)) {
+          return [mangaSearchValue, ...prevList];
+        }
       }
+
       return prevList;
     });
   };
 
   useEffect(() => {
-    // console.log("Search value: ", searchValue);
-    if (searchValue.length > 0) {
-      if (location.pathname === "/") {
-        fetchAnimeSearchResultList({ searchValue });
-        navigate("/animes");
-      }
-      if (location.pathname.startsWith("/animes")) {
-        fetchAnimeSearchResultList({ searchValue });
-      }
-      if (location.pathname.startsWith("/search/animes")) {
-        fetchAnimeSearchResultList({ searchValue });
-      }
-      if (location.pathname.startsWith("/mangas")) {
-        fetchMangaSearchResultList({ searchValue });
-      }
-      if (location.pathname.startsWith("/search/mangas")) {
-        fetchMangaSearchResultList({ searchValue });
-      }
+    if (location.pathname === "/") {
+      updateAnimeSearchValue("");
+      updateMangaSearchValue("");
+    } else if (location.pathname.includes("/animes")) {
+      updateMangaSearchValue("");
+    } else if (location.pathname.includes("/mangas")) {
+      updateAnimeSearchValue("");
+    }
+  }, [location.pathname]);
+
+  useEffect(() => {
+    if (animeSearchValue) {
+      fetchAnimeSearchResultList({ searchValue: animeSearchValue });
     } else {
-      if (location.pathname.startsWith("/animes")) {
+      // fetchAnimeSearchResultList({});
+      if (categoryName) {
+        fetchCategorizedAnimeList({ categoryName });
+        fetchAnimeSearchResultList({});
+      } else {
+        fetchCategorizedAnimeList({});
         fetchAnimeSearchResultList({});
       }
-      if (location.pathname.startsWith("/search/animes")) {
-        fetchAnimeSearchResultList({});
-      }
-      if (location.pathname.startsWith("/mangas")) {
+    }
+  }, [animeSearchValue, location.pathname]);
+
+  useEffect(() => {
+    if (mangaSearchValue) {
+      fetchMangaSearchResultList({ searchValue: mangaSearchValue });
+    } else {
+      // fetchMangaSearchResultList({});
+      if (categoryName) {
+        fetchCategorizedMangaList({ categoryName });
         fetchMangaSearchResultList({});
-      }
-      if (location.pathname.startsWith("/search/mangas")) {
+      } else {
+        fetchCategorizedMangaList({});
         fetchMangaSearchResultList({});
       }
     }
-  }, [searchValue]);
+  }, [mangaSearchValue, location.pathname]);
 
   return (
     <>
@@ -99,7 +143,11 @@ function SearchBar() {
         <Box sx={{ position: "relative", width: "100%" }}>
           <TextField
             fullWidth
-            value={searchValue}
+            value={
+              location.pathname.includes("/animes") || location.pathname === "/"
+                ? animeSearchValue
+                : mangaSearchValue
+            }
             onChange={handleChangeSearchValue}
             onKeyDown={handleEnterSearchValue}
             placeholder={

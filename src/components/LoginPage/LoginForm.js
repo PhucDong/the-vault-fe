@@ -5,16 +5,16 @@ import CustomStyledTextField from "../common/CustomStyledTextField";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
 import RegisterLoginFormButton from "../common/RegisterLoginFormButton";
+import { useLocation, useNavigate } from "react-router-dom";
+import {
+  selectErrorMessages,
+  selectIsUserLoggedIn,
+} from "../../store/slices/authentication/authenticationSlice";
 import {
   useAppSelector,
   useAuthAppDispatch,
   useUserAppDispatch,
-} from "../../app/hooks";
-import {
-  selectErrorMessages,
-  selectIsUserLoggedIn,
-} from "../../features/authentication/authenticationSlice";
-import { useLocation, useNavigate } from "react-router-dom";
+} from "../../services/hooks";
 
 function LoginForm() {
   const [emailValue, setEmailValue] = useState("");

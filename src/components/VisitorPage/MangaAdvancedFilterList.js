@@ -1,27 +1,15 @@
 import { Box } from "@mui/material";
-import { useEffect, useState } from "react";
-import YearFilter from "../common/YearFilter";
-import StatusFilter from "../common/StatusFilter";
-import GenreFilter from "../common/GenreFilter";
-import { useMangaAppDispatch } from "../../app/hooks";
+import { useSelector } from "react-redux";
+import MangaGenreFilter from "../MangaSearchPage/MangaGenreFilter";
+import MangaYearFilter from "../MangaSearchPage/MangaYearFilter";
+import MangaStatusFilter from "../MangaSearchPage/MangaStatusFilter";
 
 function MangaAdvancedFilterList() {
-  const [yearOption, setYearOption] = useState(null);
-  const [publishingStatusOption, setPublishingStatusOption] = useState("");
-  const [genreOptionList, setGenreOptionList] = useState([]);
-  const { fetchMangaSearchResultList } = useMangaAppDispatch();
-
-  useEffect(() => {
-    if (yearOption || publishingStatusOption || genreOptionList.length > 0) {
-      fetchMangaSearchResultList({
-        yearOption,
-        publishingStatusOption,
-        genreOptionList,
-      });
-    } else {
-      fetchMangaSearchResultList({});
-    }
-  }, [yearOption, publishingStatusOption, genreOptionList]);
+  const yearOption = useSelector((state) => state.manga.yearOption);
+  const publishingStatusOption = useSelector(
+    (state) => state.manga.publishingStatusOption
+  );
+  const genreOptionList = useSelector((state) => state.manga.genreOptionList);
 
   return (
     <Box
@@ -33,24 +21,18 @@ function MangaAdvancedFilterList() {
       }}
     >
       {/* Genres */}
-      <GenreFilter
+      <MangaGenreFilter
         sx={{ flex: { xs: 1, sm: 2 } }}
         genreOptionList={genreOptionList}
-        setGenreOptionList={setGenreOptionList}
       />
 
       {/* Year */}
-      <YearFilter
-        sx={{ flex: { xs: 1 } }}
-        yearOption={yearOption}
-        setYearOption={setYearOption}
-      />
+      <MangaYearFilter sx={{ flex: { xs: 1 } }} yearOption={yearOption} />
 
       {/* Status */}
-      <StatusFilter
+      <MangaStatusFilter
         sx={{ flex: { xs: 1 } }}
         statusOption={publishingStatusOption}
-        setStatusOption={setPublishingStatusOption}
       />
     </Box>
   );
