@@ -2,13 +2,11 @@ import { Typography } from "@mui/material";
 import { Box } from "@mui/system";
 import { useEffect, useRef, useState } from "react";
 import CustomPaddingLayout from "../../components/common/CustomPaddingLayout";
-import { useLocation } from "react-router-dom";
 
 function DetailedReviewHeader(props) {
   const { item } = props;
   const parentBoxRef = useRef(null); // Reference for the parent Box
   const [parentHeight, setParentHeight] = useState(0); // State to store the height
-  const location = useLocation();
 
   useEffect(() => {
     if (parentBoxRef.current) {
@@ -95,16 +93,15 @@ function DetailedReviewHeader(props) {
               color: "primary.main",
             }}
           >
-            {location.state.item.title}
+            {item.targetId.title}
           </Typography>
 
           {/* Author */}
           <Typography
             sx={{
               fontSize: { xs: "1.3rem", sm: "1.4rem", lg: "1.6rem" },
-              textTransform: "capitalize",
             }}
-          >{`Author: ${item.author}`}</Typography>
+          >{`Reviewed by ${item.author.username}`}</Typography>
         </Box>
       </CustomPaddingLayout>
     </Box>
