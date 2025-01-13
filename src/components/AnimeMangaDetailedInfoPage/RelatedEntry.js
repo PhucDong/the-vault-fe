@@ -1,7 +1,8 @@
 import { Box, Typography } from "@mui/material";
-import React from "react";
 
-function RelatedEntry({ item }) {
+function RelatedEntry(props) {
+  const { item } = props;
+
   return (
     <Box
       sx={{
