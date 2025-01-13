@@ -58,8 +58,8 @@ function ItemCategory(props) {
           gap: { xs: "12px 8px", sm: "16px 12px" }, // Sets consistent gap between items
         }}
       >
-        {itemCategory.itemList.map((anime, index) => (
-          <ItemCard key={index} item={anime} format={itemCategory.format} />
+        {itemCategory.itemList.map((item, index) => (
+          <ItemCard key={index} item={item} format={itemCategory.format} />
         ))}
       </Box>
     </Box>
