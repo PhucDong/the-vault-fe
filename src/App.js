@@ -15,43 +15,25 @@ import MangaListPage from "./pages/MangaListPage";
 import MangaListByCategoryPage from "./pages/MangaListByCategoryPage";
 import RegisterLogInLayout from "./layouts/RegisterLogInLayout";
 import HomePage from "./pages/HomePage";
-import AnimeDetailedInfoPage, {
-  animeDetailLoader,
-} from "./pages/AnimeDetailedInfoPage";
-import MangaDetailedInfoPage, {
-  mangaDetailLoader,
-} from "./pages/MangaDetailedInfoPage";
-import CharacterDetailedInfoPage, {
-  characterDetailLoader,
-} from "./pages/CharacterDetailedInfoPage/CharacterDetailedInfoPage";
-import StaffDetailedInfoPage, {
-  staffDetailLoader,
-} from "./pages/StaffDetailedInfoPage/StaffDetailedInfoPage";
-import ReviewDetailedInfoPage, {
-  reviewDetailLoader,
-} from "./pages/ReviewDetailedInfoPage/ReviewDetailedInfoPage";
+import AnimeDetailedInfoPage from "./pages/AnimeDetailedInfoPage";
+import MangaDetailedInfoPage from "./pages/MangaDetailedInfoPage";
+import CharacterDetailedInfoPage from "./pages/CharacterDetailedInfoPage/CharacterDetailedInfoPage";
+import EmployeeDetailedInfoPage from "./pages/EmployeeDetailedInfoPage/EmployeeDetailedInfoPage";
+import ReviewDetailedInfoPage from "./pages/ReviewDetailedInfoPage/ReviewDetailedInfoPage";
 import ReviewEditorPage from "./pages/ReviewEditorPage";
 
 const router = createBrowserRouter(
   createRoutesFromElements(
     <Route element={<MainLayout />} errorElement={<ErrorPage />}>
       <Route path="/" element={<VisitorPage />}>
-        <Route
-          path="animes"
-          element={<AnimeListPage />}
-          // loader={animeListLoader}
-        />
+        <Route path="animes" element={<AnimeListPage />} />
 
         <Route
           path="search/animes/:categoryName"
           element={<AnimeListByCategoryPage />}
         />
 
-        <Route
-          path="mangas"
-          element={<MangaListPage />}
-          // loader={mangaListLoader}
-        />
+        <Route path="mangas" element={<MangaListPage />} />
 
         <Route
           path="search/mangas/:categoryName"
@@ -59,40 +41,28 @@ const router = createBrowserRouter(
         />
       </Route>
 
-      <Route
-        path="animes/:animeId"
-        element={<AnimeDetailedInfoPage />}
-        loader={animeDetailLoader}
-      />
+      <Route path="animes/:animeId" element={<AnimeDetailedInfoPage />} />
 
       <Route
         path="animes/related/:itemId"
         element={<AnimeDetailedInfoPage />}
-        loader={animeDetailLoader}
       />
 
-      <Route
-        path="mangas/:mangaId"
-        element={<MangaDetailedInfoPage />}
-        loader={mangaDetailLoader}
-      />
+      <Route path="mangas/:mangaId" element={<MangaDetailedInfoPage />} />
 
       <Route
         path="characters/:characterId"
         element={<CharacterDetailedInfoPage />}
-        loader={characterDetailLoader}
       />
 
       <Route
-        path="staff/:staffId"
-        element={<StaffDetailedInfoPage />}
-        loader={staffDetailLoader}
+        path="employees/:employeeId"
+        element={<EmployeeDetailedInfoPage />}
       />
 
       <Route
         path="reviews/:reviewId"
         element={<ReviewDetailedInfoPage />}
-        loader={reviewDetailLoader}
       />
 
       <Route path="reviews/editor" element={<ReviewEditorPage />} />
@@ -108,11 +78,27 @@ const router = createBrowserRouter(
 
       <Route path="/home" element={<HomePage />} />
     </Route>
-  )
+  ),
+  {
+    future: {
+      v7_relativeSplatPath: true,
+      v7_fetcherPersist: true,
+      v7_normalizeFormMethod: true,
+      v7_partialHydration: true,
+      v7_skipActionErrorRevalidation: true,
+    },
+  }
 );
 
 function App() {
-  return <RouterProvider router={router} />;
+  return (
+    <RouterProvider
+      router={router}
+      future={{
+        v7_startTransition: true,
+      }}
+    />
+  );
 }
 
 export default App;
