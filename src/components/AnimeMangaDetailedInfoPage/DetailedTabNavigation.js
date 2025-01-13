@@ -3,7 +3,7 @@ import { useState } from "react";
 import CustomTabPanel from "./CustomTabPanel";
 import CustomPaddingLayout from "../common/CustomPaddingLayout";
 import DetailedItemCharacterList from "./DetailedItemCharacterList";
-import DetailedItemStaffList from "./DetailedItemStaffList";
+import DetailedItemEmployeeList from "./DetailedItemEmployeeList";
 import DetailedItemReviewList from "./DetailedItemReviewList";
 import DetailedItemRelatedEntryList from "./DetailedItemRelatedEntryList";
 import DetailedItemSummaryStatList from "./DetailedItemSummaryStatList";
@@ -84,7 +84,7 @@ function DetailedTabNavigation({ item }) {
         />
       </CustomTabPanel>
       <CustomTabPanel value={value} index={2} item={item}>
-        <DetailedItemStaffList
+        <DetailedItemEmployeeList
           item={item}
           tabValue={value}
           setTabValue={setValue}
