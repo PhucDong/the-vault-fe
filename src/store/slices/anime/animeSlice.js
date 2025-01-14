@@ -12,6 +12,7 @@ const initialState = {
   genreOptionList: [],
   studioOption: "",
   genreList: [],
+  studioList: [],
 };
 
 export const fetchAnimeSearchResultList = createAsyncThunk(
@@ -73,6 +74,7 @@ export const fetchAnimeSearchResultList = createAsyncThunk(
         return {
           searchResultList: filteredAnimes,
           genreList: response.genreList,
+          studioList: response.studioList,
         };
       } else if (
         searchValue ||
@@ -83,6 +85,7 @@ export const fetchAnimeSearchResultList = createAsyncThunk(
         return {
           searchResultList: response.animeList,
           genreList: response.genreList,
+          studioList: response.studioList,
         };
       } else {
         throw new Error("No search results found.");
@@ -142,12 +145,14 @@ export const fetchCategorizedAnimeList = createAsyncThunk(
         return {
           categorizedAnimeList: filteredAnimeListByCategory,
           genreList: response.genreList,
+          studioList: response.studioList,
         };
       }
 
       return {
         categorizedAnimeList: animeCategoryList,
         genreList: response.genreList,
+        studioList: response.studioList,
       };
     } catch (error) {
       return rejectWithValue(error.message);
@@ -180,6 +185,14 @@ export const animeSlice = createSlice({
     clearCategorizedAnimeList(state) {
       state.categorizedAnimeList = [];
     },
+    clearAllAnimeFilter(state) {
+      state.searchValue = "";
+      state.yearOption = null;
+      state.airingStatusOption = "";
+      state.seasonOption = "";
+      state.genreOptionList = [];
+      state.studioOption = "";
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -190,6 +203,7 @@ export const animeSlice = createSlice({
         state.fetchSearchResultStatus = "idle";
         state.searchResultList = action.payload?.searchResultList;
         state.genreList = action.payload?.genreList;
+        state.studioList = action.payload?.studioList;
       })
       .addCase(fetchAnimeSearchResultList.rejected, (state, action) => {
         state.fetchSearchResultStatus = "failed";
@@ -203,6 +217,7 @@ export const animeSlice = createSlice({
         state.fetchCategorizedAnimeListStatus = "idle";
         state.categorizedAnimeList = action.payload?.categorizedAnimeList;
         state.genreList = action.payload?.genreList;
+        state.studioList = action.payload?.studioList;
       })
       .addCase(fetchCategorizedAnimeList.rejected, (state, action) => {
         state.fetchCategorizedAnimeListStatus = "failed";
@@ -219,6 +234,7 @@ export const {
   updateGenreOptionList,
   updateStudioOption,
   clearCategorizedAnimeList,
+  clearAllAnimeFilter,
 } = animeSlice.actions;
 export default animeSlice.reducer;
 
