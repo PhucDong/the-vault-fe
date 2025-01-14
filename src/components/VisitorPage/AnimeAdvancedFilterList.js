@@ -1,4 +1,4 @@
-import { Box } from "@mui/material";
+import { Box, Typography } from "@mui/material";
 import { useEffect } from "react";
 import AnimeYearFilter from "../AnimeSearchPage/AnimeYearFilter";
 import AnimeStatusFilter from "../AnimeSearchPage/AnimeStatusFilter";
@@ -7,6 +7,7 @@ import AnimeGenreFilter from "../AnimeSearchPage/AnimeGenreFilter";
 import AnimeStudioFilter from "../AnimeSearchPage/AnimeStudioFilter";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
+import { useAnimeAppDispatch } from "../../services/hooks";
 
 function AnimeAdvancedFilterList() {
   const yearOption = useSelector((state) => state.anime.yearOption);
@@ -18,6 +19,7 @@ function AnimeAdvancedFilterList() {
   const studioOption = useSelector((state) => state.anime.studioOption);
   const navigate = useNavigate();
   const location = useLocation();
+  const { clearAllAnimeFilter } = useAnimeAppDispatch();
 
   useEffect(() => {
     if (
@@ -59,12 +61,19 @@ function AnimeAdvancedFilterList() {
         }}
       >
         {/* Genres */}
-        <AnimeGenreFilter sx={{ flex: 1 }} genreOptionList={genreOptionList} />
+        <AnimeGenreFilter
+          sx={{ width: { xs: "100%", sm: "65%", md: "75%", lg: "65%" } }}
+          genreOptionList={genreOptionList}
+        />
 
         {/* Studios */}
-        <AnimeStudioFilter sx={{ flex: 1 }} studioOption={studioOption} />
+        <AnimeStudioFilter
+          sx={{ width: { xs: "100%", sm: "35%", md: "25%", lg: "35%" } }}
+          studioOption={studioOption}
+        />
       </Box>
 
+      {/* Year, Status & Season filters */}
       <Box
         sx={{
           width: "100%",
@@ -82,6 +91,13 @@ function AnimeAdvancedFilterList() {
         {/* Season */}
         <AnimeSeasonFilter sx={{ flex: 1 }} seasonOption={seasonOption} />
       </Box>
+
+      <Typography
+        onClick={() => clearAllAnimeFilter()}
+        sx={{ color: "info.main", cursor: "pointer" }}
+      >
+        Remove all filters
+      </Typography>
     </Box>
   );
 }
