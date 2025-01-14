@@ -1,6 +1,5 @@
 import {
   Box,
-  Checkbox,
   InputLabel,
   ListItemText,
   MenuItem,
@@ -9,6 +8,7 @@ import {
 import { useState } from "react";
 import KeyboardArrowRightIcon from "@mui/icons-material/KeyboardArrowRight";
 import { useMangaAppDispatch } from "../../services/hooks";
+import CustomStyledCheckbox from "../common/CustomStyledCheckbox";
 
 function MangaStatusFilter(props) {
   const { statusOption, sx } = props;
@@ -150,16 +150,16 @@ function MangaStatusFilter(props) {
             value={option}
             onClick={() => handleChangeAiringStatusFilter(option)}
           >
-            <Checkbox
+            <CustomStyledCheckbox
               id={option}
               name={option}
-              checked={statusOption === option}
+              storeOption={statusOption}
+              option={option}
             />
             <ListItemText
               primary={option}
               sx={{
                 "& .MuiTypography-root": {
-                  color: "primary.main",
                   textTransform: "capitalize",
                 },
               }}

@@ -1,33 +1,22 @@
 import {
   Box,
-  Checkbox,
   InputLabel,
   ListItemText,
   MenuItem,
   TextField,
 } from "@mui/material";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import KeyboardArrowRightIcon from "@mui/icons-material/KeyboardArrowRight";
 import { useAnimeAppDispatch } from "../../services/hooks";
-
-const studioOptionList = [
-  "Bones",
-  "A-1 Pictures",
-  "Toei Animation",
-  "Sunrise",
-  "MAPPA",
-  "ufotable",
-  "Madhouse",
-  "Kyoto Animation",
-  "Wit Studio",
-  "Production I.G",
-  "Studio Ghibli",
-  "CloverWorks",
-];
+import CustomStyledCheckbox from "../common/CustomStyledCheckbox";
+import apiService from "../../services/apiService";
+import { useSelector } from "react-redux";
 
 function AnimeStudioFilter(props) {
   const { studioOption, sx } = props;
   const { updateStudioOption } = useAnimeAppDispatch();
+  const studioList = useSelector((state) => state.anime.studioList);
+  // const [animeStudioList, setAnimeStudioList] = useState(null);
 
   const handleChangeStudioFilter = (option) => {
     if (studioOption === option) {
@@ -47,6 +36,19 @@ function AnimeStudioFilter(props) {
   const handleCloseAdvancedFilterDropdownMenu = () => {
     setOpenAdvancedFilterDropdownMenu(false);
   };
+
+  // useEffect(() => {
+  //   try {
+  //     const fetchedAnimeStudioList = async () => {
+  //       const response = await apiService.get("/studios");
+  //       setAnimeStudioList(response.animeStudioList);
+  //     };
+
+  //     fetchedAnimeStudioList();
+  //   } catch (error) {
+  //     console.log(error);
+  //   }
+  // }, []);
 
   return (
     <Box sx={sx}>
@@ -152,16 +154,17 @@ function AnimeStudioFilter(props) {
           },
         }}
       >
-        {studioOptionList.map((option) => (
+        {studioList?.map((option) => (
           <MenuItem
             key={option}
             value={option}
             onClick={() => handleChangeStudioFilter(option)}
           >
-            <Checkbox
+            <CustomStyledCheckbox
               id={option}
               name={option}
-              checked={studioOption?.indexOf(option) > -1}
+              storeOption={studioOption}
+              option={option}
             />
             <ListItemText primary={option} />
           </MenuItem>

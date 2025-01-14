@@ -1,6 +1,5 @@
 import {
   Box,
-  Checkbox,
   InputLabel,
   ListItemText,
   MenuItem,
@@ -9,6 +8,7 @@ import {
 import { useState } from "react";
 import KeyboardArrowRightIcon from "@mui/icons-material/KeyboardArrowRight";
 import { useAnimeAppDispatch } from "../../services/hooks";
+import CustomStyledCheckbox from "../common/CustomStyledCheckbox";
 
 const seasonOptionList = ["winter", "spring", "summer", "fall"];
 
@@ -147,16 +147,16 @@ function AnimeSeasonFilter(props) {
             value={option}
             onClick={() => handleChangeSeasonFilter(option)}
           >
-            <Checkbox
+            <CustomStyledCheckbox
               id={option}
               name={option}
-              checked={seasonOption === option}
+              storeOption={seasonOption}
+              option={option}
             />
             <ListItemText
               primary={option}
               sx={{
                 "& .MuiTypography-root": {
-                  color: "primary.main",
                   textTransform: "capitalize",
                 },
               }}
