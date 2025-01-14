@@ -44,7 +44,6 @@ function AnimeYearFilter(props) {
           views={["year"]}
           yearsOrder="desc"
           maxDate={dayjs()}
-          // value={dayjs(yearOption)}
           value={yearOption ? dayjs(yearOption) : null}
           onChange={handleChangeYearFilter}
           slots={{ openPickerIcon: KeyboardArrowRightIcon }}
