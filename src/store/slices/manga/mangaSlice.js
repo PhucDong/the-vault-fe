@@ -135,6 +135,12 @@ export const mangaSlice = createSlice({
     clearCategorizedMangaList(state) {
       state.categorizedMangaList = [];
     },
+    clearAllMangaFilter(state) {
+      state.searchValue = "";
+      state.publishingStatusOption = "";
+      state.yearOption = null;
+      state.genreOptionList = [];
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -172,6 +178,7 @@ export const {
   updateGenreOptionList,
   updatePublishingStatus,
   clearCategorizedMangaList,
+  clearAllMangaFilter,
 } = mangaSlice.actions;
 export default mangaSlice.reducer;
 
