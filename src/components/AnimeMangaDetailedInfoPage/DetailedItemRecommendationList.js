@@ -34,31 +34,31 @@ function DetailedItemRecommendationList(props) {
       }}
     >
       <Box>
-        <Box
-          sx={{
-            display: "flex",
-            justifyContent: "space-between",
-            alignItems: "center",
-            marginBottom: { xs: "8px", sm: "12px", lg: "16px" },
-            "& .MuiTypography-root": {
-              fontSize: { xs: "1.1rem", sm: "1.2rem" },
-              fontWeight: 600,
-              color: "primary.main",
-            },
-            "& a": {
-              textDecoration: "none",
-              color: "info.main",
-              fontWeight: 550,
-              lineHeight: "100%",
-              fontSize: { xs: "1rem", sm: "1.125rem" },
-            },
-          }}
-        >
-          <Typography>Recommendations</Typography>
-          {tabValue === 0 && (
-            <Link onClick={() => setTabValue(6)}>View All</Link>
-          )}
-        </Box>
+        {tabValue === 0 && (
+          <Box
+            sx={{
+              display: "flex",
+              justifyContent: "space-between",
+              alignItems: "center",
+              marginBottom: { xs: "8px", sm: "12px", lg: "16px" },
+              "& .MuiTypography-root": {
+                fontSize: { xs: "1.1rem", sm: "1.2rem" },
+                fontWeight: 600,
+                color: "primary.main",
+              },
+              "& a": {
+                textDecoration: "none",
+                color: "info.main",
+                fontWeight: 550,
+                lineHeight: "100%",
+                fontSize: { xs: "1rem", sm: "1.125rem" },
+              },
+            }}
+          >
+            <Typography>Recommendations</Typography>
+            <Link onClick={() => setTabValue(2)}>View All</Link>
+          </Box>
+        )}
 
         <Tabs
           value={value}
@@ -90,25 +90,21 @@ function DetailedItemRecommendationList(props) {
           }}
         >
           {item.recommendations && item.recommendations.length > 0 ? (
-            item.recommendations
-              .slice(0, 6)
-              .map((recommendation, index) => (
-                <Tab
-                  key={index}
-                  label={<Recommendation item={recommendation} />}
-                  {...a11yProps(index)}
-                  onClick={() => {
-                    window.scrollTo({ top: 0, behavior: "smooth" }); // Scrolls to the top of the page
-                    if (recommendation.format === "TV") {
-                      navigate(`/animes/${recommendation._id}`);
-                    } else if (
-                      recommendation.format === "Manga"
-                    ) {
-                      navigate(`/mangas/${recommendation._id}`);
-                    }
-                  }}
-                />
-              ))
+            item.recommendations.slice(0, 6).map((recommendation, index) => (
+              <Tab
+                key={index}
+                label={<Recommendation item={recommendation} />}
+                {...a11yProps(index)}
+                onClick={() => {
+                  window.scrollTo({ top: 0, behavior: "smooth" }); // Scrolls to the top of the page
+                  if (recommendation.format === "TV") {
+                    navigate(`/animes/${recommendation._id}`);
+                  } else if (recommendation.format === "Manga") {
+                    navigate(`/mangas/${recommendation._id}`);
+                  }
+                }}
+              />
+            ))
           ) : (
             <Typography sx={{ fontSize: { xs: "0.95rem", sm: "1.1rem" } }}>
               No recommendations found.

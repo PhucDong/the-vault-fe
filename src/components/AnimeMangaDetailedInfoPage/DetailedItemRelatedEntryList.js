@@ -35,31 +35,31 @@ function DetailedItemRelatedEntryList(props) {
     >
       <Box>
         {/* Header: heading & view all */}
-        <Box
-          sx={{
-            display: "flex",
-            justifyContent: "space-between",
-            alignItems: "center",
-            marginBottom: { xs: "8px", sm: "12px", lg: "16px" },
-            "& .MuiTypography-root": {
-              fontSize: { xs: "1.1rem", sm: "1.2rem" },
-              fontWeight: 600,
-              color: "primary.main",
-            },
-            "& a": {
-              textDecoration: "none",
-              color: "info.main",
-              fontWeight: 550,
-              lineHeight: "100%",
-              fontSize: { xs: "0.95rem", sm: "1.1rem" },
-            },
-          }}
-        >
-          <Typography>Related Entries</Typography>
-          {tabValue === 0 && (
-            <Link onClick={() => setTabValue(4)}>View All</Link>
-          )}
-        </Box>
+        {tabValue === 0 && (
+          <Box
+            sx={{
+              display: "flex",
+              justifyContent: "space-between",
+              alignItems: "center",
+              marginBottom: { xs: "8px", sm: "12px", lg: "16px" },
+              "& .MuiTypography-root": {
+                fontSize: { xs: "1.1rem", sm: "1.2rem" },
+                fontWeight: 600,
+                color: "primary.main",
+              },
+              "& a": {
+                textDecoration: "none",
+                color: "info.main",
+                fontWeight: 550,
+                lineHeight: "100%",
+                fontSize: { xs: "0.95rem", sm: "1.1rem" },
+              },
+            }}
+          >
+            <Typography>Related Entries</Typography>
+            <Link onClick={() => setTabValue(1)}>View All</Link>
+          </Box>
+        )}
 
         {!item.relatedEntries || item.relatedEntries.length === 0 ? (
           <Typography sx={{ fontSize: { xs: "0.95rem", sm: "1.1rem" } }}>
@@ -101,9 +101,7 @@ function DetailedItemRelatedEntryList(props) {
                   window.scrollTo({ top: 0, behavior: "smooth" }); // Scrolls to the top of the page
                   if (relatedEntry.format === "TV") {
                     navigate(`/animes/${relatedEntry._id}`);
-                  } else if (
-                    relatedEntry.format === "Manga"
-                  ) {
+                  } else if (relatedEntry.format === "Manga") {
                     navigate(`/mangas/${relatedEntry._id}`);
                   }
                 }}

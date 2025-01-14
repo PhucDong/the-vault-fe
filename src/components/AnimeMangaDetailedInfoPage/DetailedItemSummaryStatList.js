@@ -40,31 +40,31 @@ function DetailedItemSummaryStatList(props) {
       }}
     >
       <Box>
-        <Box
-          sx={{
-            display: "flex",
-            justifyContent: "space-between",
-            alignItems: "center",
-            marginBottom: { xs: "8px", sm: "12px", lg: "16px" },
-            "& .MuiTypography-root": {
-              fontSize: { xs: "1.1rem", sm: "1.2rem" },
-              fontWeight: 600,
-              color: "primary.main",
-            },
-            "& a": {
-              textDecoration: "none",
-              color: "info.main",
-              fontWeight: 550,
-              lineHeight: "100%",
-              fontSize: { xs: "1rem", sm: "1.125rem" },
-            },
-          }}
-        >
-          <Typography>Summary Stats</Typography>
-          {tabValue === 0 && (
-            <Link onClick={() => setTabValue(5)}>View All</Link>
-          )}
-        </Box>
+        {tabValue === 0 && (
+          <Box
+            sx={{
+              display: "flex",
+              justifyContent: "space-between",
+              alignItems: "center",
+              marginBottom: { xs: "8px", sm: "12px", lg: "16px" },
+              "& .MuiTypography-root": {
+                fontSize: { xs: "1.1rem", sm: "1.2rem" },
+                fontWeight: 600,
+                color: "primary.main",
+              },
+              "& a": {
+                textDecoration: "none",
+                color: "info.main",
+                fontWeight: 550,
+                lineHeight: "100%",
+                fontSize: { xs: "1rem", sm: "1.125rem" },
+              },
+            }}
+          >
+            <Typography>Summary Stats</Typography>
+            <Link onClick={() => setTabValue(6)}>View All</Link>
+          </Box>
+        )}
 
         <Box sx={{ display: "flex", flexDirection: "column", gap: "6px" }}>
           {Object.entries(getNewStatObj).length > 0 ? (

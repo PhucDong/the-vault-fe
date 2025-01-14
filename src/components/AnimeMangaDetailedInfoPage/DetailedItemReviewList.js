@@ -19,31 +19,31 @@ function DetailedItemReviewList(props) {
       }}
     >
       <Box>
-        <Box
-          sx={{
-            display: "flex",
-            justifyContent: "space-between",
-            alignItems: "center",
-            marginBottom: { xs: "8px", sm: "12px", lg: "16px" },
-            "& .MuiTypography-root": {
-              fontSize: { xs: "1.1rem", sm: "1.2rem" },
-              fontWeight: 600,
-              color: "primary.main",
-            },
-            "& a": {
-              textDecoration: "none",
-              color: "info.main",
-              fontWeight: 550,
-              lineHeight: "100%",
-              fontSize: { xs: "1rem", sm: "1.125rem" },
-            },
-          }}
-        >
-          <Typography>Reviews</Typography>
-          {tabValue === 0 && (
-            <Link onClick={() => setTabValue(3)}>View All</Link>
-          )}
-        </Box>
+        {tabValue === 0 && (
+          <Box
+            sx={{
+              display: "flex",
+              justifyContent: "space-between",
+              alignItems: "center",
+              marginBottom: { xs: "8px", sm: "12px", lg: "16px" },
+              "& .MuiTypography-root": {
+                fontSize: { xs: "1.1rem", sm: "1.2rem" },
+                fontWeight: 600,
+                color: "primary.main",
+              },
+              "& a": {
+                textDecoration: "none",
+                color: "info.main",
+                fontWeight: 550,
+                lineHeight: "100%",
+                fontSize: { xs: "1rem", sm: "1.125rem" },
+              },
+            }}
+          >
+            <Typography>Reviews</Typography>
+            <Link onClick={() => setTabValue(5)}>View All</Link>
+          </Box>
+        )}
 
         <Box
           sx={{
@@ -58,11 +58,7 @@ function DetailedItemReviewList(props) {
             item.reviews
               .slice(0, 6)
               .map((review, index) => (
-                <Review
-                  key={index}
-                  item={item}
-                  review={review}
-                />
+                <Review key={index} item={item} review={review} />
               ))
           ) : (
             <Typography sx={{ fontSize: { xs: "0.95rem", sm: "1.1rem" } }}>
