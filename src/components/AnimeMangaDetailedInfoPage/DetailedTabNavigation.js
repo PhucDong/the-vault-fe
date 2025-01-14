@@ -64,12 +64,12 @@ function DetailedTabNavigation({ item }) {
           }}
         >
           <Tab label="Overview" {...a11yProps(0)} />
-          <Tab label="Characters" {...a11yProps(1)} />
-          <Tab label="Staff" {...a11yProps(2)} />
-          <Tab label="Reviews" {...a11yProps(3)} />
-          <Tab label="Related Entries" {...a11yProps(4)} />
-          <Tab label="Stats" {...a11yProps(5)} />
-          <Tab label="Recommendations" {...a11yProps(6)} />
+          <Tab label="Related Entries" {...a11yProps(1)} />
+          <Tab label="Recommendations" {...a11yProps(2)} />
+          <Tab label="Characters" {...a11yProps(3)} />
+          <Tab label="Employees" {...a11yProps(4)} />
+          <Tab label="Reviews" {...a11yProps(5)} />
+          <Tab label="Stats" {...a11yProps(6)} />
         </Tabs>
       </CustomPaddingLayout>
 
@@ -77,38 +77,38 @@ function DetailedTabNavigation({ item }) {
         <OverviewList item={item} tabValue={value} setTabValue={setValue} />
       </CustomTabPanel>
       <CustomTabPanel value={value} index={1} item={item}>
-        <DetailedItemCharacterList
-          item={item}
-          tabValue={value}
-          setTabValue={setValue}
-        />
+        <DetailedItemRelatedEntryList item={item} />
       </CustomTabPanel>
       <CustomTabPanel value={value} index={2} item={item}>
-        <DetailedItemEmployeeList
+        <DetailedItemRecommendationList
           item={item}
           tabValue={value}
           setTabValue={setValue}
         />
       </CustomTabPanel>
       <CustomTabPanel value={value} index={3} item={item}>
-        <DetailedItemReviewList
+        <DetailedItemCharacterList
           item={item}
           tabValue={value}
           setTabValue={setValue}
         />
       </CustomTabPanel>
       <CustomTabPanel value={value} index={4} item={item}>
-        <DetailedItemRelatedEntryList item={item} />
+        <DetailedItemEmployeeList
+          item={item}
+          tabValue={value}
+          setTabValue={setValue}
+        />
       </CustomTabPanel>
       <CustomTabPanel value={value} index={5} item={item}>
-        <DetailedItemSummaryStatList
+        <DetailedItemReviewList
           item={item}
           tabValue={value}
           setTabValue={setValue}
         />
       </CustomTabPanel>
       <CustomTabPanel value={value} index={6} item={item}>
-        <DetailedItemRecommendationList
+        <DetailedItemSummaryStatList
           item={item}
           tabValue={value}
           setTabValue={setValue}
