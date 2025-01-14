@@ -106,7 +106,6 @@ function SearchBar() {
     if (animeSearchValue) {
       fetchAnimeSearchResultList({ searchValue: animeSearchValue });
     } else {
-      // fetchAnimeSearchResultList({});
       if (categoryName) {
         fetchCategorizedAnimeList({ categoryName });
         fetchAnimeSearchResultList({});
@@ -121,7 +120,6 @@ function SearchBar() {
     if (mangaSearchValue) {
       fetchMangaSearchResultList({ searchValue: mangaSearchValue });
     } else {
-      // fetchMangaSearchResultList({});
       if (categoryName) {
         fetchCategorizedMangaList({ categoryName });
         fetchMangaSearchResultList({});
