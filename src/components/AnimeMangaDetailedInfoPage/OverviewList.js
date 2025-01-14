@@ -1,7 +1,7 @@
 import DetailedItemDescription from "./DetailedItemDescription";
 import DetailedItemRelatedEntryList from "./DetailedItemRelatedEntryList";
 import DetailedItemCharacterList from "./DetailedItemCharacterList";
-import DetailedItemStaffList from "./DetailedItemEmployeeList";
+import DetailedItemEmployeeList from "./DetailedItemEmployeeList";
 import DetailedItemSummaryStatList from "./DetailedItemSummaryStatList";
 import DetailedItemReviewList from "./DetailedItemReviewList";
 import DetailedItemRecommendationList from "./DetailedItemRecommendationList";
@@ -31,17 +31,17 @@ function OverviewList({ tabValue, setTabValue, item }) {
           tabValue={tabValue}
           setTabValue={setTabValue}
         />
+        <DetailedItemRecommendationList
+          item={item}
+          tabValue={tabValue}
+          setTabValue={setTabValue}
+        />
         <DetailedItemCharacterList
           item={item}
           tabValue={tabValue}
           setTabValue={setTabValue}
         />
-        <DetailedItemStaffList
-          item={item}
-          tabValue={tabValue}
-          setTabValue={setTabValue}
-        />
-        <DetailedItemSummaryStatList
+        <DetailedItemEmployeeList
           item={item}
           tabValue={tabValue}
           setTabValue={setTabValue}
@@ -51,7 +51,7 @@ function OverviewList({ tabValue, setTabValue, item }) {
           tabValue={tabValue}
           setTabValue={setTabValue}
         />
-        <DetailedItemRecommendationList
+        <DetailedItemSummaryStatList
           item={item}
           tabValue={tabValue}
           setTabValue={setTabValue}
