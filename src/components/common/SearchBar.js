@@ -1,11 +1,19 @@
-import { Box, InputAdornment, TextField, Typography } from "@mui/material";
+import {
+  Box,
+  Button,
+  InputAdornment,
+  TextField,
+  Typography,
+} from "@mui/material";
 import { useEffect, useState } from "react";
 import CustomStyledSearchButton from "./CustomStyledSearchButton";
 import SearchIcon from "@mui/icons-material/Search";
 import AdvancedSearch from "../VisitorPage/AdvancedSearch";
-import { useLocation, useNavigate, useParams } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { useAnimeAppDispatch, useMangaAppDispatch } from "../../services/hooks";
+import apiService from "../../services/apiService";
+import CustomStyledFastGenreButton from "./CustomStyledFastGenreButton";
 
 function SearchBar() {
   const location = useLocation();
@@ -16,18 +24,13 @@ function SearchBar() {
   const [filteredSearchHistoryList, setFilteredSearchHistoryList] = useState(
     []
   );
-  const {
-    fetchAnimeSearchResultList,
-    updateAnimeSearchValue,
-    fetchCategorizedAnimeList,
-  } = useAnimeAppDispatch();
-  const {
-    fetchMangaSearchResultList,
-    updateMangaSearchValue,
-    fetchCategorizedMangaList,
-  } = useMangaAppDispatch();
+  const { updateAnimeSearchValue, updateAnimeGenreOptionList } =
+    useAnimeAppDispatch();
+  const { updateMangaSearchValue, updateMangaGenreOptionList } =
+    useMangaAppDispatch();
   const navigate = useNavigate();
-  const { categoryName } = useParams();
+  const [popularAnimeGenreList, setPopularAnimeGenreList] = useState(null);
+  const [popularMangaGenreList, setPopularMangaGenreList] = useState(null);
 
   const handleChangeSearchValue = (event) => {
     const { value } = event.target;
@@ -91,6 +94,27 @@ function SearchBar() {
     });
   };
 
+  const handleChangeFastFilter = (event) => {
+    const { value } = event.target;
+
+    if (location.pathname === "/") {
+      navigate("/animes");
+      updateAnimeGenreOptionList([value]);
+    } else if (location.pathname.includes("/animes")) {
+      updateAnimeGenreOptionList([value]);
+    } else if (location.pathname.includes("/mangas")) {
+      updateMangaGenreOptionList([value]);
+    }
+  };
+
+  const handleRemoveFastFilter = () => {
+    if (location.pathname === "/" || location.pathname.includes("/animes")) {
+      updateAnimeGenreOptionList([]);
+    } else if (location.pathname.includes("/mangas")) {
+      updateMangaGenreOptionList([]);
+    }
+  };
+
   useEffect(() => {
     if (location.pathname === "/") {
       updateAnimeSearchValue("");
@@ -103,32 +127,25 @@ function SearchBar() {
   }, [location.pathname]);
 
   useEffect(() => {
-    if (animeSearchValue) {
-      fetchAnimeSearchResultList({ searchValue: animeSearchValue });
-    } else {
-      if (categoryName) {
-        fetchCategorizedAnimeList({ categoryName });
-        fetchAnimeSearchResultList({});
-      } else {
-        fetchCategorizedAnimeList({});
-        fetchAnimeSearchResultList({});
-      }
-    }
-  }, [animeSearchValue, location.pathname]);
+    try {
+      const fetchedPopularGenreList = async () => {
+        const response = await apiService.get("/genres");
 
-  useEffect(() => {
-    if (mangaSearchValue) {
-      fetchMangaSearchResultList({ searchValue: mangaSearchValue });
-    } else {
-      if (categoryName) {
-        fetchCategorizedMangaList({ categoryName });
-        fetchMangaSearchResultList({});
-      } else {
-        fetchCategorizedMangaList({});
-        fetchMangaSearchResultList({});
-      }
+        if (
+          location.pathname === "/" ||
+          location.pathname.includes("/animes")
+        ) {
+          setPopularAnimeGenreList(response.populAnimeGenreList);
+        } else if (location.pathname.includes("/mangas")) {
+          setPopularMangaGenreList(response.popularMangaGenreList);
+        }
+      };
+
+      fetchedPopularGenreList();
+    } catch (error) {
+      console.log(error);
     }
-  }, [mangaSearchValue, location.pathname]);
+  }, [location.pathname]);
 
   return (
     <>
@@ -188,6 +205,8 @@ function SearchBar() {
               },
             }}
           />
+
+          {/* Search history */}
           {openSearchHistoryListOpen &&
             filteredSearchHistoryList &&
             filteredSearchHistoryList.length > 0 && (
@@ -239,10 +258,69 @@ function SearchBar() {
               </Box>
             )}
         </Box>
+
         <CustomStyledSearchButton onClick={handleSearchValue}>
           Search
         </CustomStyledSearchButton>
       </Box>
+
+      {/* Fast filters */}
+      <Box
+        sx={{
+          width: "100%",
+          display: "flex",
+          flexWrap: { xs: "wrap", md: "nowrap" },
+          alignItems: "center",
+          rowGap: { xs: "8px" },
+          columnGap: { xs: "12px", lg: "16px" },
+          marginTop: { xs: "6px", sm: "8px" },
+        }}
+      >
+        <Typography
+          sx={{ color: "primary.main", fontSize: { xs: "0.9rem", md: "1rem" } }}
+        >
+          Popular genres:{" "}
+        </Typography>
+
+        {location.pathname === "/" || location.pathname.includes("/animes")
+          ? popularAnimeGenreList?.slice(0, 4).map((genre) => (
+              <CustomStyledFastGenreButton
+                key={genre.name}
+                value={genre.name}
+                onClick={handleChangeFastFilter}
+              >
+                {genre.name}
+              </CustomStyledFastGenreButton>
+            ))
+          : popularMangaGenreList?.slice(0, 4).map((genre) => (
+              <CustomStyledFastGenreButton
+                key={genre.name}
+                value={genre.name}
+                onClick={handleChangeFastFilter}
+              >
+                {genre.name}
+              </CustomStyledFastGenreButton>
+            ))}
+
+        <Button
+          onClick={handleRemoveFastFilter}
+          sx={{
+            padding: 0,
+            textTransform: "capitalize",
+            lineHeight: "100%",
+            minWidth: 0,
+            fontSize: { xs: "1rem", md: "1.1rem" },
+            color: "primary.light",
+            border: "none",
+            "&:hover": {
+              backgroundColor: "transparent",
+            },
+          }}
+        >
+          Clear Genre
+        </Button>
+      </Box>
+
       <AdvancedSearch />
     </>
   );
