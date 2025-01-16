@@ -14,7 +14,7 @@ import CustomStyledCheckbox from "../common/CustomStyledCheckbox";
 
 function MangaGenreFilter(props) {
   const { genreOptionList, sx } = props;
-  const { updateGenreOptionList } = useMangaAppDispatch();
+  const { updateMangaGenreOptionList } = useMangaAppDispatch();
   const genreList = useSelector((state) => state.manga.genreList);
   const isExtraSmallScreenWidthAndAbove = useMediaQuery((theme) =>
     theme.breakpoints.up("xs")
@@ -71,7 +71,7 @@ function MangaGenreFilter(props) {
   );
 
   const handleChangeGenreFilter = (event) =>
-    updateGenreOptionList(event.target.value);
+    updateMangaGenreOptionList(event.target.value);
   const [openAdvancedFilterDropdownMenu, setOpenAdvancedFilterDropdownMenu] =
     useState(false);
 
