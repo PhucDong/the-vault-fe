@@ -26,6 +26,7 @@ function MangaListByCategoryPage() {
     (state) => state.manga.publishingStatusOption
   );
   const genreOptionList = useSelector((state) => state.manga.genreOptionList);
+  const searchValue = useSelector((state) => state.manga.searchValue);
 
   useEffect(() => {
     if (mangaSearchResultList) {
@@ -43,8 +44,14 @@ function MangaListByCategoryPage() {
   }, [mangaSearchResultList]);
 
   useEffect(() => {
-    if (yearOption || genreOptionList?.length > 0 || publishingStatusOption) {
+    if (
+      searchValue ||
+      yearOption ||
+      genreOptionList?.length > 0 ||
+      publishingStatusOption
+    ) {
       fetchMangaSearchResultList({
+        searchValue,
         yearOption,
         publishingStatusOption,
         genreOptionList,
@@ -53,7 +60,13 @@ function MangaListByCategoryPage() {
       fetchCategorizedMangaList({ categoryName });
       fetchMangaSearchResultList({});
     }
-  }, [yearOption, publishingStatusOption, genreOptionList, categoryName]);
+  }, [
+    searchValue,
+    yearOption,
+    publishingStatusOption,
+    genreOptionList,
+    categoryName,
+  ]);
 
   useEffect(() => {
     if (categoryName) {

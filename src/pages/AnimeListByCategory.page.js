@@ -6,7 +6,10 @@ import { useSelector } from "react-redux";
 import NoSearchResultAlert from "../components/common/NoSearchResultAlert";
 import ItemCard from "../components/VisitorPage/ItemCard";
 import storage from "redux-persist/lib/storage";
-import { selectAnimeSearchResultList, selectCategorizedAnimeList } from "../store/slices/anime/animeSlice";
+import {
+  selectAnimeSearchResultList,
+  selectCategorizedAnimeList,
+} from "../store/slices/anime/animeSlice";
 import { useAnimeAppDispatch } from "../services/hooks";
 
 function AnimeListByCategoryPage() {
@@ -25,6 +28,7 @@ function AnimeListByCategoryPage() {
   const seasonOption = useSelector((state) => state.anime.seasonOption);
   const genreOptionList = useSelector((state) => state.anime.genreOptionList);
   const studioOption = useSelector((state) => state.anime.studioOption);
+  const searchValue = useSelector((state) => state.anime.searchValue);
 
   useEffect(() => {
     if (animeSearchResultList) {
@@ -43,6 +47,7 @@ function AnimeListByCategoryPage() {
 
   useEffect(() => {
     if (
+      searchValue ||
       yearOption ||
       airingStatusOption ||
       seasonOption ||
@@ -50,6 +55,7 @@ function AnimeListByCategoryPage() {
       studioOption
     ) {
       fetchAnimeSearchResultList({
+        searchValue,
         yearOption,
         airingStatusOption,
         seasonOption,
@@ -61,6 +67,7 @@ function AnimeListByCategoryPage() {
       fetchAnimeSearchResultList({});
     }
   }, [
+    searchValue,
     yearOption,
     airingStatusOption,
     seasonOption,
