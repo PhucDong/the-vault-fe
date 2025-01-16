@@ -129,7 +129,7 @@ export const mangaSlice = createSlice({
     updatePublishingStatus(state, action) {
       state.publishingStatusOption = action.payload;
     },
-    updateGenreOptionList(state, action) {
+    updateMangaGenreOptionList(state, action) {
       state.genreOptionList = action.payload;
     },
     clearCategorizedMangaList(state) {
@@ -175,7 +175,7 @@ export const mangaSlice = createSlice({
 export const {
   updateMangaSearchValue,
   updatePublishedYear,
-  updateGenreOptionList,
+  updateMangaGenreOptionList,
   updatePublishingStatus,
   clearCategorizedMangaList,
   clearAllMangaFilter,
