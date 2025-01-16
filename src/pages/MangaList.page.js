@@ -6,7 +6,10 @@ import { useEffect } from "react";
 import NoSearchResultAlert from "../components/common/NoSearchResultAlert";
 import storage from "redux-persist/lib/storage";
 import { useMangaAppDispatch } from "../services/hooks";
-import { selectCategorizedMangaList, selectMangaSearchResultList } from "../store/slices/manga/mangaSlice";
+import {
+  selectCategorizedMangaList,
+  selectMangaSearchResultList,
+} from "../store/slices/manga/mangaSlice";
 
 function MangaListPage() {
   const {
@@ -21,8 +24,7 @@ function MangaListPage() {
     (state) => state.manga.publishingStatusOption
   );
   const genreOptionList = useSelector((state) => state.manga.genreOptionList);
-
-  console.log("Categorized manga list: ", categorizedMangaList);
+  const searchValue = useSelector((state) => state.manga.searchValue);
 
   useEffect(() => {
     if (mangaSearchResultList) {
@@ -40,8 +42,14 @@ function MangaListPage() {
   }, [mangaSearchResultList]);
 
   useEffect(() => {
-    if (yearOption || publishingStatusOption || genreOptionList?.length > 0) {
+    if (
+      searchValue ||
+      yearOption ||
+      publishingStatusOption ||
+      genreOptionList?.length > 0
+    ) {
       fetchMangaSearchResultList({
+        searchValue,
         yearOption,
         publishingStatusOption,
         genreOptionList,
@@ -50,7 +58,7 @@ function MangaListPage() {
       fetchCategorizedMangaList({});
       fetchMangaSearchResultList({});
     }
-  }, [yearOption, publishingStatusOption, genreOptionList]);
+  }, [searchValue, yearOption, publishingStatusOption, genreOptionList]);
 
   return (
     <Box

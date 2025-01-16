@@ -16,6 +16,7 @@ function AnimeListPage() {
     fetchAnimeSearchResultList,
     fetchCategorizedAnimeList,
     clearCategorizedAnimeList,
+    updateAnimeGenreOptionList,
   } = useAnimeAppDispatch();
   const categorizedAnimeList = useSelector(selectCategorizedAnimeList);
   const animeSearchResultList = useSelector(selectAnimeSearchResultList);
@@ -26,6 +27,7 @@ function AnimeListPage() {
   const seasonOption = useSelector((state) => state.anime.seasonOption);
   const genreOptionList = useSelector((state) => state.anime.genreOptionList);
   const studioOption = useSelector((state) => state.anime.studioOption);
+  const searchValue = useSelector((state) => state.anime.searchValue);
 
   useEffect(() => {
     if (!animeSearchResultList) {
@@ -46,6 +48,7 @@ function AnimeListPage() {
 
   useEffect(() => {
     if (
+      searchValue ||
       yearOption ||
       airingStatusOption ||
       seasonOption ||
@@ -53,6 +56,7 @@ function AnimeListPage() {
       studioOption
     ) {
       fetchAnimeSearchResultList({
+        searchValue,
         yearOption,
         airingStatusOption,
         seasonOption,
@@ -64,12 +68,17 @@ function AnimeListPage() {
     fetchCategorizedAnimeList({});
     fetchAnimeSearchResultList({});
   }, [
+    searchValue,
     yearOption,
     airingStatusOption,
     seasonOption,
     genreOptionList,
     studioOption,
   ]);
+
+  // useEffect(() => {
+  //   updateAnimeGenreOptionList([]);
+  // }, []);
 
   return (
     <Box
