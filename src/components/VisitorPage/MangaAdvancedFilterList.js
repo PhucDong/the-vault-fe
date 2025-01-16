@@ -18,7 +18,7 @@ function MangaAdvancedFilterList() {
       sx={{
         display: "flex",
         flexDirection: "column",
-        gap: { sm: "12px", md: "16px" },
+        gap: {  xs: "12px", sm: "12px", md: "16px" },
         marginTop: "8px",
       }}
     >
