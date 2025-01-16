@@ -14,7 +14,7 @@ import CustomStyledCheckbox from "../common/CustomStyledCheckbox";
 
 function AnimeGenreFilter(props) {
   const { genreOptionList, sx } = props;
-  const { updateGenreOptionList } = useAnimeAppDispatch();
+  const { updateAnimeGenreOptionList } = useAnimeAppDispatch();
   const genreList = useSelector((state) => state.anime.genreList);
   const isExtraSmallScreenWidthAndAbove = useMediaQuery((theme) =>
     theme.breakpoints.up("xs")
@@ -71,7 +71,7 @@ function AnimeGenreFilter(props) {
   );
 
   const handleChangeGenreFilter = (event) =>
-    updateGenreOptionList(event.target.value);
+    updateAnimeGenreOptionList(event.target.value);
   const [openAdvancedFilterDropdownMenu, setOpenAdvancedFilterDropdownMenu] =
     useState(false);
 
