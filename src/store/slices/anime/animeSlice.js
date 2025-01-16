@@ -176,7 +176,7 @@ export const animeSlice = createSlice({
     updateSeasonOption(state, action) {
       state.seasonOption = action.payload;
     },
-    updateGenreOptionList(state, action) {
+    updateAnimeGenreOptionList(state, action) {
       state.genreOptionList = action.payload;
     },
     updateStudioOption(state, action) {
@@ -231,7 +231,7 @@ export const {
   updateAiredYear,
   updateAiringStatus,
   updateSeasonOption,
-  updateGenreOptionList,
+  updateAnimeGenreOptionList,
   updateStudioOption,
   clearCategorizedAnimeList,
   clearAllAnimeFilter,
