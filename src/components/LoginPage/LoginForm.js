@@ -1,19 +1,17 @@
 import { Box, IconButton, InputAdornment } from "@mui/material";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import CustomStyledInputLabel from "../common/CustomStyledInputLabel";
 import CustomStyledTextField from "../common/CustomStyledTextField";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
 import RegisterLoginFormButton from "../common/RegisterLoginFormButton";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import {
-  selectErrorMessages,
-  selectIsUserLoggedIn,
+  selectErrorMessages
 } from "../../store/slices/authentication/authenticationSlice";
 import {
   useAppSelector,
   useAuthAppDispatch,
-  useUserAppDispatch,
 } from "../../services/hooks";
 
 function LoginForm() {
@@ -21,10 +19,7 @@ function LoginForm() {
   const [passwordValue, setPasswordValue] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const { login } = useAuthAppDispatch();
-  const { resetState } = useUserAppDispatch();
   const errorMessages = useAppSelector(selectErrorMessages);
-  const location = useLocation();
-  const isUserLoggedIn = useAppSelector(selectIsUserLoggedIn);
   const navigate = useNavigate();
 
   const handleChangeEmailValue = (event) => setEmailValue(event.target.value);
@@ -38,18 +33,6 @@ function LoginForm() {
   const handleMouseUpPassword = (event) => {
     event.preventDefault();
   };
-
-  useEffect(() => {
-    if (location.pathname.startsWith("/login")) {
-      resetState();
-    }
-  }, [location.pathname, resetState]);
-
-  useEffect(() => {
-    if (isUserLoggedIn) {
-      navigate(-1);
-    }
-  }, [isUserLoggedIn, navigate]);
 
   return (
     <>
@@ -113,6 +96,7 @@ function LoginForm() {
           login({
             email: emailValue,
             password: passwordValue,
+            navigate,
           })
         }
       >
