@@ -1,8 +1,12 @@
-import { Box, Typography } from "@mui/material";
+import { Box, Typography, useMediaQuery } from "@mui/material";
 import { NavLink } from "react-router-dom";
 import RegisterForm from "../components/RegisterPage/RegisterForm";
 
 function RegisterPage() {
+  const isMediumScreenWidthAndAbove = useMediaQuery((theme) =>
+    theme.breakpoints.up("md")
+  );
+
   return (
     <Box
       sx={{
@@ -23,7 +27,7 @@ function RegisterPage() {
           marginBottom: "32px",
         }}
       >
-        Register to The Vault
+        {isMediumScreenWidthAndAbove ? "Register" : "Register to The Vault"}
       </Typography>
 
       <RegisterForm />
