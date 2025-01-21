@@ -1,21 +1,13 @@
 import { Box, IconButton, InputAdornment } from "@mui/material";
 import CustomStyledInputLabel from "../common/CustomStyledInputLabel";
 import CustomStyledTextField from "../common/CustomStyledTextField";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
 import RegisterLoginFormButton from "../common/RegisterLoginFormButton";
-import { faker } from "@faker-js/faker";
-import { useLocation, useNavigate } from "react-router-dom";
-import {
-  selectErrorMessages,
-  selectIsUserRegistered,
-} from "../../store/slices/user/userSlice";
-import {
-  useAppSelector,
-  useAuthAppDispatch,
-  useUserAppDispatch,
-} from "../../services/hooks";
+import { useNavigate } from "react-router-dom";
+import { selectErrorMessages } from "../../store/slices/user/userSlice";
+import { useAppSelector, useUserAppDispatch } from "../../services/hooks";
 
 function RegisterForm() {
   const [emailValue, setEmailValue] = useState("");
@@ -27,10 +19,7 @@ function RegisterForm() {
     useState(false);
   const errorMessages = useAppSelector(selectErrorMessages);
   const { register } = useUserAppDispatch();
-  const { resetState } = useAuthAppDispatch();
-  const isUserRegistered = useAppSelector(selectIsUserRegistered);
   const navigate = useNavigate();
-  const location = useLocation();
 
   const handleChangeEmailValue = (event) => setEmailValue(event.target.value);
   const handleChangeUsernameValue = (event) =>
@@ -57,18 +46,6 @@ function RegisterForm() {
     event.preventDefault();
   };
 
-  useEffect(() => {
-    if (isUserRegistered) {
-      navigate("/");
-    }
-  }, [isUserRegistered, navigate]);
-
-  useEffect(() => {
-    if (location.pathname.startsWith("/register")) {
-      resetState();
-    }
-  }, [location.pathname, resetState]);
-
   return (
     <>
       <Box sx={{ display: "flex", flexDirection: "column", gap: "20px" }}>
@@ -82,8 +59,8 @@ function RegisterForm() {
             placeholder="Please enter your email"
             value={emailValue}
             onChange={handleChangeEmailValue}
-            error={!!errorMessages.email}
-            helperText={errorMessages.email}
+            error={errorMessages?.email}
+            helperText={errorMessages?.email}
           />
         </Box>
 
@@ -99,8 +76,8 @@ function RegisterForm() {
             placeholder="Please enter your username"
             value={usernameValue}
             onChange={handleChangeUsernameValue}
-            error={!!errorMessages.username}
-            helperText={errorMessages.username}
+            error={errorMessages?.username}
+            helperText={errorMessages?.username}
           />
         </Box>
 
@@ -116,8 +93,8 @@ function RegisterForm() {
             placeholder="Please enter your password"
             value={passwordValue}
             onChange={handleChangePasswordValue}
-            error={!!errorMessages.password}
-            helperText={errorMessages.password}
+            error={errorMessages?.password}
+            helperText={errorMessages?.password}
             type={showPassword ? "text" : "password"}
             slotProps={{
               input: {
@@ -154,8 +131,8 @@ function RegisterForm() {
             placeholder="Please confirm your password"
             value={passwordConfirmation}
             onChange={handleChangePasswordConfirmation}
-            error={!!errorMessages.passwordConfirmation}
-            helperText={errorMessages.passwordConfirmation}
+            error={errorMessages?.passwordConfirmation}
+            helperText={errorMessages?.passwordConfirmation}
             type={showPasswordConfirmation ? "text" : "password"}
             slotProps={{
               input: {
@@ -184,11 +161,11 @@ function RegisterForm() {
       <RegisterLoginFormButton
         onClick={() =>
           register({
-            id: faker.string.uuid(),
             email: emailValue,
             password: passwordValue,
             username: usernameValue,
             passwordConfirmation,
+            navigate,
           })
         }
       >
