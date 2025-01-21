@@ -1,8 +1,12 @@
-import { Box, Typography } from "@mui/material";
+import { Box, Typography, useMediaQuery } from "@mui/material";
 import { NavLink } from "react-router-dom";
 import LoginForm from "../components/LoginPage/LoginForm";
 
 function LoginPage() {
+  const isMediumScreenWidthAndAbove = useMediaQuery((theme) =>
+    theme.breakpoints.up("md")
+  );
+
   return (
     <Box
       sx={{
@@ -23,7 +27,7 @@ function LoginPage() {
           marginBottom: "32px",
         }}
       >
-        Log in to The Vault
+        {isMediumScreenWidthAndAbove ? "Log in" : "Log in to The Vault"}
       </Typography>
 
       <LoginForm />
@@ -43,13 +47,3 @@ function LoginPage() {
 }
 
 export default LoginPage;
-
-export const userAccountListLoader = async () => {
-  const response = await fetch("http://localhost:3900/userAccountList");
-
-  if (!response.ok) {
-    throw new Error("Failed to fetch user account list");
-  }
-
-  return response.json();
-};
