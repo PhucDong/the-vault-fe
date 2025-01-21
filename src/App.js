@@ -7,7 +7,7 @@ import {
 import MainLayout from "./layouts/MainLayout";
 import ErrorPage from "./pages/Error.page.js";
 import VisitorPage from "./pages/Visitor.page.js";
-import LoginPage, { userAccountListLoader } from "./pages/Login.page.js";
+import LoginPage from "./pages/Login.page.js";
 import RegisterPage from "./pages/Register.page.js";
 import AnimeListByCategoryPage from "./pages/AnimeListByCategory.page.js";
 import AnimeListPage from "./pages/AnimeList.page.js";
@@ -69,7 +69,6 @@ const router = createBrowserRouter(
         <Route
           path="register"
           element={<RegisterPage />}
-          loader={userAccountListLoader}
         />
       </Route>
 
