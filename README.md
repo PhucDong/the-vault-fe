@@ -1,5 +1,5 @@
 # The Vault FE
-Latest update: **13 Jan 2025**
+Latest update: **21 Jan 2025**
 
 ## Description
 The vault is a personal project. It's a website for anime/manga lovers that allows them to search for their favorite titles, save their progress, and write reviews.
@@ -31,11 +31,16 @@ The vault is a personal project. It's a website for anime/manga lovers that allo
 - Basic search feature
 - Search with advanced filters
 - Update producers & studios to animes
+- Code Home Page of registered user
+- Code navbar for registered users
+- Code Profile Page for registered users
 
 ## Challenges
 - Advanced filters: 
   - Animes: genres, studio, year, & airing status
   - Mangas: genres, year, & publishing status
+- Next destination after registering
+  - Lead users to their Home Page
 
 ## Future features
 
