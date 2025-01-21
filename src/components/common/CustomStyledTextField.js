@@ -26,7 +26,7 @@ const CustomStyledTextField = styled(TextField)(() => ({
   },
   "& .MuiFormHelperText-root": {
     margin: "4px 0 0 0",
-    lineHeight: "100%",
+    lineHeight: 1.25,
     fontWeight: 550,
   },
 }));
