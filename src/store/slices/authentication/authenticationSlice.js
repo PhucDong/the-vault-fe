@@ -1,4 +1,5 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import apiService from "../../../services/apiService";
 
 const initialState = {
   isUserLoggedIn: false,
@@ -10,41 +11,26 @@ const initialState = {
 // Asynchronous thunks
 export const login = createAsyncThunk(
   "authentication/login",
-  async ({ email, password }, { rejectWithValue }) => {
+  async ({ email, password, navigate }, { rejectWithValue }) => {
     const errorMessages = {
       email: "",
       password: "",
     };
 
     try {
-      const response = await fetch("http://localhost:3900/userAccountList");
-      if (!response.ok) {
-        throw new Error(`Failed to fetch user account list`);
-      }
-      const userAccountList = await response.json();
-
       // Validation
       const passwordRegex =
         /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
-      const emailRegex = /^[\w\.\+%-]+@[a-zA-Z\d\.-]+\.[a-zA-Z]{2,}$/;
+      const emailRegex = /^[\w.+%-]+@[a-zA-Z\d.-]+\.[a-zA-Z]{2,}$/;
 
       if (!email) errorMessages.email = "Email is required.";
-      if (!emailRegex.test(email)) {
+      else if (!emailRegex.test(email)) {
         errorMessages.email = "Email is not valid.";
       }
       if (!password) errorMessages.password = "Password is required.";
-      if (password && !passwordRegex.test(password)) {
-        errorMessages.password = "Password is not strong enough.";
-      }
-
-      const foundUser = userAccountList.find(
-        (userAccount) =>
-          userAccount.password === password && userAccount.email === email
-      );
-
-      if (!foundUser) {
-        errorMessages.email = "Incorrect email or password.";
-        errorMessages.password = "Incorrect email or password.";
+      else if (password && !passwordRegex.test(password)) {
+        errorMessages.password =
+          "Password is not strong enough. It needs at least 8 characters, 1 uppercase character, 1 lowercase character, 1 number, and 1 symbol.";
       }
 
       // Check if there are any errors
@@ -52,12 +38,17 @@ export const login = createAsyncThunk(
         return rejectWithValue(errorMessages);
       }
 
-      return { email, username: foundUser.username };
-    } catch (error) {
-      return rejectWithValue({ general: "An unexpected error occurred." });
-    }
+      const response = await apiService.post("/auth/login", {
+        email,
+        password,
+      });
 
-    // return { email, password, userAccountList };
+      navigate(-1);
+
+      return response.user;
+    } catch (error) {
+      return rejectWithValue(error);
+    }
   }
 );
 
@@ -84,7 +75,6 @@ export const authenticationSlice = createSlice({
       })
       .addCase(login.rejected, (state, action) => {
         state.logInStatus = "failed";
-        console.log("Action: ", action);
         state.errorMessages = action.payload || {
           error: "Log in failed",
         };
