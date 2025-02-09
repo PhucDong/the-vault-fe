@@ -1,47 +1,152 @@
-import { Button, TextField } from "@mui/material";
-import React, { useState } from "react";
+import { Button } from "@mui/material";
+import { useEffect, useState } from "react";
 import CustomPaddingLayout from "../components/common/CustomPaddingLayout";
-import { useNavigate } from "react-router-dom";
-import { useAppSelector } from "../services/hooks";
-import { selectUsername } from "../store/slices/authentication/authenticationSlice";
+import { useNavigate, useParams } from "react-router-dom";
+import apiService from "../services/apiService";
+import { useSelector } from "react-redux";
+import ReviewFormat from "../components/ReviewEditorPage/ReviewFormat";
+import ReviewTitle from "../components/ReviewEditorPage/ReviewTitle";
+import ReviewText from "../components/ReviewEditorPage/ReviewText";
+import ReviewScore from "../components/ReviewEditorPage/ReviewScore";
+import { useAppSelector, useReviewAppDispatch } from "../services/hooks";
+import { selectReviewFormat } from "../store/slices/review/reviewSlice";
 
 function ReviewEditorPage() {
-  const [reviewText, setReviewText] = useState("");
   const [errors, setErrors] = useState({});
-
-  const handleChangeReviewText = (event) => setReviewText(event.target.value);
+  const { reviewId } = useParams();
+  const format = useAppSelector(selectReviewFormat);
+  const {
+    fetchTitleListBasedOnFormat,
+    updateReview,
+    updateText,
+    updateScore,
+    updateTitle,
+    updateTitleId,
+    updateFormat,
+  } = useReviewAppDispatch();
   const navigate = useNavigate();
-  const username = useAppSelector(selectUsername);
+  const title = useSelector((state) => state.review.title);
+  const titleId = useSelector((state) => state.review.titleId);
+  const text = useSelector((state) => state.review.text);
+  const score = useSelector((state) => state.review.score);
+  const loggedInCurrentUserId = useSelector(
+    (state) => state.authentication.currentUserId
+  );
+  const loggedInAccessToken = useSelector(
+    (state) => state.authentication.accessToken
+  );
+  const registeredCurrentUserId = useSelector(
+    (state) => state.user.currentUserId
+  );
+  const registeredAccessToken = useSelector((state) => state.user.accessToken);
 
-  const submitReview = async () => {
+  const handlePostUserReview = async () => {
+    apiService.defaults.headers.common.Authorization = `Bearer ${
+      loggedInAccessToken || registeredAccessToken
+    }`;
+
+    const numericValue = parseFloat(score);
+    const errorMessages = {};
+
     try {
-      if (reviewText.length > 2000) {
-        const postResponse = await fetch("http://localhost:3800/reviewList", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            author: username,
-            text: reviewText,
-            likes: 0,
-            dislikes: 0,
-            score: 0,
-          }),
-        });
-
-        if (!postResponse.ok) {
-          throw new Error("Failed to submit review.");
-        }
-        setErrors({});
-        navigate(-1);
-      } else {
-        setErrors({
-          message: "The review length has to be more than 2000 letters.",
-        });
+      if (!title) {
+        errorMessages.title = "Title is required.";
       }
-    } catch (error) {}
+
+      if (!text || text.length <= 20) {
+        errorMessages.text = "Text must be at least 20 characters long.";
+      }
+
+      if (isNaN(numericValue) || numericValue < 0 || numericValue > 10) {
+        errorMessages.score =
+          "Invalid score. It has to be a float between 0 and 10, inclusively.";
+      }
+
+      if (!/^\d+(\.\d{1})?$/.test(numericValue)) {
+        errorMessages.score = "Score must have at most 1 decimal place.";
+      }
+
+      setErrors(errorMessages);
+
+      await apiService.post("/reviews", {
+        author: loggedInCurrentUserId || registeredCurrentUserId,
+        targetType: `${format}s`,
+        targetId: titleId,
+        text,
+        score,
+      });
+      navigate(-1);
+    } catch (error) {
+      console.log(error);
+    }
   };
+
+  const handleUpdateUserReview = async () => {
+    const errorMessages = {};
+    const numericValue = parseFloat(score);
+
+    try {
+      if (!text || text.length <= 20) {
+        errorMessages.text = "Text must be at least 20 characters long.";
+      }
+
+      if (isNaN(numericValue) || numericValue < 0 || numericValue > 10) {
+        errorMessages.score =
+          "Invalid score. It has to be a float between 0 and 10, inclusively.";
+      }
+
+      if (!/^\d+(\.\d{1})?$/.test(numericValue)) {
+        errorMessages.score = "Score must have at most 1 decimal place.";
+      }
+
+      setErrors(errorMessages);
+      await apiService.put(`/reviews/${reviewId}`, {
+        text: text,
+        score: score,
+      });
+      navigate(-1);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  useEffect(() => {
+    if (!reviewId) {
+      updateReview({});
+      updateText("");
+      updateTitle("");
+      updateScore("");
+      updateTitleId("");
+      updateFormat("Anime");
+      return;
+    }
+
+    let isMounted = true;
+    const fetchReview = async () => {
+      try {
+        const response = await apiService.get(`/reviews/${reviewId}`);
+        if (isMounted) {
+          updateReview(response.review);
+          updateText(response.review.text);
+          updateScore(response.review.score);
+          updateTitle(response.review.title);
+        } // Prevents state updates after unmount
+      } catch (error) {
+        console.error(error);
+      }
+    };
+
+    fetchReview();
+    return () => {
+      isMounted = false;
+    };
+  }, [reviewId]);
+
+  useEffect(() => {
+    if (!reviewId) {
+      fetchTitleListBasedOnFormat({ format });
+    }
+  }, [format, reviewId]);
 
   return (
     <CustomPaddingLayout
@@ -50,35 +155,25 @@ function ReviewEditorPage() {
         marginBottom: { xs: "28px", md: "44px", lg: "56px" },
         display: "flex",
         flexDirection: "column",
-        gap: "12px",
+        gap: { xs: "16px", md: "20px" },
+
+        "& .MuiBox-root": {
+          display: "flex",
+          flexDirection: "column",
+          gap: { xs: "4px", md: "6px" },
+        },
       }}
     >
-      <TextField
-        fullWidth
-        multiline
-        minRows={6}
-        value={reviewText}
-        onChange={handleChangeReviewText}
-        placeholder="Please write your review here."
-        error={!!errors.message}
-        helperText={errors.message}
-        sx={{
-          "& .MuiOutlinedInput-root": {
-            borderRadius: "8px",
-            "& .MuiOutlinedInput-input": { color: "primary.main" },
-          },
-          "& .MuiFormHelperText-root": {
-            margin: { xs: "4px 0 0 0", sm: "6px 0 0 0" },
-            marginBottom: {
-              xs: errors.message && "8px",
-              sm: errors.message && "12px",
-            },
-            lineHeight: { xs: 1.25, sm: "100%" },
-            fontWeight: 550,
-            fontSize: { xs: "0.8rem", sm: "0.9rem" },
-          },
-        }}
-      />
+      {!reviewId && (
+        <>
+          <ReviewFormat />
+          <ReviewTitle errors={errors} setErrors={setErrors} />
+        </>
+      )}
+
+      <ReviewText errors={errors} setErrors={setErrors} />
+      <ReviewScore errors={errors} setErrors={setErrors} />
+
       <Button
         sx={{
           textTransform: "capitalize",
@@ -89,9 +184,9 @@ function ReviewEditorPage() {
           fontSize: { xs: "1.1rem", sm: "1.2rem" },
           borderRadius: "8px",
         }}
-        onClick={submitReview}
+        onClick={reviewId ? handleUpdateUserReview : handlePostUserReview}
       >
-        Post
+        {reviewId ? "Update" : "Post"}
       </Button>
     </CustomPaddingLayout>
   );
