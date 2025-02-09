@@ -1,61 +1,17 @@
 import MenuBookIcon from "@mui/icons-material/MenuBook";
 import MovieIcon from "@mui/icons-material/Movie";
 import HomeIcon from "@mui/icons-material/Home";
-// import AppRegistrationIcon from "@mui/icons-material/AppRegistration";
 import LoginIcon from "@mui/icons-material/Login";
+import PersonIcon from "@mui/icons-material/Person";
 import CustomPaddingLayout from "./CustomPaddingLayout";
 import { Box, Typography, useMediaQuery } from "@mui/material";
-import styled from "@emotion/styled";
 import { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-
-const CustomStyledNavBarItem = styled(Box, {
-  shouldForwardProp: (prop) =>
-    prop !== "isNavBarItemActive" && prop !== "navBarItem",
-})(({ navBarItem, isNavBarItemActive, theme }) => ({
-  color: isNavBarItemActive
-    ? theme.palette.primary.main
-    : theme.palette.primary.light,
-  display: "flex",
-  alignItems: "center",
-  "& .MuiTypography-root": {
-    fontWeight: 550,
-  },
-  [theme.breakpoints.up("xs")]: {
-    flexDirection: "column",
-    gap: "4px",
-    "& .MuiSvgIcon-root": { fontSize: "2rem" },
-    "& .MuiTypography-root": {
-      fontSize: "1rem",
-    },
-  },
-  [theme.breakpoints.up("sm")]: {
-    gap: 0,
-    "& .MuiSvgIcon-root": { fontSize: "2.2rem" },
-    "& .MuiTypography-root": {
-      fontSize: "1.1rem",
-    },
-  },
-  [theme.breakpoints.up("md")]: {
-    flexDirection: "row",
-    cursor: "pointer",
-    "& .MuiTypography-root": {
-      fontSize: navBarItem ? "2rem" : "1.2rem",
-    },
-  },
-  [theme.breakpoints.up("lg")]: {
-    "& .MuiTypography-root": {
-      fontSize: navBarItem ? "2rem" : "1.2rem",
-    },
-  },
-}));
-
-const navBarItemList = [
-  { icon: <HomeIcon />, label: "Home" },
-  { icon: <MovieIcon />, label: "Anime" },
-  { icon: <MenuBookIcon />, label: "Manga" },
-  { icon: <LoginIcon />, label: "Log In" },
-];
+import { useAppSelector } from "../../services/hooks";
+import { selectIsUserLoggedIn } from "../../store/slices/authentication/authenticationSlice";
+import { selectIsUserRegistered } from "../../store/slices/user/userSlice";
+import { CustomStyledNavBarItem } from "./CustomStyledNavBarItem";
+import ProfileNavBarItem from "../HomePage/ProfileNavBarItem";
 
 function MainHeader(props) {
   const { setNavHeight } = props;
@@ -65,17 +21,42 @@ function MainHeader(props) {
   const isMediumScreenWidthAndAbove = useMediaQuery((theme) =>
     theme.breakpoints.up("md")
   );
+  const isUserLoggedIn = useAppSelector(selectIsUserLoggedIn);
+  const isUserRegistered = useAppSelector(selectIsUserRegistered);
 
   const handleChangeIsNavBarItemActive = (navBarItem) => {
-    if (navBarItem === "Home")
-      navigate("/", { state: { prevPathName: location.pathname } });
-    else if (navBarItem === "Anime")
+    if (navBarItem === "Home") {
+      if (isUserLoggedIn || isUserRegistered) {
+        navigate("/home", { state: { prevPathName: location.pathname } });
+      } else {
+        navigate("/", { state: { prevPathName: location.pathname } });
+      }
+    } else if (navBarItem === "Anime") {
       navigate("/animes", { state: { prevPathName: location.pathname } });
-    else if (navBarItem === "Manga")
+    } else if (navBarItem === "Manga") {
       navigate("/mangas", { state: { prevPathName: location.pathname } });
-    else if (navBarItem === "Log In")
+    } else if (navBarItem === "Log In") {
       navigate("/login", { state: { prevPathName: location.pathname } });
+    }
     setNavBarItem(navBarItem);
+  };
+
+  const getNavBarItemList = () => {
+    if (isUserLoggedIn || isUserRegistered) {
+      return [
+        { icon: <HomeIcon />, label: "Home" },
+        { icon: <MovieIcon />, label: "Anime" },
+        { icon: <MenuBookIcon />, label: "Manga" },
+        { icon: <PersonIcon />, label: "Profile" },
+      ];
+    } else {
+      return [
+        { icon: <HomeIcon />, label: "Home" },
+        { icon: <MovieIcon />, label: "Anime" },
+        { icon: <MenuBookIcon />, label: "Manga" },
+        { icon: <LoginIcon />, label: "Log In" },
+      ];
+    }
   };
 
   useEffect(() => {
@@ -90,7 +71,11 @@ function MainHeader(props) {
     )
       setNavBarItem("Manga");
     else if (location.pathname.startsWith("/login")) setNavBarItem("Log In");
-    else if (location.pathname.startsWith("/")) setNavBarItem("Home");
+    else if (
+      location.pathname.startsWith("/") ||
+      location.pathname.startsWith("/home")
+    )
+      setNavBarItem("Home");
   }, [location.pathname]);
 
   return (
@@ -123,7 +108,7 @@ function MainHeader(props) {
         }}
       >
         {!isMediumScreenWidthAndAbove ? (
-          navBarItemList.map((item) => (
+          getNavBarItemList().map((item) => (
             <CustomStyledNavBarItem
               key={item.label}
               isNavBarItemActive={navBarItem === item.label}
@@ -147,28 +132,30 @@ function MainHeader(props) {
 
               {/* Anime & Manga */}
               <Box sx={{ display: "flex", gap: { xs: "8px", md: "32px" } }}>
-                <CustomStyledNavBarItem
-                  isNavBarItemActive={navBarItem === "Anime"}
-                  onClick={() => handleChangeIsNavBarItemActive("Anime")}
-                >
-                  <Typography>Anime</Typography>
-                </CustomStyledNavBarItem>
-                <CustomStyledNavBarItem
-                  isNavBarItemActive={navBarItem === "Manga"}
-                  onClick={() => handleChangeIsNavBarItemActive("Manga")}
-                >
-                  <Typography>Manga</Typography>
-                </CustomStyledNavBarItem>
+                {["Anime", "Manga"].map((item) => (
+                  <CustomStyledNavBarItem
+                    key={item}
+                    isNavBarItemActive={navBarItem === item}
+                    onClick={() => handleChangeIsNavBarItemActive(item)}
+                  >
+                    <Typography>{item}</Typography>
+                  </CustomStyledNavBarItem>
+                ))}
               </Box>
             </Box>
 
-            {/* Login & register */}
-            <CustomStyledNavBarItem
-              isNavBarItemActive={navBarItem === "Log In"}
-              onClick={() => handleChangeIsNavBarItemActive("Log In")}
-            >
-              <Typography>Log In</Typography>
-            </CustomStyledNavBarItem>
+            {isUserLoggedIn || isUserRegistered ? (
+              // Profile
+              <ProfileNavBarItem navBarItem={navBarItem} />
+            ) : (
+              // Log in
+              <CustomStyledNavBarItem
+                isNavBarItemActive={navBarItem === "Log In"}
+                onClick={() => handleChangeIsNavBarItemActive("Log In")}
+              >
+                <Typography>Log In</Typography>
+              </CustomStyledNavBarItem>
+            )}
           </>
         )}
       </Box>
