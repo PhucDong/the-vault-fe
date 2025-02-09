@@ -21,58 +21,64 @@ import CharacterDetailedInfoPage from "./pages/CharacterDetailedInfoPage/Charact
 import EmployeeDetailedInfoPage from "./pages/EmployeeDetailedInfoPage/EmployeeDetailedInfo.page.js";
 import ReviewDetailedInfoPage from "./pages/ReviewDetailedInfoPage/ReviewDetailedInfo.page.js";
 import ReviewEditorPage from "./pages/ReviewEditor.page.js";
+import AuthRequire from "./pages/AuthRequire.js";
+import ProfilePage from "./pages/ProfilePage/Profile.page.js";
 
 const router = createBrowserRouter(
   createRoutesFromElements(
-    <Route element={<MainLayout />} errorElement={<ErrorPage />}>
-      <Route path="/" element={<VisitorPage />}>
-        <Route path="animes" element={<AnimeListPage />} />
-
-        <Route
-          path="search/animes/:categoryName"
-          element={<AnimeListByCategoryPage />}
-        />
-
-        <Route path="mangas" element={<MangaListPage />} />
-
-        <Route
-          path="search/mangas/:categoryName"
-          element={<MangaListByCategoryPage />}
-        />
+    <Route>
+      <Route
+        path="/home"
+        element={
+          <AuthRequire>
+            <MainLayout />
+          </AuthRequire>
+        }
+        errorElement={<ErrorPage />}
+      >
+        <Route index element={<HomePage />} />
+        <Route path="me" element={<ProfilePage />} />
+        <Route path="reviews/editor" element={<ReviewEditorPage />} />
+        <Route path="reviews/editor/:reviewId" element={<ReviewEditorPage />} />
+        <Route path="reviews/:reviewId" element={<ReviewDetailedInfoPage />} />
       </Route>
 
-      <Route path="animes/:animeId" element={<AnimeDetailedInfoPage />} />
+      <Route element={<MainLayout />}>
+        <Route path="/" element={<VisitorPage />}>
+          <Route path="animes" element={<AnimeListPage />} />
 
-      <Route
-        path="animes/related/:itemId"
-        element={<AnimeDetailedInfoPage />}
-      />
+          <Route
+            path="search/animes/:categoryName"
+            element={<AnimeListByCategoryPage />}
+          />
 
-      <Route path="mangas/:mangaId" element={<MangaDetailedInfoPage />} />
+          <Route path="mangas" element={<MangaListPage />} />
 
-      <Route
-        path="characters/:characterId"
-        element={<CharacterDetailedInfoPage />}
-      />
+          <Route
+            path="search/mangas/:categoryName"
+            element={<MangaListByCategoryPage />}
+          />
+        </Route>
 
-      <Route
-        path="employees/:employeeId"
-        element={<EmployeeDetailedInfoPage />}
-      />
+        <Route path="animes/:animeId" element={<AnimeDetailedInfoPage />} />
 
-      <Route path="reviews/:reviewId" element={<ReviewDetailedInfoPage />} />
+        <Route path="mangas/:mangaId" element={<MangaDetailedInfoPage />} />
 
-      <Route path="reviews/editor" element={<ReviewEditorPage />} />
-
-      <Route element={<RegisterLogInLayout />}>
-        <Route path="login" element={<LoginPage />} />
         <Route
-          path="register"
-          element={<RegisterPage />}
+          path="characters/:characterId"
+          element={<CharacterDetailedInfoPage />}
         />
-      </Route>
 
-      <Route path="/home" element={<HomePage />} />
+        <Route
+          path="employees/:employeeId"
+          element={<EmployeeDetailedInfoPage />}
+        />
+
+        <Route element={<RegisterLogInLayout />}>
+          <Route path="login" element={<LoginPage />} />
+          <Route path="register" element={<RegisterPage />} />
+        </Route>
+      </Route>
     </Route>
   ),
   {
