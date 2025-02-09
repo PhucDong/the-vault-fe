@@ -3,9 +3,12 @@ import apiService from "../../../services/apiService";
 
 const initialState = {
   isUserLoggedIn: false,
+  username: null,
   email: null,
   password: null,
   errorMessages: { email: "", password: "" },
+  accessToken: null,
+  currentUserId: null,
 };
 
 // Asynchronous thunks
@@ -42,11 +45,13 @@ export const login = createAsyncThunk(
         email,
         password,
       });
+      // console.log("Response after log in: ", response);
+      apiService.defaults.headers.common.Authorization = `Bearer ${response.accessToken}`;
+      navigate("/home");
 
-      navigate(-1);
-
-      return response.user;
+      return { user: response.user, accessToken: response.accessToken };
     } catch (error) {
+      // console.log("Errors: ", error);
       return rejectWithValue(error);
     }
   }
@@ -57,7 +62,7 @@ export const authenticationSlice = createSlice({
   name: "authentication",
   initialState,
   reducers: {
-    resetState: (state) => {
+    resetAuthState: (state) => {
       Object.assign(state, initialState);
     },
   },
@@ -69,8 +74,10 @@ export const authenticationSlice = createSlice({
       .addCase(login.fulfilled, (state, action) => {
         state.logInStatus = "idle";
         state.isUserLoggedIn = true;
-        state.email = action.payload.email;
-        state.username = action.payload.username;
+        state.email = action.payload.user.email;
+        state.username = action.payload.user.username;
+        state.accessToken = action.payload.accessToken;
+        state.currentUserId = action.payload.user._id;
         state.errorMessages = {};
       })
       .addCase(login.rejected, (state, action) => {
@@ -82,7 +89,7 @@ export const authenticationSlice = createSlice({
   },
 });
 
-export const { resetState } = authenticationSlice.actions;
+export const { resetAuthState } = authenticationSlice.actions;
 export default authenticationSlice.reducer;
 
 // Export state values
