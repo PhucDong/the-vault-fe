@@ -16,7 +16,6 @@ function AnimeListPage() {
     fetchAnimeSearchResultList,
     fetchCategorizedAnimeList,
     clearCategorizedAnimeList,
-    updateAnimeGenreOptionList,
   } = useAnimeAppDispatch();
   const categorizedAnimeList = useSelector(selectCategorizedAnimeList);
   const animeSearchResultList = useSelector(selectAnimeSearchResultList);
@@ -75,10 +74,6 @@ function AnimeListPage() {
     genreOptionList,
     studioOption,
   ]);
-
-  // useEffect(() => {
-  //   updateAnimeGenreOptionList([]);
-  // }, []);
 
   return (
     <Box
