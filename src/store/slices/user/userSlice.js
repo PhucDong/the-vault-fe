@@ -6,6 +6,9 @@ const initialState = {
   email: null,
   password: null,
   username: null,
+  searchValue: "",
+  accessToken: null,
+  currentUserId: null,
   errorMessages: { email: "", password: "", passwordConfirmation: "" },
 };
 
@@ -66,9 +69,10 @@ export const register = createAsyncThunk(
         username,
       });
 
-      navigate("/login");
+      apiService.defaults.headers.common.Authorization = `Bearer ${response.accessToken}`;
+      navigate("/home");
 
-      return response.user;
+      return { user: response.user, accessToken: response.accessToken };
     } catch (error) {
       if (error.message === "Email already exists.") {
         errorMessages.email = "Email already exists.";
@@ -87,8 +91,11 @@ export const userSlice = createSlice({
   name: "user",
   initialState,
   reducers: {
-    resetState: (state) => {
+    resetUserState: (state) => {
       Object.assign(state, initialState);
+    },
+    updateUserSearchValue(state, action) {
+      state.searchValue = action.payload;
     },
   },
   extraReducers: (builder) => {
@@ -99,8 +106,10 @@ export const userSlice = createSlice({
       .addCase(register.fulfilled, (state, action) => {
         state.logInStatus = "idle";
         state.isUserRegistered = true;
-        state.email = action.payload.email;
-        state.username = action.payload.username;
+        state.email = action.payload.user.email;
+        state.username = action.payload.user.username;
+        state.accessToken = action.payload.accessToken;
+        state.currentUserId = action.payload.user._id;
         state.errorMessages = {};
       })
       .addCase(register.rejected, (state, action) => {
@@ -110,7 +119,7 @@ export const userSlice = createSlice({
   },
 });
 
-export const { resetState } = userSlice.actions;
+export const { resetUserState, updateUserSearchValue } = userSlice.actions;
 export default userSlice.reducer;
 
 // Export state values
