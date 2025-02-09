@@ -15,6 +15,7 @@ import userReducer from "./slices/user/userSlice";
 import authenticationReducer from "./slices/authentication/authenticationSlice";
 import animeReducer from "./slices/anime/animeSlice";
 import mangaReducer from "./slices/manga/mangaSlice";
+import reviewReducer from "./slices/review/reviewSlice";
 import autoMergeLevel2 from "redux-persist/es/stateReconciler/autoMergeLevel2";
 import { isSessionActive } from "../utils/sessionUtils";
 
@@ -26,6 +27,8 @@ const userTransform = createTransform(
       isUserRegistered: inboundState.isUserRegistered,
       email: inboundState.email,
       username: inboundState.username,
+      accessToken: inboundState.accessToken,
+      currentUserId: inboundState.currentUserId,
     };
   },
   // Transform function to merge state when loading
@@ -34,18 +37,23 @@ const userTransform = createTransform(
       isUserRegistered: outboundState.isUserRegistered,
       email: outboundState.email,
       username: outboundState.username,
+      accessToken: outboundState.accessToken,
+      currentUserId: outboundState.currentUserId,
     };
   },
   { whitelist: ["user"] } // Apply only to the 'user' slice
 );
 
-// Custom transform to persist some states in userSlice
+// Custom transform to persist some states in authenticationSlice
 const authTransform = createTransform(
   // Transform function to filter data when saving
   (inboundState, key) => {
     return {
       isUserLoggedIn: inboundState.isUserLoggedIn,
       email: inboundState.email,
+      username: inboundState.username,
+      accessToken: inboundState.accessToken,
+      currentUserId: inboundState.currentUserId,
     };
   },
   // Transform function to merge state when loading
@@ -53,9 +61,39 @@ const authTransform = createTransform(
     return {
       isUserLoggedIn: outboundState.isUserLoggedIn,
       email: outboundState.email,
+      username: outboundState.username,
+      accessToken: outboundState.accessToken,
+      currentUserId: outboundState.currentUserId,
     };
   },
   { whitelist: ["authentication"] } // Apply only to the 'auth' slice
+);
+
+// Custom transform to persist some states in reviewSlice
+const reviewTransform = createTransform(
+  // Transform function to filter data when saving
+  (inboundState, key) => {
+    return {
+      format: inboundState.format,
+      title: inboundState.title,
+      titleId: inboundState.titleId,
+      text: inboundState.text,
+      score: inboundState.score,
+      review: { ...inboundState.review },
+    };
+  },
+  // Transform function to merge state when loading
+  (outboundState, key) => {
+    return {
+      format: outboundState.format,
+      title: outboundState.title,
+      titleId: outboundState.titleId,
+      text: outboundState.text,
+      score: outboundState.score,
+      review: { ...outboundState.review },
+    };
+  },
+  { whitelist: ["review"] } // Apply only to the 'auth' slice
 );
 
 // 1. Configure Persist
@@ -63,9 +101,9 @@ const persistConfig = {
   key: "root",
   storage,
   whitelist: isSessionActive()
-    ? ["anime", "manga", "authentication", "user"]
+    ? ["anime", "manga", "authentication", "user", "review"]
     : [],
-  transforms: [userTransform, authTransform],
+  transforms: [userTransform, authTransform, reviewTransform],
   stateReconciler: autoMergeLevel2,
 };
 
@@ -75,6 +113,7 @@ const rootReducer = combineReducers({
   user: userReducer,
   anime: animeReducer,
   manga: mangaReducer,
+  review: reviewReducer,
 });
 
 // 3. Wrap the Reducer with persistReducer
