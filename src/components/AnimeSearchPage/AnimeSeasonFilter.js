@@ -54,7 +54,6 @@ function AnimeSeasonFilter(props) {
         select
         hiddenLabel
         value={seasonOption}
-        // onChange={handleChangeSeasonFilter}
         slotProps={{
           select: {
             multiple: false,
