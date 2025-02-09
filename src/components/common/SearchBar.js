@@ -19,6 +19,7 @@ function SearchBar() {
   const location = useLocation();
   const animeSearchValue = useSelector((state) => state.anime.searchValue);
   const mangaSearchValue = useSelector((state) => state.manga.searchValue);
+  const userSearchValue = useSelector((state) => state.user.searchValue);
   const [searchHistoryList, setSearchHistoryList] = useState([]);
   const [openSearchHistoryListOpen, setOpenSearchHistoryList] = useState(false);
   const [filteredSearchHistoryList, setFilteredSearchHistoryList] = useState(
@@ -31,6 +32,12 @@ function SearchBar() {
   const navigate = useNavigate();
   const [popularAnimeGenreList, setPopularAnimeGenreList] = useState(null);
   const [popularMangaGenreList, setPopularMangaGenreList] = useState(null);
+  const animeGenreOptionList = useSelector(
+    (state) => state.anime.genreOptionList
+  );
+  const mangaGenreOptionList = useSelector(
+    (state) => state.manga.genreOptionList
+  );
 
   const handleChangeSearchValue = (event) => {
     const { value } = event.target;
@@ -96,22 +103,39 @@ function SearchBar() {
 
   const handleChangeFastFilter = (event) => {
     const { value } = event.target;
+    const isAnimePage =
+      location.pathname === "/" || location.pathname.includes("/animes");
+    const genreList = isAnimePage ? animeGenreOptionList : mangaGenreOptionList;
+    const updateGenreList = isAnimePage
+      ? updateAnimeGenreOptionList
+      : updateMangaGenreOptionList;
+
+    updateGenreList(
+      genreList.includes(value) ? [...genreList] : [...genreList, value]
+    );
 
     if (location.pathname === "/") {
       navigate("/animes");
-      updateAnimeGenreOptionList([value]);
-    } else if (location.pathname.includes("/animes")) {
-      updateAnimeGenreOptionList([value]);
-    } else if (location.pathname.includes("/mangas")) {
-      updateMangaGenreOptionList([value]);
     }
   };
 
-  const handleRemoveFastFilter = () => {
-    if (location.pathname === "/" || location.pathname.includes("/animes")) {
-      updateAnimeGenreOptionList([]);
+  const getSearchValue = () => {
+    if (location.pathname.includes("/animes") || location.pathname === "/") {
+      return animeSearchValue;
     } else if (location.pathname.includes("/mangas")) {
-      updateMangaGenreOptionList([]);
+      return mangaSearchValue;
+    } else if (location.pathname.includes("/home")) {
+      return userSearchValue;
+    }
+  };
+
+  const getPlaceholder = () => {
+    if (location.pathname.includes("/animes")) {
+      return "Search for your anime";
+    } else if (location.pathname.includes("/mangas")) {
+      return "Search for your manga";
+    } else if (location.pathname.includes("/home")) {
+      return "Search for users";
     }
   };
 
@@ -128,20 +152,22 @@ function SearchBar() {
 
   useEffect(() => {
     try {
-      const fetchedPopularGenreList = async () => {
-        const response = await apiService.get("/genres");
+      if (!location.pathname.includes("/home")) {
+        const fetchedPopularGenreList = async () => {
+          const response = await apiService.get("/genres");
 
-        if (
-          location.pathname === "/" ||
-          location.pathname.includes("/animes")
-        ) {
-          setPopularAnimeGenreList(response.populAnimeGenreList);
-        } else if (location.pathname.includes("/mangas")) {
-          setPopularMangaGenreList(response.popularMangaGenreList);
-        }
-      };
+          if (
+            location.pathname === "/" ||
+            location.pathname.includes("/animes")
+          ) {
+            setPopularAnimeGenreList(response.popularAnimeGenreList);
+          } else if (location.pathname.includes("/mangas")) {
+            setPopularMangaGenreList(response.popularMangaGenreList);
+          }
+        };
 
-      fetchedPopularGenreList();
+        fetchedPopularGenreList();
+      }
     } catch (error) {
       console.log(error);
     }
@@ -158,18 +184,10 @@ function SearchBar() {
         <Box sx={{ position: "relative", width: "100%" }}>
           <TextField
             fullWidth
-            value={
-              location.pathname.includes("/animes") || location.pathname === "/"
-                ? animeSearchValue
-                : mangaSearchValue
-            }
+            value={getSearchValue()}
             onChange={handleChangeSearchValue}
             onKeyDown={handleEnterSearchValue}
-            placeholder={
-              location.pathname.includes("mangas")
-                ? "Search for your manga"
-                : "Search for your anime"
-            }
+            placeholder={getPlaceholder()}
             slotProps={{
               input: {
                 startAdornment: (
@@ -265,63 +283,53 @@ function SearchBar() {
       </Box>
 
       {/* Fast filters */}
-      <Box
-        sx={{
-          width: "100%",
-          display: "flex",
-          flexWrap: { xs: "wrap", md: "nowrap" },
-          alignItems: "center",
-          rowGap: { xs: "8px" },
-          columnGap: { xs: "12px", lg: "16px" },
-          marginTop: { xs: "6px", sm: "8px" },
-        }}
-      >
-        <Typography
-          sx={{ color: "primary.main", fontSize: { xs: "0.9rem", md: "1rem" } }}
-        >
-          Popular genres:{" "}
-        </Typography>
+      {(location.pathname === "/" ||
+        location.pathname.includes("/animes") ||
+        location.pathname.includes("/mangas")) && (
+        <>
+          <Box
+            sx={{
+              width: "100%",
+              display: "flex",
+              flexWrap: { xs: "wrap", md: "nowrap" },
+              alignItems: "center",
+              rowGap: { xs: "8px" },
+              columnGap: { xs: "12px", lg: "16px" },
+              marginTop: { xs: "6px", sm: "8px" },
+            }}
+          >
+            <Typography
+              sx={{
+                color: "primary.main",
+                fontSize: { xs: "0.9rem", md: "0.95rem" },
+              }}
+            >
+              Popular genres:{" "}
+            </Typography>
 
-        {location.pathname === "/" || location.pathname.includes("/animes")
-          ? popularAnimeGenreList?.slice(0, 4).map((genre) => (
-              <CustomStyledFastGenreButton
-                key={genre.name}
-                value={genre.name}
-                onClick={handleChangeFastFilter}
-              >
-                {genre.name}
-              </CustomStyledFastGenreButton>
-            ))
-          : popularMangaGenreList?.slice(0, 4).map((genre) => (
-              <CustomStyledFastGenreButton
-                key={genre.name}
-                value={genre.name}
-                onClick={handleChangeFastFilter}
-              >
-                {genre.name}
-              </CustomStyledFastGenreButton>
-            ))}
-
-        <Button
-          onClick={handleRemoveFastFilter}
-          sx={{
-            padding: 0,
-            textTransform: "capitalize",
-            lineHeight: "100%",
-            minWidth: 0,
-            fontSize: { xs: "1rem", md: "1.1rem" },
-            color: "primary.light",
-            border: "none",
-            "&:hover": {
-              backgroundColor: "transparent",
-            },
-          }}
-        >
-          Clear Genre
-        </Button>
-      </Box>
-
-      <AdvancedSearch />
+            {location.pathname === "/" || location.pathname.includes("/animes")
+              ? popularAnimeGenreList?.slice(0, 4).map((genre) => (
+                  <CustomStyledFastGenreButton
+                    key={genre.name}
+                    value={genre.name}
+                    onClick={handleChangeFastFilter}
+                  >
+                    {genre.name}
+                  </CustomStyledFastGenreButton>
+                ))
+              : popularMangaGenreList?.slice(0, 4).map((genre) => (
+                  <CustomStyledFastGenreButton
+                    key={genre.name}
+                    value={genre.name}
+                    onClick={handleChangeFastFilter}
+                  >
+                    {genre.name}
+                  </CustomStyledFastGenreButton>
+                ))}
+          </Box>
+          <AdvancedSearch />
+        </>
+      )}
     </>
   );
 }
