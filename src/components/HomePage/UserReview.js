@@ -1,9 +1,6 @@
 import { Box, Menu, MenuItem, Typography } from "@mui/material";
 import ThumbUpAltIcon from "@mui/icons-material/ThumbUpAlt";
 import ThumbDownAltIcon from "@mui/icons-material/ThumbDownAlt";
-import ThumbUpOffAltIcon from "@mui/icons-material/ThumbUpOffAlt";
-import ThumbDownOffAltIcon from "@mui/icons-material/ThumbDownOffAlt";
-import ChatBubbleOutlineIcon from "@mui/icons-material/ChatBubbleOutline";
 import dayjs from "dayjs";
 import { useSelector } from "react-redux";
 import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
@@ -11,7 +8,11 @@ import { useState } from "react";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 import DeleteUserReviewAlert from "./DeleteUserReviewAlert";
-import { useNavigate } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
+import { RichTextReadOnly } from "mui-tiptap";
+import useExtensions from "../../hooks/useExtensions";
+import truncate from "html-truncate";
+import ReviewReactions from "./ReviewReactions";
 
 const userReviewDropdownMenuList = [
   {
@@ -21,6 +22,22 @@ const userReviewDropdownMenuList = [
   { icon: <DeleteIcon />, label: "Delete" },
 ];
 
+const customStyledActionDataContainer = {
+  display: "flex",
+  alignItems: "center",
+  gap: "4px",
+
+  "& .MuiSvgIcon-root": {
+    fontSize: { xs: "1rem", sm: "1.1rem" },
+    color: "primary.dark",
+  },
+  "& .MuiTypography-root": {
+    fontSize: { xs: "0.9rem", sm: "1rem" },
+    color: "primary.dark",
+    fontWeight: 550,
+  },
+};
+
 function UserReview(props) {
   const { review, setReviewList } = props;
   const currentUserId = useSelector(
@@ -29,9 +46,21 @@ function UserReview(props) {
   const [anchorEl, setAnchorEl] = useState(null);
   const open = Boolean(anchorEl);
   const [openDeleteAlert, setOpenDeleteAlert] = useState(false);
-  const [liked, setLiked] = useState(false);
-  const [disliked, setDisliked] = useState(false);
+
   const navigate = useNavigate();
+  const [isExpanded, setIsExpanded] = useState(false);
+  const [likes, setLikes] = useState(review?.likes);
+  const [dislikes, setDislikes] = useState(review?.dislikes);
+
+  const getModifiedContent = () => {
+    return truncate(review?.text, 100, {
+      ending: "...",
+    });
+  };
+
+  const extensions = useExtensions({
+    placeholder: "Add your own content here...",
+  });
 
   const handleOpenUserReviewDropdownMenu = (event) => {
     setAnchorEl(event.currentTarget);
@@ -210,78 +239,82 @@ function UserReview(props) {
             display: "flex",
             flexDirection: "column",
             gap: "6px",
-            marginBottom: "12px",
+            marginBottom: { xs: "12px", lg: "16px" },
           }}
         >
           {/* Text & image */}
           <Box>
             {/* Text */}
-            <Typography
+            <Box
               sx={{
-                lineHeight: 1.25,
-                marginBottom: { xs: "12px" },
+                display: "flex",
+                flexWrap: "wrap",
+                gap: "4px",
+                marginBottom: { xs: "16px" },
+                width: "100%",
+                overflowWrap: "break-word",
                 wordBreak: "break-word",
+                whiteSpace: "normal",
+
+                "& p": {
+                  lineHeight: 1.25,
+                  fontSize: { xs: "1rem" },
+                },
+                "& a": {
+                  textDecoration: "none",
+                  fontWeight: 550,
+                  fontSize: { xs: "1rem" },
+                  alignSelf: "flex-end",
+                },
               }}
             >
-              {review.text}
-            </Typography>
+              <RichTextReadOnly
+                className="hello-world"
+                content={isExpanded ? review?.text : getModifiedContent()}
+                extensions={extensions}
+              />
+
+              {getModifiedContent().length < review?.text?.length && (
+                <NavLink onClick={() => setIsExpanded(!isExpanded)}>
+                  {isExpanded ? "See less" : "See more"}
+                </NavLink>
+              )}
+            </Box>
 
             {/* Image */}
-            <Box
+            {/* <Box
               sx={{
                 width: "100%",
                 height: "120px",
                 backgroundColor: "#ababab",
               }}
-            ></Box>
+            ></Box> */}
           </Box>
 
-          {/* Likes, dislikes, & comments */}
+          {/* DATA: Likes, dislikes, & comments */}
           <Box sx={{ display: "flex", justifyContent: "space-between" }}>
             {/* Likes, & dislikes */}
             <Box sx={{ display: "flex", alignItems: "center", gap: "12px" }}>
-              <Box
-                sx={{
-                  display: "flex",
-                  alignItems: "center",
-                  gap: "4px",
-                  "& .MuiSvgIcon-root": {
-                    fontSize: "1.2rem",
-                    color: "primary.dark",
-                  },
-                  "& .MuiTypography-root": {
-                    fontSize: "0.95rem",
-                    color: "primary.dark",
-                    fontWeight: 550,
-                  },
-                }}
-              >
+              <Box sx={customStyledActionDataContainer}>
                 <ThumbUpAltIcon />
-                <Typography>{review.likes || 0}</Typography>
+                <Typography>{likes?.length}</Typography>
               </Box>
-              <Box
-                sx={{
-                  display: "flex",
-                  alignItems: "center",
-                  gap: "4px",
-                  "& .MuiSvgIcon-root": {
-                    fontSize: "1.2rem",
-                    color: "primary.dark",
-                  },
-                  "& .MuiTypography-root": {
-                    fontSize: "0.95rem",
-                    color: "primary.dark",
-                    fontWeight: 550,
-                  },
-                }}
-              >
+              <Box sx={customStyledActionDataContainer}>
                 <ThumbDownAltIcon />
-                <Typography>{review.dislikes || 0}</Typography>
+                <Typography>{dislikes?.length}</Typography>
               </Box>
             </Box>
 
             {/* Comments */}
-            <Box>
+            <Box
+              sx={{
+                "& .MuiTypography-root": {
+                  fontSize: { xs: "0.9rem", sm: "1rem" },
+                  color: "primary.dark",
+                  fontWeight: 550,
+                },
+              }}
+            >
               <Typography sx={{ color: "primary.dark", fontWeight: 550 }}>{`${
                 review.comments || 0
               } comments`}</Typography>
@@ -289,77 +322,11 @@ function UserReview(props) {
           </Box>
         </Box>
 
-        {/* INTERACTIONS: like, dislike, & comment */}
-        <Box sx={{ display: "flex", justifyContent: "space-between" }}>
-          {/* Like & dislike */}
-          <Box sx={{ display: "flex", alignItems: "center", gap: "12px" }}>
-            <Box
-              onClick={() => setLiked(!liked)}
-              sx={{
-                display: "flex",
-                alignItems: "center",
-                gap: "4px",
-                "& .MuiSvgIcon-root": {
-                  fontSize: { xs: "1.6rem" },
-                  color: "primary.dark",
-                },
-                "& .MuiTypography-root": {
-                  fontSize: "1rem",
-                  color: "primary.dark",
-                  fontWeight: 550,
-                },
-              }}
-            >
-              {liked ? <ThumbUpAltIcon /> : <ThumbUpOffAltIcon />}
-              <Typography>Like</Typography>
-            </Box>
-
-            <Box
-              onClick={() => setDisliked(!disliked)}
-              sx={{
-                display: "flex",
-                alignItems: "center",
-                gap: "4px",
-                "& .MuiSvgIcon-root": {
-                  fontSize: { xs: "1.6rem" },
-                  color: "primary.dark",
-                },
-                "& .MuiTypography-root": {
-                  fontSize: "1rem",
-                  color: "primary.dark",
-                  fontWeight: 550,
-                },
-              }}
-            >
-              {disliked ? <ThumbDownAltIcon /> : <ThumbDownOffAltIcon />}
-              <Typography>Dislike</Typography>
-            </Box>
-          </Box>
-
-          {/* Comment */}
-          <Box
-            onClick={() => console.log("Comment!")}
-            sx={{
-              display: "flex",
-              alignItems: "center",
-              gap: "4px",
-              "& .MuiSvgIcon-root": {
-                fontSize: { xs: "1.6rem" },
-                color: "primary.dark",
-              },
-              "& .MuiTypography-root": {
-                fontSize: "1rem",
-                color: "primary.dark",
-                fontWeight: 550,
-              },
-            }}
-          >
-            <ChatBubbleOutlineIcon />
-            <Typography sx={{ color: "primary.dark", fontWeight: 550 }}>
-              Comment
-            </Typography>
-          </Box>
-        </Box>
+        <ReviewReactions
+          review={review}
+          setLikes={setLikes}
+          setDislikes={setDislikes}
+        />
       </Box>
     </Box>
   );
