@@ -9,6 +9,7 @@ const initialState = {
   text: "",
   score: "",
   review: {},
+  reactions: {}, // Store reactions per review
 };
 
 export const fetchTitleListBasedOnFormat = createAsyncThunk(
@@ -53,6 +54,22 @@ export const reviewSlice = createSlice({
     updateReview(state, action) {
       state.review = action.payload;
     },
+    updateReactions(state, action) {
+      const { reviewId, emoji } = action.payload;
+
+      if (!state.reactions[reviewId]) {
+        state.reactions[reviewId] = { isLiked: false, isDisliked: false };
+      }
+
+      if (emoji === "like") {
+        state.reactions[reviewId].isLiked = !state.reactions[reviewId].isLiked;
+        state.reactions[reviewId].isDisliked = false;
+      } else {
+        state.reactions[reviewId].isDisliked =
+          !state.reactions[reviewId].isDisliked;
+        state.reactions[reviewId].isLiked = false;
+      }
+    },
     resetReviewState: (state) => {
       Object.assign(state, initialState);
     },
@@ -79,6 +96,7 @@ export const {
   updateScore,
   updateText,
   updateReview,
+  updateReactions,
   resetReviewState,
 } = reviewSlice.actions;
 export default reviewSlice.reducer;
