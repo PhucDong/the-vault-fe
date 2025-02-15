@@ -80,6 +80,7 @@ const reviewTransform = createTransform(
       text: inboundState.text,
       score: inboundState.score,
       review: { ...inboundState.review },
+      reactions: {...inboundState.reactions}
     };
   },
   // Transform function to merge state when loading
@@ -90,7 +91,7 @@ const reviewTransform = createTransform(
       titleId: outboundState.titleId,
       text: outboundState.text,
       score: outboundState.score,
-      review: { ...outboundState.review },
+      reactions: {...outboundState.reactions}
     };
   },
   { whitelist: ["review"] } // Apply only to the 'auth' slice
