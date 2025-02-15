@@ -24,7 +24,6 @@ const profileDropdownMenuList = [
 ];
 
 function ProfileNavBarItem(props) {
-  const { navBarItem } = props;
   const isUserLoggedIn = useAppSelector(selectIsUserLoggedIn);
   const loggedInUsername = useSelector(
     (state) => state.authentication.username
