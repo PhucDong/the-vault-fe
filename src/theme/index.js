@@ -35,11 +35,13 @@ const theme = createTheme({
       styleOverrides: {
         html: {
           boxSizing: "border-box",
+          overflowY: "overlay",
         },
         "*, *::before, *::after": {
           boxSizing: "inherit",
         },
         body: {
+          overflow: "hidden !important", // Prevent unwanted shifts
           height: "100%",
           minHeight: "100vh",
           margin: 0,
