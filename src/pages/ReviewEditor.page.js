@@ -1,4 +1,4 @@
-import { Button } from "@mui/material";
+import { Button, Typography } from "@mui/material";
 import { useEffect, useState } from "react";
 import CustomPaddingLayout from "../components/common/CustomPaddingLayout";
 import { useNavigate, useParams } from "react-router-dom";
@@ -66,7 +66,9 @@ function ReviewEditorPage() {
         errorMessages.score = "Score must have at most 1 decimal place.";
       }
 
-      setErrors(errorMessages);
+      if (errorMessages.title || errorMessages.text || errorMessages.score) {
+        setErrors(errorMessages);
+      }
 
       await apiService.post("/reviews", {
         author: loggedInCurrentUserId || registeredCurrentUserId,
@@ -77,7 +79,9 @@ function ReviewEditorPage() {
       });
       navigate(-1);
     } catch (error) {
-      console.log(error);
+      errorMessages.duplicate = error.message;
+      setErrors(errorMessages);
+      console.log("Create review error: ", error);
     }
   };
 
@@ -148,9 +152,13 @@ function ReviewEditorPage() {
     }
   }, [format, reviewId]);
 
+  console.log("Errors: ", errors);
+
   return (
     <CustomPaddingLayout
       sx={{
+        width: "100vw", // Force it to take full viewport width
+        maxWidth: "100%", // Ensure it doesn't exceed the viewport
         marginTop: { xs: "24px", sm: "32px", md: "52px", lg: "72px" },
         marginBottom: { xs: "28px", md: "44px", lg: "56px" },
         display: "flex",
@@ -164,6 +172,18 @@ function ReviewEditorPage() {
         },
       }}
     >
+      {errors?.duplicate && (
+        <Typography
+          sx={{
+            color: "error.main",
+            fontWeight: 550,
+            fontSize: { xs: "1rem", md: "1.1rem" },
+          }}
+        >
+          {errors?.duplicate}
+        </Typography>
+      )}
+
       {!reviewId && (
         <>
           <ReviewFormat />
