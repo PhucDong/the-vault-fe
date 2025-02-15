@@ -53,6 +53,10 @@ function ReviewList() {
     fetchReviewList();
   }, []);
 
+  // console.log("Review list: ", reviewList);
+  // const contentWrapperList = document.querySelectorAll(".ProseMirror");
+  // console.log("Content wrapper list: ", contentWrapperList);
+
   return (
     <Box
       sx={{
@@ -62,7 +66,7 @@ function ReviewList() {
       }}
     >
       {reviewList?.map((review, index) => (
-        <UserReview key={index} review={review} setReviewList={setReviewList}/>
+        <UserReview key={index} review={review} setReviewList={setReviewList} />
       ))}
     </Box>
   );
