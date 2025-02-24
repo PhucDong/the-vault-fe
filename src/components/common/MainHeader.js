@@ -7,11 +7,9 @@ import CustomPaddingLayout from "./CustomPaddingLayout";
 import { Box, Typography, useMediaQuery } from "@mui/material";
 import { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import { useAppSelector } from "../../services/hooks";
-import { selectIsUserLoggedIn } from "../../store/slices/authentication/authenticationSlice";
-import { selectIsUserRegistered } from "../../store/slices/user/userSlice";
 import { CustomStyledNavBarItem } from "./CustomStyledNavBarItem";
 import ProfileNavBarItem from "../HomePage/ProfileNavBarItem";
+import useUser from "../../hooks/useUser";
 
 function MainHeader(props) {
   const { setNavHeight } = props;
@@ -21,12 +19,11 @@ function MainHeader(props) {
   const isMediumScreenWidthAndAbove = useMediaQuery((theme) =>
     theme.breakpoints.up("md")
   );
-  const isUserLoggedIn = useAppSelector(selectIsUserLoggedIn);
-  const isUserRegistered = useAppSelector(selectIsUserRegistered);
+  const { isTokenExpired } = useUser();
 
   const handleChangeIsNavBarItemActive = (navBarItem) => {
     if (navBarItem === "Home") {
-      if (isUserLoggedIn || isUserRegistered) {
+      if (isTokenExpired.tokenExpiryStatus === false) {
         navigate("/home", { state: { prevPathName: location.pathname } });
       } else {
         navigate("/", { state: { prevPathName: location.pathname } });
@@ -42,7 +39,7 @@ function MainHeader(props) {
   };
 
   const getNavBarItemList = () => {
-    if (isUserLoggedIn || isUserRegistered) {
+    if (isTokenExpired.tokenExpiryStatus === false) {
       return [
         { icon: <HomeIcon />, label: "Home" },
         { icon: <MovieIcon />, label: "Anime" },
@@ -144,7 +141,7 @@ function MainHeader(props) {
               </Box>
             </Box>
 
-            {isUserLoggedIn || isUserRegistered ? (
+            {isTokenExpired.tokenExpiryStatus === false ? (
               // Profile
               <ProfileNavBarItem navBarItem={navBarItem} />
             ) : (
