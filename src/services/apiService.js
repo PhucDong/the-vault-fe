@@ -1,5 +1,6 @@
 import axios from "axios";
 import { BASE_URL } from "./config";
+import { store } from "../store/store";
 
 const apiService = axios.create({
   baseURL: BASE_URL,
@@ -7,6 +8,15 @@ const apiService = axios.create({
 
 apiService.interceptors.request.use(
   (request) => {
+    const state = store.getState(); // Get the latest Redux state
+    const loggedInAccessToken = state.authentication?.accessToken;
+    const registeredAccessToken = state.user?.accessToken;
+    const accessToken = loggedInAccessToken || registeredAccessToken;
+
+    if (accessToken) {
+      request.headers.Authorization = `Bearer ${accessToken}`;
+    }
+
     console.log("Start Request", request);
     return request;
   },
