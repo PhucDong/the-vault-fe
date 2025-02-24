@@ -1,5 +1,5 @@
 # The Vault FE
-Latest update: **15 Feb 2025**
+Latest update: **24 Feb 2025**
 
 ## Description
 The vault is a personal project. It's a website for anime/manga lovers that allows them to search for their favorite titles, save their progress, and write reviews.
@@ -36,6 +36,7 @@ The vault is a personal project. It's a website for anime/manga lovers that allo
 - Code Profile Page for registered users
 - Implement likes, dislikes, comments of each review (done)
 - Implement CRUD of comments for each review
+- Update allowed text length from 600 (min) to 10000 (max) characters in ReviewEditor.page.js
 
 ## Challenges
 - Advanced filters: 
