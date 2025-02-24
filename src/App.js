@@ -24,6 +24,12 @@ import ReviewEditorPage from "./pages/ReviewEditor.page.js";
 import AuthRequire from "./pages/AuthRequire.js";
 import ProfilePage from "./pages/ProfilePage/Profile.page.js";
 
+const BASE_ROOT = {
+  review: "reviews",
+  anime: "animes",
+  manga: "mangas",
+};
+
 const router = createBrowserRouter(
   createRoutesFromElements(
     <Route>
@@ -38,31 +44,46 @@ const router = createBrowserRouter(
       >
         <Route index element={<HomePage />} />
         <Route path="me" element={<ProfilePage />} />
-        <Route path="reviews/editor" element={<ReviewEditorPage />} />
-        <Route path="reviews/editor/:reviewId" element={<ReviewEditorPage />} />
-        <Route path="reviews/:reviewId" element={<ReviewDetailedInfoPage />} />
+        <Route
+          path={`${BASE_ROOT.review}/editor`}
+          element={<ReviewEditorPage />}
+        />
+        <Route
+          path={`${BASE_ROOT.review}/editor/:reviewId`}
+          element={<ReviewEditorPage />}
+        />
+        <Route
+          path={`${BASE_ROOT.review}/:reviewId`}
+          element={<ReviewDetailedInfoPage />}
+        />
       </Route>
 
       <Route element={<MainLayout />}>
         <Route path="/" element={<VisitorPage />}>
-          <Route path="animes" element={<AnimeListPage />} />
+          <Route path={BASE_ROOT.anime} element={<AnimeListPage />} />
 
           <Route
-            path="search/animes/:categoryName"
+            path={`search/${BASE_ROOT.anime}/:categoryName`}
             element={<AnimeListByCategoryPage />}
           />
 
-          <Route path="mangas" element={<MangaListPage />} />
+          <Route path={BASE_ROOT.manga} element={<MangaListPage />} />
 
           <Route
-            path="search/mangas/:categoryName"
+            path={`search/${BASE_ROOT.manga}/:categoryName`}
             element={<MangaListByCategoryPage />}
           />
         </Route>
 
-        <Route path="animes/:animeId" element={<AnimeDetailedInfoPage />} />
+        <Route
+          path={`${BASE_ROOT.anime}/:animeId`}
+          element={<AnimeDetailedInfoPage />}
+        />
 
-        <Route path="mangas/:mangaId" element={<MangaDetailedInfoPage />} />
+        <Route
+          path={`${BASE_ROOT.manga}/:mangaId`}
+          element={<MangaDetailedInfoPage />}
+        />
 
         <Route
           path="characters/:characterId"
