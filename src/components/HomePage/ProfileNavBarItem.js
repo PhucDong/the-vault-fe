@@ -14,6 +14,7 @@ import { useState } from "react";
 import PersonIcon from "@mui/icons-material/Person";
 import LogoutIcon from "@mui/icons-material/Logout";
 import { useNavigate } from "react-router-dom";
+import useLogout from "../../hooks/useLogout";
 
 const profileDropdownMenuList = [
   {
@@ -32,11 +33,7 @@ function ProfileNavBarItem(props) {
   const [anchorEl, setAnchorEl] = useState(null);
   const open = Boolean(anchorEl);
   const navigate = useNavigate();
-  const { resetAuthState } = useAuthAppDispatch();
-  const { resetUserState } = useUserAppDispatch();
-  const { resetReviewState } = useReviewAppDispatch();
-  const { clearAllAnimeFilter } = useAnimeAppDispatch();
-  const { clearAllMangaFilter } = useMangaAppDispatch();
+  const { logout } = useLogout();
 
   const handleCloseProfileDropdownMenu = () => {
     setAnchorEl(null);
@@ -50,11 +47,7 @@ function ProfileNavBarItem(props) {
     if (item === "Profile") {
       navigate("/home/me");
     } else if (item === "Log out") {
-      resetUserState();
-      resetAuthState();
-      resetReviewState();
-      clearAllAnimeFilter();
-      clearAllMangaFilter();
+      logout();
       navigate("/");
     }
   };
