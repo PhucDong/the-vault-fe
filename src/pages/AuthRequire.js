@@ -1,13 +1,10 @@
-import { useAppSelector } from "../services/hooks";
-import { selectIsUserLoggedIn } from "../store/slices/authentication/authenticationSlice";
-import { selectIsUserRegistered } from "../store/slices/user/userSlice";
+import useUser from "../hooks/useUser";
 import { Navigate } from "react-router-dom";
 
 function AuthRequire({ children }) {
-  const isUserLoggedIn = useAppSelector(selectIsUserLoggedIn);
-  const isUserRegistered = useAppSelector(selectIsUserRegistered);  
+  const { isTokenExpired } = useUser();
 
-  if (isUserLoggedIn || isUserRegistered) {
+  if (isTokenExpired.tokenExpiryStatus === false) {
     return children;
   } else {
     return <Navigate to="/" />;
