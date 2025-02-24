@@ -45,13 +45,10 @@ export const login = createAsyncThunk(
         email,
         password,
       });
-      // console.log("Response after log in: ", response);
-      apiService.defaults.headers.common.Authorization = `Bearer ${response.accessToken}`;
       navigate("/home");
 
       return { user: response.user, accessToken: response.accessToken };
     } catch (error) {
-      // console.log("Errors: ", error);
       return rejectWithValue(error);
     }
   }
