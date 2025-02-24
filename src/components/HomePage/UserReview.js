@@ -1,56 +1,30 @@
 import { Box, Menu, MenuItem, Typography } from "@mui/material";
-import ThumbUpAltIcon from "@mui/icons-material/ThumbUpAlt";
-import ThumbDownAltIcon from "@mui/icons-material/ThumbDownAlt";
 import dayjs from "dayjs";
 import { useSelector } from "react-redux";
 import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
 import { useState } from "react";
-import EditIcon from "@mui/icons-material/Edit";
-import DeleteIcon from "@mui/icons-material/Delete";
 import DeleteUserReviewAlert from "./DeleteUserReviewAlert";
 import { NavLink, useNavigate } from "react-router-dom";
 import { RichTextReadOnly } from "mui-tiptap";
 import useExtensions from "../../hooks/useExtensions";
 import truncate from "html-truncate";
 import ReviewReactions from "./ReviewReactions";
-
-const userReviewDropdownMenuList = [
-  {
-    icon: <EditIcon />,
-    label: "Edit",
-  },
-  { icon: <DeleteIcon />, label: "Delete" },
-];
-
-const customStyledActionDataContainer = {
-  display: "flex",
-  alignItems: "center",
-  gap: "4px",
-
-  "& .MuiSvgIcon-root": {
-    fontSize: { xs: "1rem", sm: "1.1rem" },
-    color: "primary.dark",
-  },
-  "& .MuiTypography-root": {
-    fontSize: { xs: "0.9rem", sm: "1rem" },
-    color: "primary.dark",
-    fontWeight: 550,
-  },
-};
+import CommentSection from "./CommentSection";
+import useUser from "../../hooks/useUser";
+import getReviewDropdownMenu from "../../utils/getReviewDropdownMenu";
+import CommentInput from "./CommentInput";
 
 function UserReview(props) {
-  const { review, setReviewList } = props;
-  const currentUserId = useSelector(
-    (state) => state.authentication.currentUserId
-  );
+  const { review, setReviewList, sx } = props;
+  const { isTokenExpired } = useUser();
   const [anchorEl, setAnchorEl] = useState(null);
   const open = Boolean(anchorEl);
   const [openDeleteAlert, setOpenDeleteAlert] = useState(false);
-
   const navigate = useNavigate();
   const [isExpanded, setIsExpanded] = useState(false);
-  const [likes, setLikes] = useState(review?.likes);
-  const [dislikes, setDislikes] = useState(review?.dislikes);
+  const comments = useSelector(
+    (state) => state.review?.comments[review._id]?.comments
+  );
 
   const getModifiedContent = () => {
     return truncate(review?.text, 100, {
@@ -90,16 +64,16 @@ function UserReview(props) {
         border: "1px solid #A9A9A9",
         borderRadius: "8px",
         padding: { xs: "12px 16px", lg: "16px 20px" },
+        ...sx,
       }}
     >
-      <Box>
-        {/* HEADER */}
+      <Box sx={{ display: "flex", flexDirection: "column", gap: "8px" }}>
+        {/* HEADER: profile pic, username, created date, more icon */}
         <Box
           sx={{
             display: "flex",
             justifyContent: "space-between",
             alignItems: "center",
-            marginBottom: "8px",
           }}
         >
           {/* Author name, profile pic, created date */}
@@ -113,8 +87,8 @@ function UserReview(props) {
             {/* Profile pic */}
             <Box
               sx={{
-                width: "44px",
-                height: "44px",
+                width: { xs: "36px", md: "40px" },
+                height: { xs: "36px", md: "40px" },
                 backgroundColor: "#ababab",
                 borderRadius: "50%",
               }}
@@ -126,7 +100,7 @@ function UserReview(props) {
                 sx={{
                   marginBottom: "6px",
                   fontWeight: 550,
-                  fontSize: "1rem",
+                  fontSize: { xs: "0.9rem", md: "1rem" },
                   color: "primary.main",
                 }}
               >
@@ -135,7 +109,7 @@ function UserReview(props) {
               <Typography
                 sx={{
                   fontWeight: 550,
-                  fontSize: "0.85rem",
+                  fontSize: { xs: "0.75rem", md: "0.85rem" },
                   color: "#b8b8b8",
                 }}
               >
@@ -145,7 +119,7 @@ function UserReview(props) {
           </Box>
 
           {/* More icon */}
-          {currentUserId === review.author._id && (
+          {isTokenExpired.currentUserId === review.author._id && (
             <Box>
               <Box
                 sx={{
@@ -197,7 +171,7 @@ function UserReview(props) {
                   },
                 }}
               >
-                {userReviewDropdownMenuList.map((item) => (
+                {getReviewDropdownMenu().map((item) => (
                   <MenuItem
                     key={item.label}
                     sx={{
@@ -233,17 +207,34 @@ function UserReview(props) {
           )}
         </Box>
 
-        {/* BDOY: text, image, likes, dislikes, comments */}
+        {/* Target review title & score */}
+        <Box
+          sx={{
+            "& .MuiTypography-root": {
+              fontSize: { xs: "0.85rem", lg: "0.875rem" },
+              fontWeight: 520,
+              color: "#a1a1a1",
+            },
+          }}
+        >
+          <Typography
+            sx={{ marginBottom: "4px" }}
+          >{`${review?.targetType?.substring(
+            0,
+            review?.targetType?.length - 1
+          )}: ${review?.target?.title}`}</Typography>
+          <Typography>{`Score: ${review?.score}/10`}</Typography>
+        </Box>
+
+        {/* BODY: text */}
         <Box
           sx={{
             display: "flex",
             flexDirection: "column",
-            gap: "6px",
-            marginBottom: { xs: "12px", lg: "16px" },
           }}
         >
           {/* Text & image */}
-          <Box>
+          <Box sx={{ marginBottom: { xs: "8px" } }}>
             {/* Text */}
             <Box
               sx={{
@@ -291,42 +282,22 @@ function UserReview(props) {
             ></Box> */}
           </Box>
 
-          {/* DATA: Likes, dislikes, & comments */}
-          <Box sx={{ display: "flex", justifyContent: "space-between" }}>
-            {/* Likes, & dislikes */}
-            <Box sx={{ display: "flex", alignItems: "center", gap: "12px" }}>
-              <Box sx={customStyledActionDataContainer}>
-                <ThumbUpAltIcon />
-                <Typography>{likes?.length}</Typography>
-              </Box>
-              <Box sx={customStyledActionDataContainer}>
-                <ThumbDownAltIcon />
-                <Typography>{dislikes?.length}</Typography>
-              </Box>
-            </Box>
-
-            {/* Comments */}
-            <Box
-              sx={{
-                "& .MuiTypography-root": {
-                  fontSize: { xs: "0.9rem", sm: "1rem" },
-                  color: "primary.dark",
-                  fontWeight: 550,
-                },
-              }}
-            >
-              <Typography sx={{ color: "primary.dark", fontWeight: 550 }}>{`${
-                review.comments || 0
-              } comments`}</Typography>
-            </Box>
-          </Box>
+          {/* REACTION: like, dislike, comment */}
+          <ReviewReactions
+            review={review}
+            setReviewList={setReviewList}
+            comments={!comments ? review?.comments : comments}
+          />
         </Box>
 
-        <ReviewReactions
+        {/* FOOTER: comments */}
+        <CommentSection
           review={review}
-          setLikes={setLikes}
-          setDislikes={setDislikes}
+          comments={comments}
+          // setComments={setComments}
         />
+
+        {review?.comments.length === 0 && <CommentInput review={review} />}
       </Box>
     </Box>
   );
