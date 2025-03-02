@@ -3,7 +3,7 @@ import dayjs from "dayjs";
 import { useSelector } from "react-redux";
 import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
 import { useState } from "react";
-import DeleteUserReviewAlert from "./DeleteUserReviewAlert";
+import DeleteAlert from "./DeleteAlert";
 import { NavLink, useNavigate } from "react-router-dom";
 import { RichTextReadOnly } from "mui-tiptap";
 import useExtensions from "../../hooks/useExtensions";
@@ -136,8 +136,8 @@ function UserReview(props) {
                 <MoreHorizIcon />
               </Box>
               <Menu
-                id="profile-positioned-menu"
-                aria-labelledby="profile-positioned-button"
+                id="review-dropdown-menu"
+                aria-labelledby="review-dropdown-button"
                 anchorEl={anchorEl}
                 open={open}
                 onClose={handleCloseUserReviewDropdownMenu}
@@ -151,6 +151,9 @@ function UserReview(props) {
                 }}
                 disableScrollLock
                 sx={{
+                  "& .MuiPaper-root": {
+                    boxShadow: "rgba(0, 0, 0, 0.24) 0px 3px 8px",
+                  },  
                   "& .MuiMenu-list": {
                     display: "flex",
                     flexDirection: "column",
@@ -159,7 +162,9 @@ function UserReview(props) {
                   "& .MuiMenuItem-root": {
                     color: "primary.light",
                     backgroundColor: "transparent",
-
+                    padding: { xs: "6px 10px", md: "8px 12px" },
+                    minHeight: 0,
+                    
                     "&:hover": {
                       color: "primary.main",
                       backgroundColor: "transparent",
@@ -197,7 +202,7 @@ function UserReview(props) {
                   </MenuItem>
                 ))}
               </Menu>
-              <DeleteUserReviewAlert
+              <DeleteAlert
                 reviewId={review._id}
                 setReviewList={setReviewList}
                 openDeleteAlert={openDeleteAlert}
@@ -291,11 +296,7 @@ function UserReview(props) {
         </Box>
 
         {/* FOOTER: comments */}
-        <CommentSection
-          review={review}
-          comments={comments}
-          // setComments={setComments}
-        />
+        <CommentSection review={review} comments={comments} />
 
         {review?.comments.length === 0 && <CommentInput review={review} />}
       </Box>
