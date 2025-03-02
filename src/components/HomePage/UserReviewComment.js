@@ -1,4 +1,4 @@
-import { Box, Typography } from "@mui/material";
+import { Box, Menu, MenuItem, Typography } from "@mui/material";
 import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
 import updateLocale from "dayjs/plugin/updateLocale";
@@ -9,6 +9,9 @@ import { useSelector } from "react-redux";
 import { useReviewAppDispatch } from "../../services/hooks";
 import apiService from "../../services/apiService";
 import useUser from "../../hooks/useUser";
+import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
+import getReviewDropdownMenu from "../../utils/getReviewDropdownMenu";
+import DeleteAlert from "./DeleteAlert";
 
 dayjs.extend(relativeTime);
 dayjs.extend(updateLocale);
@@ -49,7 +52,8 @@ const customStyledCommentActionContainer = {
 };
 
 function UserReviewComment(props) {
-  const { comment } = props;
+  const { comment, review } = props;
+  const reviewId = review._id;
   const commentId = comment._id;
   const isCommentLiked = useSelector(
     (state) => state.review.reactions[commentId]?.isLiked
@@ -61,6 +65,9 @@ function UserReviewComment(props) {
   const [commentLikes, setCommentLikes] = useState(comment?.likes);
   const [commentDislikes, setCommentDislikes] = useState(comment?.dislikes);
   const { isTokenExpired } = useUser();
+  const [anchorEl, setAnchorEl] = useState(null);
+  const open = Boolean(anchorEl);
+  const [openDeleteAlert, setOpenDeleteAlert] = useState(false);
 
   const handleSaveCommentReaction = async (targetType, targetId, emoji) => {
     updateCommentReactions({ emoji, commentId: targetId });
@@ -76,8 +83,29 @@ function UserReviewComment(props) {
     setCommentDislikes(fetchedComment.comment.dislikes);
   };
 
+  const handleOpenReviewCommentDropdownMenu = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handleCloseReviewCommentDropdownMenu = () => {
+    setAnchorEl(null);
+  };
+
+  const handleReviewCommentDropdownMenuOption = (item) => {
+    if (item === "Delete") {
+      setOpenDeleteAlert(true);
+      handleCloseReviewCommentDropdownMenu();
+    } else if (item === "Edit") {
+      handleCloseReviewCommentDropdownMenu();
+    }
+  };
+
+  const handleCloseDeleteAlert = () => {
+    setOpenDeleteAlert(false);
+  };
+
   useEffect(() => {
-    const hasRun = sessionStorage.getItem(`hasRun-${commentId}`);
+    const hasRun = localStorage.getItem(`hasRun-${commentId}`);
 
     if (!hasRun) {
       if (comment?.likes?.includes(isTokenExpired.currentUserId)) {
@@ -86,7 +114,7 @@ function UserReviewComment(props) {
         updateCommentReactions({ emoji: "dislike", commentId });
       }
 
-      sessionStorage.setItem(`hasRun-${commentId}`, "true");
+      localStorage.setItem(`hasRun-${commentId}`, "true");
     }
   }, []);
 
@@ -105,37 +133,129 @@ function UserReviewComment(props) {
       {/* Author name, comment text, likes & dislikes */}
       <Box sx={{ flex: 1 }}>
         <Box
-          sx={{
-            maxWidth: "fit-content",
-            marginBottom: "6px",
-            backgroundColor: "#ebebeb",
-            padding: "8px 12px",
-            borderRadius: "8px",
-          }}
+          sx={{ display: "flex", alignItems: "center", marginBottom: "6px" }}
         >
-          <Typography
+          <Box
             sx={{
-              marginBottom: "4px",
-              fontWeight: 600,
-              fontSize: { xs: "0.75rem", md: "0.85rem" },
-              color: "primary.main",
+              maxWidth: "fit-content",
+              backgroundColor: "#ebebeb",
+              padding: "8px 12px",
+              borderRadius: "8px",
             }}
           >
-            {comment.author.username}
-          </Typography>
+            <Typography
+              sx={{
+                marginBottom: "4px",
+                fontWeight: 600,
+                fontSize: { xs: "0.75rem", md: "0.85rem" },
+                color: "primary.main",
+              }}
+            >
+              {comment.author.username}
+            </Typography>
 
-          <Typography
-            sx={{
-              fontSize: { xs: "0.9rem", md: "1rem" },
-              color: "primary.main",
-              lineHeight: 1.25,
-              overflowWrap: "break-word",
-              wordBreak: "break-word",
-              whiteSpace: "normal",
-            }}
-          >
-            {comment.text}
-          </Typography>
+            <Typography
+              sx={{
+                fontSize: { xs: "0.9rem", md: "1rem" },
+                color: "primary.main",
+                lineHeight: 1.25,
+                overflowWrap: "break-word",
+                wordBreak: "break-word",
+                whiteSpace: "normal",
+              }}
+            >
+              {comment.text}
+            </Typography>
+          </Box>
+
+          {isTokenExpired.currentUserId === comment.author._id && (
+            <Box>
+              <Box
+                sx={{ marginLeft: "4px", "&:hover": { cursor: "pointer" } }}
+                onClick={handleOpenReviewCommentDropdownMenu}
+              >
+                <MoreHorizIcon
+                  sx={{
+                    color: "primary.light",
+                    fontSize: { xs: "1.7rem", md: "1.6rem" },
+                  }}
+                />
+              </Box>
+              <Menu
+                id="comment-dropdown-menu"
+                aria-labelledby="comment-dropdown-button"
+                anchorEl={anchorEl}
+                open={open}
+                onClose={handleCloseReviewCommentDropdownMenu}
+                anchorOrigin={{
+                  vertical: "bottom",
+                  horizontal: "right",
+                }}
+                transformOrigin={{
+                  vertical: "top",
+                  horizontal: "right",
+                }}
+                disableScrollLock
+                sx={{
+                  "& .MuiPaper-root": {
+                    boxShadow: "rgba(0, 0, 0, 0.24) 0px 3px 8px",
+                  },
+                  "& .MuiMenu-list": {
+                    display: "flex",
+                    flexDirection: "column",
+                    padding: 0,
+                  },
+                  "& .MuiMenuItem-root": {
+                    color: "primary.light",
+                    backgroundColor: "transparent",
+                    padding: { xs: "6px 10px", md: "8px 12px" },
+                    minHeight: 0,
+
+                    "&:hover": {
+                      color: "primary.main",
+                      backgroundColor: "transparent",
+                    },
+
+                    "&.Mui-selected": {
+                      color: "info.main",
+                    },
+                  },
+                }}
+              >
+                {getReviewDropdownMenu().map((item) => (
+                  <MenuItem
+                    key={item.label}
+                    sx={{
+                      padding: "8px 16px",
+                      display: "flex",
+                      gap: "4px",
+                      alignItems: "center",
+
+                      "& .MuiSvgIcon-root": {
+                        fontSize: { md: "1.6rem", lg: "1.8rem" },
+                      },
+                      "& .MuiTypography-root": {
+                        fontWeight: 550,
+                        fontSize: { md: "1.1rem" },
+                      },
+                    }}
+                    onClick={() =>
+                      handleReviewCommentDropdownMenuOption(item.label)
+                    }
+                  >
+                    {item.icon}
+                    <Typography>{item.label}</Typography>
+                  </MenuItem>
+                ))}
+              </Menu>
+              <DeleteAlert
+                reviewId={reviewId}
+                commentId={commentId}
+                openDeleteAlert={openDeleteAlert}
+                handleCloseDeleteAlert={handleCloseDeleteAlert}
+              />
+            </Box>
+          )}
         </Box>
 
         <Box sx={{ display: "flex", gap: "20px" }}>
