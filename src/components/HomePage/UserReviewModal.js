@@ -5,34 +5,13 @@ import { useState } from "react";
 import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
 import getReviewDropdownMenu from "../../utils/getReviewDropdownMenu";
 import { useNavigate } from "react-router-dom";
-import DeleteUserReviewAlert from "./DeleteUserReviewAlert";
+import DeleteAlert from "./DeleteAlert";
 import { RichTextReadOnly } from "mui-tiptap";
 import useExtensions from "../../hooks/useExtensions";
 import ReviewReactions from "./ReviewReactions";
 import { useSelector } from "react-redux";
 import CommentSection from "./CommentSection";
 import CommentInput from "./CommentInput";
-
-// const CustomStyledUserReviewModal = styled(Box)(({ theme }) => ({
-//   position: "absolute",
-//   top: "50%",
-//   left: "50%",
-//   transform: "translate(-50%, -50%)",
-//   width: "84%",
-//   backgroundColor: "#fff",
-//   borderRadius: "12px",
-//   padding: "12px 16px",
-//   [theme.breakpoints.up("sm")]: {
-//     width: "64%",
-//   },
-//   [theme.breakpoints.up("md")]: {
-//     width: "44%",
-//   },
-//   [theme.breakpoints.up("lg")]: {
-//     padding: "16px 20px",
-//     width: "28%",
-//   },
-// }));
 
 function UserReviewModal(props) {
   const {
@@ -241,7 +220,7 @@ function UserReviewModal(props) {
                       </MenuItem>
                     ))}
                   </Menu>
-                  <DeleteUserReviewAlert
+                  <DeleteAlert
                     reviewId={review._id}
                     setReviewList={setReviewList}
                     openDeleteAlert={openDeleteAlert}
