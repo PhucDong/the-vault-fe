@@ -2,6 +2,7 @@ import styled from "@emotion/styled";
 import { Box, Modal, Typography } from "@mui/material";
 import CustomStyledDeleteAlertButton from "./CustomStyledDeleteAlertButton";
 import apiService from "../../services/apiService";
+import { useReviewAppDispatch } from "../../services/hooks";
 
 const CustomStyledDeleteAlert = styled(Box)(({ theme }) => ({
   position: "absolute",
@@ -43,16 +44,35 @@ const CustomStyledDeleteAlert = styled(Box)(({ theme }) => ({
   },
 }));
 
-function DeleteUserReviewAlert(props) {
-  const { reviewId, openDeleteAlert, handleCloseDeleteAlert, setReviewList } =
-    props;
+function DeleteAlert(props) {
+  const {
+    reviewId,
+    commentId,
+    openDeleteAlert,
+    handleCloseDeleteAlert,
+    setReviewList,
+  } = props;
+  const { updateComments } = useReviewAppDispatch();
 
-  const handleDeleteCurrentUserReview = async () => {
+  const handleDeleteUserReview = async () => {
     try {
       await apiService.delete(`/reviews/${reviewId}`);
       handleCloseDeleteAlert();
-      const response = await apiService.get("/reviews");
-      setReviewList(response.reviewList);
+
+      const reviewListData = await apiService.get("/reviews");
+      setReviewList(reviewListData.reviewList);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const handleDeleteReviewComment = async () => {
+    try {
+      await apiService.delete(`/comments/${commentId}`);
+      handleCloseDeleteAlert();
+
+      const commentListData = await apiService.get(`/comments?reviewId=${reviewId}`);
+      updateComments({ reviewId, comments: commentListData.commentList });
     } catch (error) {
       console.log(error);
     }
@@ -62,7 +82,9 @@ function DeleteUserReviewAlert(props) {
     <Modal open={openDeleteAlert} onClose={handleCloseDeleteAlert}>
       <CustomStyledDeleteAlert>
         <Box className="delete-text">
-          <Typography>Are you sure you want to delete this review?</Typography>
+          <Typography>{`Are you sure you want to delete this ${
+            reviewId ? "review" : "comment"
+          }?`}</Typography>
         </Box>
 
         <Box
@@ -78,7 +100,9 @@ function DeleteUserReviewAlert(props) {
             Cancel
           </CustomStyledDeleteAlertButton>
           <CustomStyledDeleteAlertButton
-            onClick={handleDeleteCurrentUserReview}
+            onClick={
+              commentId ? handleDeleteReviewComment : handleDeleteUserReview
+            }
           >
             Delete
           </CustomStyledDeleteAlertButton>
@@ -88,4 +112,4 @@ function DeleteUserReviewAlert(props) {
   );
 }
 
-export default DeleteUserReviewAlert;
+export default DeleteAlert;
