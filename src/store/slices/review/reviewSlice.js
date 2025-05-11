@@ -11,6 +11,8 @@ const initialState = {
   review: {},
   reactions: {},
   comments: {},
+  searchResultList: null,
+  searchValue: "",
 };
 
 export const fetchTitleListBasedOnFormat = createAsyncThunk(
@@ -26,6 +28,30 @@ export const fetchTitleListBasedOnFormat = createAsyncThunk(
         return response.mangaList;
       } else {
         throw new Error("No item list found.");
+      }
+    } catch (error) {
+      return rejectWithValue(error.message);
+    }
+  }
+);
+
+export const fetchUserReviewSearchResultList = createAsyncThunk(
+  "user/fetchUserReviewSearchResults",
+  async ({ searchValue }, { rejectWithValue }) => {
+    let baseURL = "/reviews";
+
+    try {
+      if (searchValue.length > 0) {
+        const response = await apiService.get(`${baseURL}`);
+
+        const filteredReviewList = response.reviewList.filter((review) =>
+          review.target.title.toLowerCase().includes(searchValue.toLowerCase())
+        );
+        return {
+          searchResultList: filteredReviewList,
+        };
+      } else {
+        throw new Error("No search results found.");
       }
     } catch (error) {
       return rejectWithValue(error.message);
@@ -79,7 +105,8 @@ export const reviewSlice = createSlice({
       }
 
       if (emoji === "like") {
-        state.reactions[commentId].isLiked = !state.reactions[commentId].isLiked;
+        state.reactions[commentId].isLiked =
+          !state.reactions[commentId].isLiked;
         state.reactions[commentId].isDisliked = false;
       } else {
         state.reactions[commentId].isDisliked =
@@ -96,6 +123,9 @@ export const reviewSlice = createSlice({
         state.comments[reviewId].comments = [...comments];
       }
     },
+    updateUserReviewSearchValue(state, action) {
+      state.searchValue = action.payload;
+    },
     resetReviewState: (state) => {
       Object.assign(state, initialState);
     },
@@ -111,6 +141,18 @@ export const reviewSlice = createSlice({
       })
       .addCase(fetchTitleListBasedOnFormat.rejected, (state) => {
         state.fetchTitleListStatus = "failed";
+      })
+      .addCase(fetchUserReviewSearchResultList.pending, (state) => {
+        state.fetchSearchResultStatus = "loading";
+      })
+      .addCase(fetchUserReviewSearchResultList.fulfilled, (state, action) => {
+        state.fetchSearchResultStatus = "idle";
+        state.searchResultList = action.payload.searchResultList;
+      })
+      .addCase(fetchUserReviewSearchResultList.rejected, (state, action) => {
+        state.fetchSearchResultStatus = "failed";
+        state.errorMessages = action.payload;
+        state.searchResultList = null;
       });
   },
 });
@@ -125,6 +167,7 @@ export const {
   updateReviewReactions,
   updateCommentReactions,
   updateComments,
+  updateUserReviewSearchValue,
   resetReviewState,
 } = reviewSlice.actions;
 export default reviewSlice.reducer;
@@ -132,3 +175,5 @@ export default reviewSlice.reducer;
 export const selectReviewFormat = (state) => state.review.format;
 export const selectReviewTitleList = (state) => state.review.titleList;
 export const selectReview = (state) => state.review.review;
+export const selectUserReviewSearchResult = (state) =>
+  state.review.searchResultList;

@@ -1,7 +1,9 @@
 # The Vault FE
-Latest update: **24 Feb 2025**
+
+Latest update: **11 May 2025**
 
 ## Description
+
 The vault is a personal project. It's a website for anime/manga lovers that allows them to search for their favorite titles, save their progress, and write reviews.
 
 ## Challenges
@@ -12,7 +14,8 @@ The vault is a personal project. It's a website for anime/manga lovers that allo
 - How can I check similarity between 2 strings? Return a list of the most similar strings
 
 ## Solutions
-- Use **redux-persist" to store Redux states to localStorage
+
+- Use \*\*redux-persist" to store Redux states to localStorage
 
 ## Mock JSON servers
 
@@ -37,9 +40,11 @@ The vault is a personal project. It's a website for anime/manga lovers that allo
 - Implement likes, dislikes, comments of each review (done)
 - Implement CRUD of comments for each review
 - Update allowed text length from 600 (min) to 10000 (max) characters in ReviewEditor.page.js
+- Fixed displaying UI for liked/disliked comments
 
 ## Challenges
-- Advanced filters: 
+
+- Advanced filters:
   - Animes: genres, studio, year, & airing status
   - Mangas: genres, year, & publishing status
 - Next destination after registering
@@ -47,5 +52,8 @@ The vault is a personal project. It's a website for anime/manga lovers that allo
 
 ## Future features
 
-- Styling all error pages
-- Remember login credentials
+- [x] Styling all error pages
+- [x] Remember login credentials
+- [ ] Update User Profile page
+- [ ] Add img to all animes, mangas, and users
+- [x] Add debounce to search feature

@@ -94,9 +94,6 @@ export const userSlice = createSlice({
     resetUserState: (state) => {
       Object.assign(state, initialState);
     },
-    updateUserSearchValue(state, action) {
-      state.searchValue = action.payload;
-    },
   },
   extraReducers: (builder) => {
     builder
@@ -119,7 +116,7 @@ export const userSlice = createSlice({
   },
 });
 
-export const { resetUserState, updateUserSearchValue } = userSlice.actions;
+export const { resetUserState } = userSlice.actions;
 export default userSlice.reducer;
 
 // Export state values

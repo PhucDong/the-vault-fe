@@ -1,34 +1,31 @@
-import {
-  Box,
-  Button,
-  InputAdornment,
-  TextField,
-  Typography,
-} from "@mui/material";
+import { Box, InputAdornment, TextField, Typography } from "@mui/material";
 import { useEffect, useState } from "react";
-import CustomStyledSearchButton from "./CustomStyledSearchButton";
+// import CustomStyledSearchButton from "./CustomStyledSearchButton";
 import SearchIcon from "@mui/icons-material/Search";
 import AdvancedSearch from "../VisitorPage/AdvancedSearch";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
-import { useAnimeAppDispatch, useMangaAppDispatch } from "../../services/hooks";
+import {
+  useAnimeAppDispatch,
+  useMangaAppDispatch,
+  useReviewAppDispatch,
+} from "../../services/hooks";
 import apiService from "../../services/apiService";
 import CustomStyledFastGenreButton from "./CustomStyledFastGenreButton";
+import { debounce } from "lodash";
 
 function SearchBar() {
   const location = useLocation();
   const animeSearchValue = useSelector((state) => state.anime.searchValue);
   const mangaSearchValue = useSelector((state) => state.manga.searchValue);
-  const userSearchValue = useSelector((state) => state.user.searchValue);
-  const [searchHistoryList, setSearchHistoryList] = useState([]);
-  const [openSearchHistoryListOpen, setOpenSearchHistoryList] = useState(false);
-  const [filteredSearchHistoryList, setFilteredSearchHistoryList] = useState(
-    []
+  const userReviewSearchValue = useSelector(
+    (state) => state.review.searchValue
   );
   const { updateAnimeSearchValue, updateAnimeGenreOptionList } =
     useAnimeAppDispatch();
   const { updateMangaSearchValue, updateMangaGenreOptionList } =
     useMangaAppDispatch();
+  const { updateUserReviewSearchValue } = useReviewAppDispatch();
   const navigate = useNavigate();
   const [popularAnimeGenreList, setPopularAnimeGenreList] = useState(null);
   const [popularMangaGenreList, setPopularMangaGenreList] = useState(null);
@@ -38,68 +35,24 @@ function SearchBar() {
   const mangaGenreOptionList = useSelector(
     (state) => state.manga.genreOptionList
   );
+  const [inputValue, setInputValue] = useState("");
 
   const handleChangeSearchValue = (event) => {
     const { value } = event.target;
-
-    if (location.pathname === "/") {
-      updateAnimeSearchValue(value);
-      navigate("/animes", { state: { prevPathName: location.pathname } });
-    } else if (location.pathname.includes("/animes")) {
-      updateAnimeSearchValue(value);
-    } else if (location.pathname.includes("/mangas")) {
-      updateMangaSearchValue(value);
-    }
-
-    if (value.length > 0) {
-      setFilteredSearchHistoryList(
-        searchHistoryList.filter((item) => item.includes(value))
-      );
-      setOpenSearchHistoryList(true);
-    } else {
-      setOpenSearchHistoryList(false);
-    }
+    setInputValue(value); // Immediate UI update
   };
 
-  const handleEnterSearchValue = (event) => {
-    const { value } = event.target;
+  // const handleEnterSearchValue = (event) => {
+  //   const { value } = event.target;
 
-    if (event.key === "Enter") {
-      if (location.pathname.includes("/animes") && animeSearchValue) {
-        updateAnimeSearchValue(value);
-        setSearchHistoryList((prevList) => {
-          if (!prevList.includes(animeSearchValue)) {
-            return [animeSearchValue, ...prevList];
-          }
-          return prevList;
-        });
-      } else {
-        updateMangaSearchValue(value);
-        setSearchHistoryList((prevList) => {
-          if (!prevList.includes(mangaSearchValue)) {
-            return [mangaSearchValue, ...prevList];
-          }
-          return prevList;
-        });
-      }
-    }
-  };
-
-  const handleSearchValue = () => {
-    setSearchHistoryList((prevList) => {
-      if (location.pathname.includes("/animes")) {
-        if (!prevList.includes(animeSearchValue)) {
-          return [animeSearchValue, ...prevList];
-        }
-      } else {
-        if (!prevList.includes(mangaSearchValue)) {
-          return [mangaSearchValue, ...prevList];
-        }
-      }
-
-      return prevList;
-    });
-  };
+  //   if (event.key === "Enter") {
+  //     if (location.pathname.includes("/animes") && animeSearchValue) {
+  //       updateAnimeSearchValue(value);
+  //     } else {
+  //       updateMangaSearchValue(value);
+  //     }
+  //   }
+  // };
 
   const handleChangeFastFilter = (event) => {
     const { value } = event.target;
@@ -119,15 +72,15 @@ function SearchBar() {
     }
   };
 
-  const getSearchValue = () => {
-    if (location.pathname.includes("/animes") || location.pathname === "/") {
-      return animeSearchValue;
-    } else if (location.pathname.includes("/mangas")) {
-      return mangaSearchValue;
-    } else if (location.pathname.includes("/home")) {
-      return userSearchValue;
-    }
-  };
+  // const getSearchValue = () => {
+  //   if (location.pathname.includes("/animes") || location.pathname === "/") {
+  //     return animeSearchValue;
+  //   } else if (location.pathname.includes("/mangas")) {
+  //     return mangaSearchValue;
+  //   } else if (location.pathname.includes("/home")) {
+  //     return userReviewSearchValue;
+  //   }
+  // };
 
   const getPlaceholder = () => {
     if (location.pathname.includes("/animes")) {
@@ -135,21 +88,30 @@ function SearchBar() {
     } else if (location.pathname.includes("/mangas")) {
       return "Search for your manga";
     } else if (location.pathname.includes("/home")) {
-      return "Search for users";
+      return "Search for title reviews";
     }
   };
 
+  // Reset search value when the user navigates to a different page
   useEffect(() => {
-    if (location.pathname === "/") {
+    if (location.pathname === "/" || location.pathname.includes("/home")) {
       updateAnimeSearchValue("");
       updateMangaSearchValue("");
     } else if (location.pathname.includes("/animes")) {
       updateMangaSearchValue("");
+      updateUserReviewSearchValue("");
     } else if (location.pathname.includes("/mangas")) {
       updateAnimeSearchValue("");
+      updateUserReviewSearchValue("");
     }
-  }, [location.pathname]);
+  }, [
+    location.pathname,
+    updateAnimeSearchValue,
+    updateMangaSearchValue,
+    updateUserReviewSearchValue,
+  ]);
 
+  // Fetch popular genre list for anime/manga page
   useEffect(() => {
     try {
       if (!location.pathname.includes("/home")) {
@@ -173,6 +135,51 @@ function SearchBar() {
     }
   }, [location.pathname]);
 
+  useEffect(() => {
+    setInputValue(
+      location.pathname.includes("/animes")
+        ? animeSearchValue
+        : location.pathname.includes("/mangas")
+        ? mangaSearchValue
+        : location.pathname.includes("/home")
+        ? userReviewSearchValue
+        : ""
+    );
+  }, [
+    location.pathname,
+    animeSearchValue,
+    mangaSearchValue,
+    userReviewSearchValue,
+  ]);
+
+  // Debounced function for API call
+  useEffect(() => {
+    const debouncedSearch = debounce((value) => {
+      if (location.pathname.includes("/animes") || location.pathname === "/") {
+        updateAnimeSearchValue(value);
+        if (location.pathname === "/") {
+          navigate("/animes", { state: { prevPathName: location.pathname } });
+        }
+      } else if (location.pathname.includes("/mangas")) {
+        updateMangaSearchValue(value);
+      } else if (location.pathname.includes("/home")) {
+        updateUserReviewSearchValue(value);
+      }
+    }, 500);
+
+    debouncedSearch(inputValue);
+
+    // Cleanup on component unmount
+    return () => debouncedSearch.cancel();
+  }, [
+    inputValue,
+    location.pathname,
+    updateAnimeSearchValue,
+    updateMangaSearchValue,
+    updateUserReviewSearchValue,
+    navigate,
+  ]);
+
   return (
     <>
       <Box
@@ -184,9 +191,9 @@ function SearchBar() {
         <Box sx={{ position: "relative", width: "100%" }}>
           <TextField
             fullWidth
-            value={getSearchValue()}
+            value={inputValue}
             onChange={handleChangeSearchValue}
-            onKeyDown={handleEnterSearchValue}
+            // onKeyDown={handleEnterSearchValue}
             placeholder={getPlaceholder()}
             slotProps={{
               input: {
@@ -223,63 +230,11 @@ function SearchBar() {
               },
             }}
           />
-
-          {/* Search history */}
-          {openSearchHistoryListOpen &&
-            filteredSearchHistoryList &&
-            filteredSearchHistoryList.length > 0 && (
-              <Box
-                sx={{
-                  padding: { xs: "12px", sm: "14px" },
-                  position: "absolute",
-                  top: { xs: "42px", sm: "46px", md: "50px" },
-                  width: "100%",
-                  backgroundColor: "#fff",
-                  zIndex: 1,
-                  borderRadius: "8px",
-                  boxShadow: "rgba(0, 0, 0, 0.16) 0px 2px 6px",
-                }}
-              >
-                <Box
-                  sx={{
-                    display: "flex",
-                    flexDirection: "column",
-                    gap: { xs: "8px", sm: "12px" },
-                  }}
-                >
-                  {filteredSearchHistoryList.map((searchHistory) => (
-                    <Box
-                      key={searchHistory}
-                      sx={{
-                        display: "flex",
-                        alignItems: "center",
-                        gap: { xs: "6px" },
-                        "& .MuiSvgIcon-root": {
-                          color: "primary.dark",
-                          fontSize: { xs: "1.6em", md: "1.8rem" },
-                        },
-                        "& .MuiTypography-root": {
-                          fontSize: {
-                            xs: "1.1rem",
-                            sm: "1.2rem",
-                            md: "1.3rem",
-                          },
-                          color: "primary.dark",
-                        },
-                      }}
-                    >
-                      <SearchIcon />
-                      <Typography>{searchHistory}</Typography>
-                    </Box>
-                  ))}
-                </Box>
-              </Box>
-            )}
         </Box>
 
-        <CustomStyledSearchButton onClick={handleSearchValue}>
+        {/* <CustomStyledSearchButton onClick={handleSearchValue}>
           Search
-        </CustomStyledSearchButton>
+        </CustomStyledSearchButton> */}
       </Box>
 
       {/* Fast filters */}
