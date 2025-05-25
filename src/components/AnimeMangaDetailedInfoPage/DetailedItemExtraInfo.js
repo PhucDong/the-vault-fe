@@ -27,7 +27,7 @@ function DetailedItemExtraInfo({ item }) {
           gap: { xs: "32px", md: "20px" },
           "& .MuiTypography-root": { textAlign: "center" },
           "& .extra-info-container": {
-            flex: { xs: 1, md: 0 },
+            // flex: { xs: 1, md: 0 },
             display: "flex",
             gap: "8px",
             flexDirection: "column",

@@ -8,7 +8,7 @@ function Review({ item, review }) {
   return (
     <Box
       sx={{
-        width: { xs: "100%", md: "49%" },
+        width: { xs: "100%", md: "49%", xl: "32%" },
         height: { xs: "112px", md: "120px", lg: "132px" },
         border: "1px solid #A9A9A9",
         borderRadius: "8px",

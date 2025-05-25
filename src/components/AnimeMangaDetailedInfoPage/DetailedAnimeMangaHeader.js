@@ -68,17 +68,17 @@ function DetailedAnimeMangaHeader({ item }) {
         />
       </Box>
 
-      {/* Profile image, title, descriptio, & buttons */}
+      {/* Profile image, title, description, & buttons */}
       <CustomPaddingLayout
         sx={{
           width: "100%",
           position: "absolute",
           top: {
-            xs: "164px",
-            sm: "296px",
-            md: "332px",
-            lg: "370px",
-            xl: "412px",
+            xs: "124px",
+            sm: "176px",
+            md: "244px",
+            lg: "352px",
+            xl: "408px",
           },
           left: 0,
           display: { xs: "block", sm: "flex" },
