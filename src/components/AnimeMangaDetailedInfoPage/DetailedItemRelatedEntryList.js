@@ -77,7 +77,7 @@ function DetailedItemRelatedEntryList(props) {
                 gap: { xs: "8px" },
                 flexWrap: { xs: "nowrap", md: tabValue !== 0 && "wrap" },
                 alignItems: "stretch",
-                justifyContent: "space-between",
+                // justifyContent: "space-between",
                 "& .MuiButtonBase-root": {
                   padding: 0,
                   width: { xs: "280px", md: tabValue !== 0 ? "49%" : "320px" },

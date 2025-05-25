@@ -5,6 +5,7 @@ const initialState = {
   isUserLoggedIn: false,
   username: null,
   email: null,
+  profilePic: null,
   password: null,
   errorMessages: { email: "", password: "" },
   accessToken: null,
@@ -71,6 +72,7 @@ export const authenticationSlice = createSlice({
       .addCase(login.fulfilled, (state, action) => {
         state.logInStatus = "idle";
         state.isUserLoggedIn = true;
+        state.profilePic = action.payload.user.profilePic;
         state.email = action.payload.user.email;
         state.username = action.payload.user.username;
         state.accessToken = action.payload.accessToken;

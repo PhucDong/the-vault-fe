@@ -10,6 +10,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { CustomStyledNavBarItem } from "./CustomStyledNavBarItem";
 import ProfileNavBarItem from "../HomePage/ProfileNavBarItem";
 import useUser from "../../hooks/useUser";
+import { useSelector } from "react-redux";
 
 function MainHeader(props) {
   const { setNavHeight } = props;
@@ -20,6 +21,9 @@ function MainHeader(props) {
     theme.breakpoints.up("md")
   );
   const { isTokenExpired } = useUser();
+  const userProfilePic = useSelector(
+    (state) => state.authentication.profilePic
+  );
 
   const handleChangeIsNavBarItemActive = (navBarItem) => {
     if (navBarItem === "Home") {
@@ -57,6 +61,7 @@ function MainHeader(props) {
   };
 
   useEffect(() => {
+    console.log("Location pathname: ", location.pathname);
     if (
       location.pathname.startsWith("/animes") ||
       location.pathname.startsWith("/search/animes")
@@ -143,7 +148,7 @@ function MainHeader(props) {
 
             {isTokenExpired.tokenExpiryStatus === false ? (
               // Profile
-              <ProfileNavBarItem navBarItem={navBarItem} />
+              <ProfileNavBarItem userProfilePic={userProfilePic} />
             ) : (
               // Log in
               <CustomStyledNavBarItem

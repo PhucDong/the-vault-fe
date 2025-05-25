@@ -92,7 +92,17 @@ function UserReview(props) {
                 backgroundColor: "#ababab",
                 borderRadius: "50%",
               }}
-            ></Box>
+            >
+              <img
+                src={review.author.profilePic}
+                alt={review.author.username}
+                style={{
+                  width: "100%",
+                  height: "100%",
+                  borderRadius: "50%",
+                }}
+              />
+            </Box>
 
             {/* Author name & created date */}
             <Box>
@@ -153,7 +163,7 @@ function UserReview(props) {
                 sx={{
                   "& .MuiPaper-root": {
                     boxShadow: "rgba(0, 0, 0, 0.24) 0px 3px 8px",
-                  },  
+                  },
                   "& .MuiMenu-list": {
                     display: "flex",
                     flexDirection: "column",
@@ -164,7 +174,7 @@ function UserReview(props) {
                     backgroundColor: "transparent",
                     padding: { xs: "6px 10px", md: "8px 12px" },
                     minHeight: 0,
-                    
+
                     "&:hover": {
                       color: "primary.main",
                       backgroundColor: "transparent",

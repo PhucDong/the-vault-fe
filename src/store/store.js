@@ -50,6 +50,7 @@ const authTransform = createTransform(
   (inboundState, key) => {
     return {
       isUserLoggedIn: inboundState.isUserLoggedIn,
+      profilePic: inboundState.profilePic,
       email: inboundState.email,
       username: inboundState.username,
       accessToken: inboundState.accessToken,
@@ -60,6 +61,7 @@ const authTransform = createTransform(
   (outboundState, key) => {
     return {
       isUserLoggedIn: outboundState.isUserLoggedIn,
+      profilePic: outboundState.profilePic,
       email: outboundState.email,
       username: outboundState.username,
       accessToken: outboundState.accessToken,

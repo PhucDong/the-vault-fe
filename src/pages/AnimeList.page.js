@@ -28,6 +28,8 @@ function AnimeListPage() {
   const studioOption = useSelector((state) => state.anime.studioOption);
   const searchValue = useSelector((state) => state.anime.searchValue);
 
+  console.log("Anine result list: ", animeSearchResultList);
+
   useEffect(() => {
     if (!animeSearchResultList) {
       return;

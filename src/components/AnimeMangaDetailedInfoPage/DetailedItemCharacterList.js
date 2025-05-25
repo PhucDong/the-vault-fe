@@ -58,7 +58,12 @@ function DetailedItemCharacterList(props) {
             item.characters
               .slice(0, 6)
               .map((character, index) => (
-                <Character key={index} character={character} />
+                <Character
+                  key={index}
+                  character={character}
+                  coverImg={item.coverImg}
+                  title={item.title}
+                />
               ))
           ) : (
             <Typography sx={{ fontSize: { xs: "0.95rem", sm: "1.1rem" } }}>

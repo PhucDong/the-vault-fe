@@ -1,12 +1,15 @@
-import { useParams } from "react-router-dom";
+import { useLocation, useParams } from "react-router-dom";
 import DetailedCharacterHeader from "../../components/CharacterDetailedInfoPage/DetailedCharacterHeader";
 import { useEffect, useState } from "react";
 import DetailedEmployeeOtherWorkList from "../../components/EmployeeDetailedInfoPage/DetailedEmployeeOtherWorkList";
 import apiService from "../../services/apiService";
+import { randomCoverImg } from "../../utils/randomCoverImg";
+import { defaultCoverImgAlt } from "../../utils/defaultCoverImgAlt";
 
 function EmployeeDetailedInfoPage() {
   const { employeeId } = useParams();
   const [employee, setEmployee] = useState(null);
+  const location = useLocation();
 
   useEffect(() => {
     try {
@@ -25,7 +28,17 @@ function EmployeeDetailedInfoPage() {
     <>
       {employee && (
         <>
-          <DetailedCharacterHeader item={employee} />
+          <DetailedCharacterHeader
+            item={employee}
+            coverImg={
+              location.state?.coverImg
+                ? location.state.coverImg
+                : randomCoverImg
+            }
+            title={
+              location.state?.title ? location.state.title : defaultCoverImgAlt
+            }
+          />
           <DetailedEmployeeOtherWorkList item={employee} />
         </>
       )}

@@ -68,7 +68,8 @@ function DetailedItemRecommendationList(props) {
           scrollButtons={false}
           sx={{
             "& .MuiTabs-flexContainer": {
-              gap: { xs: "8px" },
+              columnGap: { xs: "8px", lg: "12px", xl: "16px" },
+              rowGap: { xs: "4px", sm: "6px", md: "8px" },
               flexWrap: {
                 xs: "nowrap",
                 md: tabValue !== 0 ? "wrap" : "nowrap",
@@ -79,8 +80,14 @@ function DetailedItemRecommendationList(props) {
                 width: {
                   xs: "132px",
                   sm: "140px",
-                  md: tabValue !== 0 ? "24%" : "140px",
+                  md: tabValue !== 0 ? "32%" : "140px",
+                  lg: "23%",
+                  xl: "18%",
                 },
+                // height: { xs: "fit-content" },
+                // height: "100%",
+                aspectRatio: "4 / 7",
+                // alignItems: "flex-start",
                 textTransform: "capitalize",
               },
             },

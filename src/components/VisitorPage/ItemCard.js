@@ -3,6 +3,8 @@ import { useNavigate } from "react-router-dom";
 
 function ItemCard({ item, format }) {
   const navigate = useNavigate();
+  // console.log("Card img: ", item.cardImg);
+  console.log("Item format: ", format);
 
   return (
     <Box
@@ -27,7 +29,18 @@ function ItemCard({ item, format }) {
           marginBottom: "6px",
           borderRadius: "8px",
         }}
-      ></Box>
+      >
+        <img
+          src={item.cardImg}
+          alt={item.title}
+          style={{
+            display: "block",
+            width: "100%",
+            height: "100%",
+            borderRadius: "8px",
+          }}
+        />
+      </Box>
 
       {/* Item title */}
       <Box sx={{ maxWidth: "100%" }}>

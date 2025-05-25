@@ -1,13 +1,6 @@
 import { CustomStyledNavBarItem } from "../common/CustomStyledNavBarItem";
 import { Box, Menu, MenuItem, Typography } from "@mui/material";
-import {
-  useAnimeAppDispatch,
-  useAppSelector,
-  useAuthAppDispatch,
-  useMangaAppDispatch,
-  useReviewAppDispatch,
-  useUserAppDispatch,
-} from "../../services/hooks";
+import { useAppSelector } from "../../services/hooks";
 import { useSelector } from "react-redux";
 import { selectIsUserLoggedIn } from "../../store/slices/authentication/authenticationSlice";
 import { useState } from "react";
@@ -25,6 +18,7 @@ const profileDropdownMenuList = [
 ];
 
 function ProfileNavBarItem(props) {
+  const { userProfilePic } = props;
   const isUserLoggedIn = useAppSelector(selectIsUserLoggedIn);
   const loggedInUsername = useSelector(
     (state) => state.authentication.username
@@ -52,20 +46,31 @@ function ProfileNavBarItem(props) {
     }
   };
 
+  console.log("User Profile Pic:", userProfilePic);
+
   return (
     <Box>
-      <CustomStyledNavBarItem
-        // isNavBarItemActive={navBarItem === "Profile"}
-        onClick={handleOpenProfileDropdownMenu}
-      >
+      <CustomStyledNavBarItem onClick={handleOpenProfileDropdownMenu}>
         <Box
           sx={{
             width: "44px",
             height: "44px",
             borderRadius: "50%",
-            backgroundColor: "#ABABAB",
+            backgroundColor: userProfilePic ? "" : "#ABABAB",
           }}
-        ></Box>
+        >
+          {userProfilePic && (
+            <img
+              src={userProfilePic}
+              alt={isUserLoggedIn ? loggedInUsername : registeredUsername}
+              style={{
+                width: "100%",
+                height: "100%",
+                borderRadius: "50%",
+              }}
+            />
+          )}
+        </Box>
         <Typography>
           {isUserLoggedIn ? loggedInUsername : registeredUsername}
         </Typography>

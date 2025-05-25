@@ -2,6 +2,7 @@ import { Box, Typography } from "@mui/material";
 
 function RelatedEntry(props) {
   const { item } = props;
+  console.log("RelatedEntry", item);
 
   return (
     <Box
@@ -17,8 +18,20 @@ function RelatedEntry(props) {
           backgroundColor: "#D9D9D9",
           height: "100%",
           aspectRatio: "5/6",
+          borderRadius: "8px 0 0 8px",
         }}
-      ></Box>
+      >
+        <img
+          src={item.cardImg}
+          alt={item.title}
+          style={{
+            display: "block",
+            width: "100%",
+            height: "100%",
+            borderRadius: "8px 0 0 8px",
+          }}
+        />
+      </Box>
 
       {/* Title, format, & status */}
       <Box

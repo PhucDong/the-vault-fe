@@ -1,7 +1,8 @@
 import { Box, Typography } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 
-function Employee({ employee }) {
+function Employee(props) {
+  const { employee, coverImg, title } = props;
   const navigate = useNavigate();
 
   return (
@@ -16,7 +17,9 @@ function Employee({ employee }) {
           cursor: "pointer",
         },
       }}
-      onClick={() => navigate(`/employees/${employee._id}`)}
+      onClick={() =>
+        navigate(`/employees/${employee._id}`, { state: { coverImg, title } })
+      }
     >
       {/* Image */}
       <Box
@@ -26,7 +29,18 @@ function Employee({ employee }) {
           height: { xs: "116px", md: "120px" }, // Fills the parent height
           aspectRatio: "4/5", // Maintain 3:4 ratio relative to width
         }}
-      ></Box>
+      >
+        <img
+          src={employee.avatar}
+          alt={employee.name}
+          style={{
+            display: "block",
+            width: "100%",
+            height: "100%",
+            borderRadius: "8px 0 0 8px",
+          }}
+        />
+      </Box>
 
       {/* Title, format, & status */}
       <Box

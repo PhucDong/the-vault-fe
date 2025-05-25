@@ -50,10 +50,17 @@ The vault is a personal project. It's a website for anime/manga lovers that allo
 - Next destination after registering
   - Lead users to their Home Page
 
+## Bugs
+
+- [x] In Recommendations tab, anime/manga cards don't have the same height
+- [ ] On mobile screens, hover/click on the Profile icon, no modal (Profile & Log Out) appears
+- [ ] On Footer, Login & Register are still available after successful registration
+- [ ] Update responsive layouts on all device screens
+
 ## Future features
 
 - [x] Styling all error pages
 - [x] Remember login credentials
 - [ ] Update User Profile page
-- [ ] Add img to all animes, mangas, and users
+- [x] Add img to all animes, mangas, and users
 - [x] Add debounce to search feature

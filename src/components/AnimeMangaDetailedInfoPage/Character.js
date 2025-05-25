@@ -2,7 +2,7 @@ import { Box, Typography } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 
 function Character(props) {
-  const { character } = props;
+  const { character, coverImg, title } = props;
   const navigate = useNavigate();
 
   return (
@@ -17,7 +17,9 @@ function Character(props) {
           cursor: "pointer",
         },
       }}
-      onClick={() => navigate(`/characters/${character._id}`)}
+      onClick={() =>
+        navigate(`/characters/${character._id}`, { state: { coverImg, title } })
+      }
     >
       {/* Image */}
       <Box
@@ -27,7 +29,18 @@ function Character(props) {
           height: { xs: "116px", md: "120px" }, // Fills the parent height
           aspectRatio: "4/5", // Maintain 3:4 ratio relative to width
         }}
-      ></Box>
+      >
+        <img
+          src={character.avatar}
+          alt={character.name}
+          style={{
+            display: "block",
+            width: "100%",
+            height: "100%",
+            borderRadius: "8px 0 0 8px",
+          }}
+        />
+      </Box>
 
       {/* Title, format, & status */}
       <Box
@@ -61,7 +74,7 @@ function Character(props) {
               textTransform: "capitalize",
             }}
           >
-            {character.type}
+            {character.roleType}
           </Typography>
         </Box>
 

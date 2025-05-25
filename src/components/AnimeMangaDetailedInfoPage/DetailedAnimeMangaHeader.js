@@ -46,17 +46,40 @@ function DetailedAnimeMangaHeader({ item }) {
       {/* Cover image of anime */}
       <Box
         sx={{
-          height: { xs: "180px", sm: "220px", md: "260px", lg: "300px" },
+          // height: { xs: "180px", sm: "220px", md: "260px", lg: "300px" },
+          width: "100%",
+          aspectRatio: {
+            xs: "16 / 7",
+            sm: "14 / 6",
+            md: "14 / 5",
+            xl: "16 / 5",
+          },
           backgroundColor: "#D9D9D9",
         }}
-      ></Box>
+      >
+        <img
+          src={item.coverImg}
+          alt={item.title}
+          style={{
+            display: "block",
+            width: "100%",
+            height: "100%",
+          }}
+        />
+      </Box>
 
       {/* Profile image, title, descriptio, & buttons */}
       <CustomPaddingLayout
         sx={{
           width: "100%",
           position: "absolute",
-          top: { xs: "120px", sm: "152px", md: "192px", lg: "232px" },
+          top: {
+            xs: "164px",
+            sm: "296px",
+            md: "332px",
+            lg: "370px",
+            xl: "412px",
+          },
           left: 0,
           display: { xs: "block", sm: "flex" },
           gap: { sm: "20px" },
@@ -77,9 +100,20 @@ function DetailedAnimeMangaHeader({ item }) {
             sx={{
               height: { xs: "144px", sm: "184px", md: "216px", lg: "232px" },
               width: { xs: "112px", sm: "144px", md: "172px", lg: "180px" },
-              backgroundColor: "#ABABAB",
+              // backgroundColor: "#ABABAB",
             }}
-          ></Box>
+          >
+            <img
+              src={item.cardImg}
+              alt={item.title}
+              style={{
+                display: "block",
+                width: "100%",
+                height: "100%",
+                // borderRadius: "8px",
+              }}
+            />
+          </Box>
 
           {/* Item title & buttons */}
           <Box
@@ -139,6 +173,7 @@ function DetailedAnimeMangaHeader({ item }) {
                 fontWeight: 600,
                 color: "primary.main",
                 marginBottom: "8px",
+                lineHeight: 1.25,
               }}
             >
               {item.title}

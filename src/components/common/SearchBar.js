@@ -39,6 +39,10 @@ function SearchBar() {
 
   const handleChangeSearchValue = (event) => {
     const { value } = event.target;
+    if (location.pathname === "/") {
+      navigate("/animes", { state: { prevPathName: location.pathname } });
+    }
+
     setInputValue(value); // Immediate UI update
   };
 
@@ -157,9 +161,6 @@ function SearchBar() {
     const debouncedSearch = debounce((value) => {
       if (location.pathname.includes("/animes") || location.pathname === "/") {
         updateAnimeSearchValue(value);
-        if (location.pathname === "/") {
-          navigate("/animes", { state: { prevPathName: location.pathname } });
-        }
       } else if (location.pathname.includes("/mangas")) {
         updateMangaSearchValue(value);
       } else if (location.pathname.includes("/home")) {

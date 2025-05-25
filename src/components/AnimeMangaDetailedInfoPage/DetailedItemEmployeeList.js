@@ -58,7 +58,12 @@ function DetailedItemEmployeeList(props) {
             item.staff
               .slice(0, 6)
               .map((employee, index) => (
-                <Employee key={index} employee={employee} />
+                <Employee
+                  key={index}
+                  employee={employee}
+                  coverImg={item.coverImg}
+                  title={item.title}
+                />
               ))
           ) : (
             <Typography sx={{ fontSize: { xs: "0.95rem", sm: "1.1rem" } }}>

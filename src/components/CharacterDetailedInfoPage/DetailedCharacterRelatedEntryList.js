@@ -20,6 +20,8 @@ function DetailedCharacterRelatedEntryList(props) {
     setValue(newValue);
   };
 
+  console.log("Character related Entries: ", item.relatedEntries);
+
   return (
     <CustomPaddingLayout
       sx={{
