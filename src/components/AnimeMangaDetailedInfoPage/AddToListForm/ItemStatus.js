@@ -5,7 +5,7 @@ import {
   ListItemText,
   MenuItem,
   TextField,
-  Typography,
+  // Typography,
 } from "@mui/material";
 import { useState } from "react";
 import KeyboardArrowRightIcon from "@mui/icons-material/KeyboardArrowRight";
@@ -19,23 +19,9 @@ function ItemStatus(props) {
 
   const getStatusOptionList = () => {
     if (animeId) {
-      return [
-        "Watching",
-        "Plan to watch",
-        "Completed",
-        "Rewatching",
-        "Paused",
-        "Dropped",
-      ];
+      return ["Watching", "Completed", "On Hold", "Dropped", "Plan to Watch"];
     } else if (mangaId) {
-      return [
-        "Reading",
-        "Plan to read",
-        "Completed",
-        "Rereading",
-        "Paused",
-        "Dropped",
-      ];
+      return ["Reading", "Completed", "On Hold", "Dropped", "Plan to Read"];
     }
   };
 

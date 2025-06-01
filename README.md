@@ -1,6 +1,6 @@
 # The Vault FE
 
-Latest update: **25 May 2025**
+Latest update: **1 June 2025**
 
 ## Description
 
@@ -55,7 +55,9 @@ The vault is a personal project. It's a website for anime/manga lovers that allo
 - [x] In Recommendations tab, anime/manga cards don't have the same height
 - [ ] On mobile screens, hover/click on the Profile icon, no modal (Profile & Log Out) appears
 - [ ] On Footer, Login & Register are still available after successful registration
-- [ ] Update responsive layouts on all device screens
+- [x] Update responsive layouts of detailed anime/manga pages on all device screens
+- [ ] Fill in the Add To List form and then save. However, nothing happens
+- [ ] Press Write Review button, but the route was broken
 
 ## Future features
 
@@ -64,3 +66,4 @@ The vault is a personal project. It's a website for anime/manga lovers that allo
 - [ ] Update User Profile page
 - [x] Add img to all animes, mangas, and users
 - [x] Add debounce to search feature
+- [ ] Refine UX/UI of all pages

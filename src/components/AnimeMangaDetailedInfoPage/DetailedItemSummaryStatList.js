@@ -6,7 +6,7 @@ import { useMemo } from "react";
 function DetailedItemSummaryStatList(props) {
   const { item, tabValue, setTabValue } = props;
 
-  const getNewStatObj = useMemo(() => {
+  const getNewStatsObj = useMemo(() => {
     const newStatObj = {};
     if (item.format === "TV") {
       newStatObj["Watching"] = Object.entries(item.stats)[0][1];
@@ -67,8 +67,8 @@ function DetailedItemSummaryStatList(props) {
         )}
 
         <Box sx={{ display: "flex", flexDirection: "column", gap: "6px" }}>
-          {Object.entries(getNewStatObj).length > 0 ? (
-            Object.entries(getNewStatObj).map((stat, index) => (
+          {Object.entries(getNewStatsObj).length > 0 ? (
+            Object.entries(getNewStatsObj).map((stat, index) => (
               <Box
                 key={index}
                 sx={{

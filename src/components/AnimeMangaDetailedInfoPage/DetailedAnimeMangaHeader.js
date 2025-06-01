@@ -145,7 +145,7 @@ function DetailedAnimeMangaHeader({ item }) {
               }}
             >
               <CustomDetailedItemButton onClick={handleOpenAddToList}>
-                Add to list
+                Add to collection
               </CustomDetailedItemButton>
               <CustomDetailedItemButton onClick={handleOpenReview}>
                 Write review
