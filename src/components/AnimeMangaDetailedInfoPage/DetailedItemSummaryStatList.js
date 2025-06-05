@@ -9,19 +9,19 @@ function DetailedItemSummaryStatList(props) {
   const getNewStatsObj = useMemo(() => {
     const newStatObj = {};
     if (item.format === "TV") {
-      newStatObj["Watching"] = Object.entries(item.stats)[0][1];
-      newStatObj["Completed"] = Object.entries(item.stats)[1][1];
-      newStatObj["On-hold"] = Object.entries(item.stats)[2][1];
-      newStatObj["Dropped"] = Object.entries(item.stats)[3][1];
-      newStatObj["Plan to watch"] = Object.entries(item.stats)[4][1];
-      newStatObj["Total"] = Object.entries(item.stats)[5][1];
+      newStatObj["Watching"] = item.stats?.watching;
+      newStatObj["Completed"] = item.stats?.completed;
+      newStatObj["On-hold"] = item.stats?.onHold;
+      newStatObj["Dropped"] = item.stats?.dropped;
+      newStatObj["Plan to watch"] = item.stats?.planToWatch;
+      newStatObj["Total"] = item.stats?.total;
     } else if (item.format === "Manga") {
-      newStatObj["Reading"] = Object.entries(item.stats)[0][1];
-      newStatObj["Completed"] = Object.entries(item.stats)[1][1];
-      newStatObj["On-hold"] = Object.entries(item.stats)[2][1];
-      newStatObj["Dropped"] = Object.entries(item.stats)[3][1];
-      newStatObj["Plan to read"] = Object.entries(item.stats)[4][1];
-      newStatObj["Total"] = Object.entries(item.stats)[5][1];
+      newStatObj["Reading"] = item.stats?.reading;
+      newStatObj["Completed"] = item.stats?.completed;
+      newStatObj["On-hold"] = item.stats?.onHold;
+      newStatObj["Dropped"] = item.stats?.dropped;
+      newStatObj["Plan to read"] = item.stats?.planToRead;
+      newStatObj["Total"] = item.stats?.total;
     }
 
     return newStatObj;
@@ -67,7 +67,7 @@ function DetailedItemSummaryStatList(props) {
         )}
 
         <Box sx={{ display: "flex", flexDirection: "column", gap: "6px" }}>
-          {Object.entries(getNewStatsObj).length > 0 ? (
+          {item.stats && Object.entries(getNewStatsObj).length > 0 ? (
             Object.entries(getNewStatsObj).map((stat, index) => (
               <Box
                 key={index}
