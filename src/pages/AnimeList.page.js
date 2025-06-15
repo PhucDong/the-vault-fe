@@ -1,4 +1,4 @@
-import { Box } from "@mui/material";
+import { Box, useMediaQuery } from "@mui/material";
 import ItemCategory from "../components/VisitorPage/ItemCategory";
 import { useSelector } from "react-redux";
 import ItemCard from "../components/VisitorPage/ItemCard";
@@ -27,8 +27,9 @@ function AnimeListPage() {
   const genreOptionList = useSelector((state) => state.anime.genreOptionList);
   const studioOption = useSelector((state) => state.anime.studioOption);
   const searchValue = useSelector((state) => state.anime.searchValue);
-
-  console.log("Anine result list: ", animeSearchResultList);
+  const isMediumScreenWidthAndAbove = useMediaQuery((theme) =>
+    theme.breakpoints.up("md")
+  );
 
   useEffect(() => {
     if (!animeSearchResultList) {
@@ -83,6 +84,7 @@ function AnimeListPage() {
         display: animeSearchResultList ? "block" : "flex",
         flexDirection: "column",
         gap: { xs: "48px", md: "60px" },
+        marginBottom: isMediumScreenWidthAndAbove ? 0 : "72px",
       }}
     >
       {categorizedAnimeList?.length > 0 ? (

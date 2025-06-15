@@ -5,6 +5,7 @@ import * as userSliceActions from "../store/slices/user/userSlice";
 import * as animeSliceActions from "../store/slices/anime/animeSlice";
 import * as mangaSliceActions from "../store/slices/manga/mangaSlice";
 import * as reviewSliceActions from "../store/slices/review/reviewSlice";
+import * as collectionSliceActions from "../store/slices/collection/collectionSlice";
 
 export const useAppSelector = (selector) => useSelector(selector);
 
@@ -31,4 +32,9 @@ export const useMangaAppDispatch = () => {
 export const useReviewAppDispatch = () => {
   const dispatch = useDispatch();
   return bindActionCreators(reviewSliceActions, dispatch);
+};
+
+export const useCollectionDispatch = () => {
+  const dispatch = useDispatch();
+  return bindActionCreators(collectionSliceActions, dispatch);
 };

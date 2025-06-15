@@ -2,23 +2,38 @@ import { Box, Button, Typography } from "@mui/material";
 import CustomPaddingLayout from "../common/CustomPaddingLayout";
 import ThumbUpIcon from "@mui/icons-material/ThumbUp";
 import ThumbDownIcon from "@mui/icons-material/ThumbDown";
+import { RichTextReadOnly } from "mui-tiptap";
+import truncate from "html-truncate";
+import useExtensions from "../../hooks/useExtensions";
 
 function DetailedReviewContent(props) {
   const { item } = props;
 
+  const extensions = useExtensions({
+    placeholder: "Add your own content here...",
+  });
+
   return (
     <CustomPaddingLayout>
-      <Box sx={{ display: "flex", flexDirection: "column", gap: "32px" }}>
-        {/* Review content */}
-        <Typography
-          sx={{
-            lineHeight: { xs: 1.5 },
-            color: "primary.main",
+      <Box
+        sx={{
+          display: "flex",
+          flexDirection: "column",
+          gap: "32px",
+
+          "& .MuiTiptap-RichTextContent-root .ProseMirror p": {
             fontSize: { xs: "1rem", md: "1.1rem" },
-          }}
-        >
-          {item.text}
-        </Typography>
+            color: "primary.main",
+            fontWeight: 550,
+            lineHeight: 1.5,
+          },
+        }}
+      >
+        {/* Review content */}
+        <RichTextReadOnly
+          content={truncate(item.text)}
+          extensions={extensions}
+        />
 
         {/* Score */}
         <Box
@@ -74,12 +89,14 @@ function DetailedReviewContent(props) {
           >
             <Button onClick={() => console.log("Liked!")}>
               <ThumbUpIcon sx={{ color: "info.main" }} />
-              <Typography sx={{ color: "info.main" }}>{item.likes}</Typography>
+              <Typography sx={{ color: "info.main" }}>
+                {item.likes.length}
+              </Typography>
             </Button>
             <Button onClick={() => console.log("Disliked!")}>
               <ThumbDownIcon sx={{ color: "error.main" }} />
               <Typography sx={{ color: "error.main" }}>
-                {item.dislikes}
+                {item.dislikes.length}
               </Typography>
             </Button>
           </Box>

@@ -1,5 +1,6 @@
 import { Box, InputLabel, TextField } from "@mui/material";
 import React from "react";
+import AddToListFormLabel from "./AddToListFormLabel";
 
 function ItemNotes(props) {
   const { itemNotes, setItemNotes, sx } = props;
@@ -8,17 +9,7 @@ function ItemNotes(props) {
 
   return (
     <Box sx={sx}>
-      <InputLabel
-        htmlFor="item-notes"
-        sx={{
-          color: "#70787a",
-          fontWeight: 600,
-          fontSize: { xs: "0.875rem", md: "1rem" },
-          marginBottom: "4px",
-        }}
-      >
-        Notes
-      </InputLabel>
+      <AddToListFormLabel htmlFor="item-notes">Notes</AddToListFormLabel>
       <TextField
         fullWidth
         id="item-notes"

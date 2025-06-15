@@ -1,4 +1,4 @@
-import { Box } from "@mui/material";
+import { Box, useMediaQuery } from "@mui/material";
 import ItemCategory from "../components/VisitorPage/ItemCategory";
 import { useSelector } from "react-redux";
 import ItemCard from "../components/VisitorPage/ItemCard";
@@ -25,6 +25,9 @@ function MangaListPage() {
   );
   const genreOptionList = useSelector((state) => state.manga.genreOptionList);
   const searchValue = useSelector((state) => state.manga.searchValue);
+  const isMediumScreenWidthAndAbove = useMediaQuery((theme) =>
+    theme.breakpoints.up("md")
+  );
 
   useEffect(() => {
     if (mangaSearchResultList) {
@@ -66,6 +69,7 @@ function MangaListPage() {
         display: mangaSearchResultList ? "block" : "flex",
         flexDirection: "column",
         gap: { xs: "48px", md: "60px" },
+        marginBottom: isMediumScreenWidthAndAbove ? 0 : "72px",
       }}
     >
       {categorizedMangaList && categorizedMangaList.length > 0 ? (

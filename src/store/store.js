@@ -16,6 +16,7 @@ import authenticationReducer from "./slices/authentication/authenticationSlice";
 import animeReducer from "./slices/anime/animeSlice";
 import mangaReducer from "./slices/manga/mangaSlice";
 import reviewReducer from "./slices/review/reviewSlice";
+import collectionReducer from "./slices/collection/collectionSlice";
 import autoMergeLevel2 from "redux-persist/es/stateReconciler/autoMergeLevel2";
 import { isSessionActive } from "../utils/sessionUtils";
 
@@ -106,7 +107,7 @@ const persistConfig = {
   key: "root",
   storage,
   whitelist: isSessionActive()
-    ? ["anime", "manga", "authentication", "user", "review"]
+    ? ["anime", "manga", "authentication", "user", "review", "collection"]
     : [],
   transforms: [userTransform, authTransform, reviewTransform],
   stateReconciler: autoMergeLevel2,
@@ -119,6 +120,7 @@ const rootReducer = combineReducers({
   anime: animeReducer,
   manga: mangaReducer,
   review: reviewReducer,
+  collection: collectionReducer
 });
 
 // 3. Wrap the Reducer with persistReducer

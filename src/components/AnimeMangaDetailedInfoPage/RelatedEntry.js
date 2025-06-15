@@ -2,7 +2,6 @@ import { Box, Typography } from "@mui/material";
 
 function RelatedEntry(props) {
   const { item } = props;
-  console.log("RelatedEntry", item);
 
   return (
     <Box

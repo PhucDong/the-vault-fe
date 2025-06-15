@@ -4,6 +4,7 @@ import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import dayjs from "dayjs";
 import { useState } from "react";
 import KeyboardArrowRightIcon from "@mui/icons-material/KeyboardArrowRight";
+import AddToListFormLabel from "./AddToListFormLabel";
 
 function ItemFinishDate(props) {
   const { itemFinishDate, setItemFinishDate, sx } = props;
@@ -27,17 +28,9 @@ function ItemFinishDate(props) {
 
   return (
     <Box sx={sx}>
-      <InputLabel
-        htmlFor="item-finish-date-option"
-        sx={{
-          color: "#70787a",
-          fontWeight: 600,
-          fontSize: { xs: "0.875rem", md: "1rem" },
-          marginBottom: "4px",
-        }}
-      >
+      <AddToListFormLabel htmlFor="item-finish-date-option">
         Finish Date
-      </InputLabel>
+      </AddToListFormLabel>
       <LocalizationProvider dateAdapter={AdapterDayjs}>
         <DatePicker
           views={["year", "month", "day"]}

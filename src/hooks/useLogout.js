@@ -1,6 +1,7 @@
 import {
   useAnimeAppDispatch,
   useAuthAppDispatch,
+  useCollectionDispatch,
   useMangaAppDispatch,
   useReviewAppDispatch,
   useUserAppDispatch,
@@ -10,6 +11,7 @@ const useLogout = () => {
   const { resetUserState } = useUserAppDispatch();
   const { resetReviewState } = useReviewAppDispatch();
   const { resetAuthState } = useAuthAppDispatch();
+  const { resetCollectionState } = useCollectionDispatch();
   const { clearAllAnimeFilter } = useAnimeAppDispatch();
   const { clearAllMangaFilter } = useMangaAppDispatch();
 
@@ -17,6 +19,7 @@ const useLogout = () => {
     resetUserState();
     resetReviewState();
     resetAuthState();
+    resetCollectionState();
     clearAllAnimeFilter();
     clearAllMangaFilter();
     localStorage.clear();

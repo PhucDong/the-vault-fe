@@ -1,6 +1,6 @@
 # The Vault FE
 
-Latest update: **1 June 2025**
+Latest update: **15 June 2025**
 
 ## Description
 
@@ -49,6 +49,7 @@ The vault is a personal project. It's a website for anime/manga lovers that allo
   - Mangas: genres, year, & publishing status
 - Next destination after registering
   - Lead users to their Home Page
+- Datepickers: enable finishDate has to be selected behind startDate
 
 ## Bugs
 

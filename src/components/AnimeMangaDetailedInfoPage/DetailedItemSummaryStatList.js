@@ -25,7 +25,17 @@ function DetailedItemSummaryStatList(props) {
     }
 
     return newStatObj;
-  }, [item.format]);
+  }, [
+    item.format,
+    item.stats?.completed,
+    item.stats?.dropped,
+    item.stats?.onHold,
+    item.stats?.planToRead,
+    item.stats?.planToWatch,
+    item.stats?.reading,
+    item.stats?.total,
+    item.stats?.watching,
+  ]);
 
   return (
     <CustomPaddingLayout

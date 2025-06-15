@@ -1,7 +1,7 @@
 import { Button, Typography } from "@mui/material";
 import { useEffect, useState } from "react";
 import CustomPaddingLayout from "../components/common/CustomPaddingLayout";
-import { useNavigate, useParams } from "react-router-dom";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 import apiService from "../services/apiService";
 import { useSelector } from "react-redux";
 import ReviewFormat from "../components/ReviewEditorPage/ReviewFormat";
@@ -39,6 +39,8 @@ function ReviewEditorPage() {
     (state) => state.user.currentUserId
   );
   const registeredAccessToken = useSelector((state) => state.user.accessToken);
+  const location = useLocation();
+  const from = location.state?.from;
 
   const handlePostUserReview = async () => {
     apiService.defaults.headers.common.Authorization = `Bearer ${
@@ -115,7 +117,7 @@ function ReviewEditorPage() {
   };
 
   useEffect(() => {
-    if (!reviewId) {
+    if (from?.pathname === "/home") {
       updateReview({});
       updateText("");
       updateTitle("");
@@ -125,25 +127,27 @@ function ReviewEditorPage() {
       return;
     }
 
-    let isMounted = true;
-    const fetchReview = async () => {
-      try {
-        const response = await apiService.get(`/reviews/${reviewId}`);
-        if (isMounted) {
+    // let isMounted = true;
+    if (reviewId) {
+      const fetchReview = async () => {
+        try {
+          const response = await apiService.get(`/reviews/${reviewId}`);
+          // if (isMounted) {
           updateReview(response.review);
           updateText(response.review.text);
           updateScore(response.review.score);
           updateTitle(response.review.title);
-        } // Prevents state updates after unmount
-      } catch (error) {
-        console.error(error);
-      }
-    };
+          // }
+        } catch (error) {
+          console.error(error);
+        }
+      };
 
-    fetchReview();
-    return () => {
-      isMounted = false;
-    };
+      fetchReview();
+    }
+    // return () => {
+    //   isMounted = false;
+    // };
   }, [reviewId]);
 
   useEffect(() => {

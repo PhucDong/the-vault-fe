@@ -52,10 +52,10 @@ const router = createBrowserRouter(
           path={`${BASE_ROOT.review}/editor/:reviewId`}
           element={<ReviewEditorPage />}
         />
-        <Route
+        {/* <Route
           path={`${BASE_ROOT.review}/:reviewId`}
           element={<ReviewDetailedInfoPage />}
-        />
+        /> */}
       </Route>
 
       <Route element={<MainLayout />}>
@@ -93,6 +93,11 @@ const router = createBrowserRouter(
         <Route
           path="employees/:employeeId"
           element={<EmployeeDetailedInfoPage />}
+        />
+
+        <Route
+          path={`${BASE_ROOT.review}/:reviewId`}
+          element={<ReviewDetailedInfoPage />}
         />
 
         <Route element={<RegisterLogInLayout />}>

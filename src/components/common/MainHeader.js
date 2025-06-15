@@ -4,13 +4,15 @@ import HomeIcon from "@mui/icons-material/Home";
 import LoginIcon from "@mui/icons-material/Login";
 import PersonIcon from "@mui/icons-material/Person";
 import CustomPaddingLayout from "./CustomPaddingLayout";
-import { Box, Typography, useMediaQuery } from "@mui/material";
+import { Box, Menu, MenuItem, Typography, useMediaQuery } from "@mui/material";
 import { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { CustomStyledNavBarItem } from "./CustomStyledNavBarItem";
 import ProfileNavBarItem from "../HomePage/ProfileNavBarItem";
 import useUser from "../../hooks/useUser";
 import { useSelector } from "react-redux";
+import profileDropdownMenuList from "../../utils/profileDropdownMenuList";
+import useLogout from "../../hooks/useLogout";
 
 function MainHeader(props) {
   const { setNavHeight } = props;
@@ -24,8 +26,19 @@ function MainHeader(props) {
   const userProfilePic = useSelector(
     (state) => state.authentication.profilePic
   );
+  const [anchorEl, setAnchorEl] = useState(null);
+  const open = Boolean(anchorEl);
+  const { logout } = useLogout();
 
-  const handleChangeIsNavBarItemActive = (navBarItem) => {
+  const handleCloseProfileDropdownMenu = () => {
+    setAnchorEl(null);
+  };
+
+  const handleOpenProfileDropdownMenu = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handleChangeIsNavBarItemActive = (navBarItem, event) => {
     if (navBarItem === "Home") {
       if (isTokenExpired.tokenExpiryStatus === false) {
         navigate("/home", { state: { prevPathName: location.pathname } });
@@ -38,6 +51,8 @@ function MainHeader(props) {
       navigate("/mangas", { state: { prevPathName: location.pathname } });
     } else if (navBarItem === "Log In") {
       navigate("/login", { state: { prevPathName: location.pathname } });
+    } else if (navBarItem === "Profile") {
+      handleOpenProfileDropdownMenu(event);
     }
     setNavBarItem(navBarItem);
   };
@@ -60,8 +75,16 @@ function MainHeader(props) {
     }
   };
 
+  const handleClickProfileDropdownMenuItem = (item) => {
+    if (item === "Profile") {
+      navigate("/home/me");
+    } else if (item === "Log out") {
+      logout();
+      navigate("/");
+    }
+  };
+
   useEffect(() => {
-    console.log("Location pathname: ", location.pathname);
     if (
       location.pathname.startsWith("/animes") ||
       location.pathname.startsWith("/search/animes")
@@ -114,7 +137,9 @@ function MainHeader(props) {
             <CustomStyledNavBarItem
               key={item.label}
               isNavBarItemActive={navBarItem === item.label}
-              onClick={() => handleChangeIsNavBarItemActive(item.label)}
+              onClick={(event) =>
+                handleChangeIsNavBarItemActive(item.label, event)
+              }
             >
               {item.icon}
               <Typography>{item.label}</Typography>
@@ -133,7 +158,12 @@ function MainHeader(props) {
               </CustomStyledNavBarItem>
 
               {/* Anime & Manga */}
-              <Box sx={{ display: "flex", gap: { xs: "8px", md: "32px" } }}>
+              <Box
+                sx={{
+                  display: "flex",
+                  gap: { xs: "8px", md: "20px", lg: "32px" },
+                }}
+              >
                 {["Anime", "Manga"].map((item) => (
                   <CustomStyledNavBarItem
                     key={item}
@@ -160,6 +190,67 @@ function MainHeader(props) {
             )}
           </>
         )}
+
+        <Menu
+          id="mobile-profile-dropdown-menu"
+          aria-labelledby="mobile-profile-dropdown-menu"
+          anchorEl={anchorEl}
+          open={open}
+          onClose={handleCloseProfileDropdownMenu}
+          anchorOrigin={{
+            vertical: "top",
+            horizontal: "right",
+          }}
+          transformOrigin={{
+            vertical: "bottom",
+            horizontal: "right",
+          }}
+          disableScrollLock
+          sx={{
+            "& .MuiMenu-list": {
+              display: "flex",
+              flexDirection: "column",
+              padding: 0,
+            },
+            "& .MuiMenuItem-root": {
+              color: "primary.light",
+              backgroundColor: "transparent",
+
+              "&:hover": {
+                color: "primary.main",
+                backgroundColor: "transparent",
+              },
+
+              "&.Mui-selected": {
+                color: "info.main",
+              },
+            },
+          }}
+        >
+          {profileDropdownMenuList.map((item) => (
+            <MenuItem
+              key={item.label}
+              sx={{
+                padding: "8px 16px",
+                display: "flex",
+                gap: "4px",
+                alignItems: "center",
+
+                "& .MuiSvgIcon-root": {
+                  fontSize: { md: "1.6rem", lg: "1.8rem" },
+                },
+                "& .MuiTypography-root": {
+                  fontWeight: 550,
+                  fontSize: { md: "1.1rem" },
+                },
+              }}
+              onClick={() => handleClickProfileDropdownMenuItem(item.label)}
+            >
+              {item.icon}
+              <Typography>{item.label}</Typography>
+            </MenuItem>
+          ))}
+        </Menu>
       </Box>
     </CustomPaddingLayout>
   );

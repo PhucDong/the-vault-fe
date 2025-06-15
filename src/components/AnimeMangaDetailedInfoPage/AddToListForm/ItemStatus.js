@@ -10,6 +10,8 @@ import {
 import { useState } from "react";
 import KeyboardArrowRightIcon from "@mui/icons-material/KeyboardArrowRight";
 import { useLocation, useParams } from "react-router-dom";
+import { Add } from "@mui/icons-material";
+import AddToListFormLabel from "./AddToListFormLabel";
 
 function ItemStatus(props) {
   const { itemStatusOption, setItemStatusOption, sx } = props;
@@ -19,9 +21,9 @@ function ItemStatus(props) {
 
   const getStatusOptionList = () => {
     if (animeId) {
-      return ["Watching", "Completed", "On Hold", "Dropped", "Plan to Watch"];
+      return ["Watching", "Completed", "On Hold", "Dropped", "Plan To Watch"];
     } else if (mangaId) {
-      return ["Reading", "Completed", "On Hold", "Dropped", "Plan to Read"];
+      return ["Reading", "Completed", "On Hold", "Dropped", "Plan To Read"];
     }
   };
 
@@ -38,17 +40,9 @@ function ItemStatus(props) {
 
   return (
     <Box sx={sx}>
-      <InputLabel
-        htmlFor="item-status-option"
-        sx={{
-          color: "#70787a",
-          fontWeight: 600,
-          fontSize: { xs: "0.875rem", md: "1rem" },
-          marginBottom: "4px",
-        }}
-      >
+      <AddToListFormLabel htmlFor="item-status-option">
         Status
-      </InputLabel>
+      </AddToListFormLabel>
       <TextField
         id="item-status-option"
         required

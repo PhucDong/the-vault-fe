@@ -3,8 +3,6 @@ import { useNavigate } from "react-router-dom";
 
 function ItemCard({ item, format }) {
   const navigate = useNavigate();
-  // console.log("Card img: ", item.cardImg);
-  console.log("Item format: ", format);
 
   return (
     <Box

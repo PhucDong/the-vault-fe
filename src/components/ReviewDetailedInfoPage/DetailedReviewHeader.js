@@ -43,17 +43,34 @@ function DetailedReviewHeader(props) {
       {/* Cover image of anime */}
       <Box
         sx={{
-          height: { xs: "180px", sm: "220px", md: "260px", lg: "300px" },
-          backgroundColor: "#D9D9D9",
+          width: "100%",
+          aspectRatio: {
+            xs: "16 / 7",
+            sm: "14 / 6",
+            md: "14 / 5",
+            xl: "16 / 5",
+          },
         }}
-      ></Box>
+      >
+        <img
+          src={item.targetId.coverImg}
+          alt={item.targetId.title}
+          style={{ display: "block", width: "100%", height: "100%" }}
+        />
+      </Box>
 
       {/* Profile image, title, descriptio, & buttons */}
       <CustomPaddingLayout
         sx={{
           width: "100%",
           position: "absolute",
-          top: { xs: "120px", sm: "152px", md: "192px", lg: "232px" },
+          top: {
+            xs: "120px",
+            sm: "196px",
+            md: "260px",
+            lg: "368px",
+            xl: "424px",
+          },
           left: 0,
           display: { xs: "flex" },
           flexDirection: { xs: "column" },
@@ -64,11 +81,16 @@ function DetailedReviewHeader(props) {
         {/* Avatar */}
         <Box
           sx={{
-            width: { xs: "152px", sm: "24%", xl: "20%" },
+            width: { xs: "132px", sm: "140px", md: "148px" },
             aspectRatio: { xs: "4/5", xl: "5/6" },
-            backgroundColor: "#ABABAB",
           }}
-        ></Box>
+        >
+          <img
+            src={item.author.profilePic}
+            alt={item.author.username}
+            style={{ width: "100%", height: "100%" }}
+          />
+        </Box>
 
         {/* Title, author */}
         <Box

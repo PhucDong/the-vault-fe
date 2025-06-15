@@ -1,4 +1,4 @@
-import { Box } from "@mui/material";
+import { Box, useMediaQuery } from "@mui/material";
 import { Navigate } from "react-router-dom";
 import CustomPaddingLayout from "../components/common/CustomPaddingLayout";
 import SearchBar from "../components/common/SearchBar";
@@ -8,10 +8,15 @@ import useUser from "../hooks/useUser";
 
 function HomePage() {
   const { isTokenExpired } = useUser();
+  const isMediumScreenWidthAndAbove = useMediaQuery((theme) =>
+    theme.breakpoints.up("md")
+  );
 
   if (isTokenExpired.tokenExpiryStatus === false) {
     return (
-      <CustomPaddingLayout>
+      <CustomPaddingLayout
+        sx={{ marginBottom: isMediumScreenWidthAndAbove ? 0 : "72px" }}
+      >
         <Box
           sx={{
             marginTop: { xs: "24px", sm: "32px", md: "52px", lg: "72px" },

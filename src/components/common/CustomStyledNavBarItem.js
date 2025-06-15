@@ -33,12 +33,12 @@ export const CustomStyledNavBarItem = styled(Box, {
     flexDirection: "row",
     cursor: "pointer",
     "& .MuiTypography-root": {
-      fontSize: navBarItem ? "2rem" : "1.2rem",
+      fontSize: navBarItem ? "2rem" : "1.1rem",
     },
   },
   [theme.breakpoints.up("lg")]: {
     "& .MuiTypography-root": {
-      fontSize: navBarItem ? "2rem" : "1.2rem",
+      fontSize: navBarItem ? "2rem" : "1.275rem",
     },
   },
 }));

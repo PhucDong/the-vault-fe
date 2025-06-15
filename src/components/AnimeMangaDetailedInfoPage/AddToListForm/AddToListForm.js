@@ -1,19 +1,68 @@
 import { Box, Button, Modal, Typography } from "@mui/material";
 import ItemStatus from "./ItemStatus";
 import { useState } from "react";
-import dayjs from "dayjs";
-import ItemStateDate from "./ItemStateDate";
+import ItemStartDate from "./ItemStartDate";
 import ItemFinishDate from "./ItemFinishDate";
 import ItemNotes from "./ItemNotes";
+import useUser from "../../../hooks/useUser";
+import { useCollectionDispatch } from "../../../services/hooks";
+import dayjs from "dayjs";
+import AddToListFormButton from "./AddToListFormButton";
 
 function AddToListForm(props) {
-  const { openAddToList, setOpenAddToList, itemTitle } = props;
+  const { openAddToList, setOpenAddToList, item, savedCollection } = props;
+  console.log("14, Item: ", item);
   const handleCloseAddToListModal = () => setOpenAddToList(false);
+  const { isTokenExpired } = useUser();
+  const { createCollection, updateCollection, deleteCollection } =
+    useCollectionDispatch();
 
-  const [itemStatusOption, setItemStatusOption] = useState("");
-  const [itemStartDate, setItemStartDate] = useState(null);
-  const [itemFinishDate, setItemFinishDate] = useState(null);
-  const [itemNotes, setItemNotes] = useState("");
+  const [itemStatusOption, setItemStatusOption] = useState(
+    savedCollection?.status || ""
+  );
+  const [itemStartDate, setItemStartDate] = useState(
+    dayjs(savedCollection?.startDate) || null
+  );
+  const [itemFinishDate, setItemFinishDate] = useState(
+    dayjs(savedCollection?.endDate) || null
+  );
+  const [itemNotes, setItemNotes] = useState(savedCollection?.notes || "");
+
+  const handleSaveCollection = async () => {
+    if (savedCollection) {
+      updateCollection({
+        collectionId: savedCollection._id,
+        status: itemStatusOption,
+        startDate: itemStartDate,
+        endDate: itemFinishDate,
+        notes: itemNotes,
+      });
+    } else {
+      createCollection({
+        format: `${item.format === "TV" ? "Animes" : "Mangas"}`,
+        itemId: item.id,
+        userId: isTokenExpired.currentUserId,
+        status: itemStatusOption,
+        startDate: itemStartDate,
+        endDate: itemFinishDate,
+        notes: itemNotes,
+      });
+    }
+
+    setOpenAddToList(false);
+  };
+
+  const handleDeleteCollection = async () => {
+    console.log("Delete collection!");
+
+    if (savedCollection) {
+      deleteCollection({
+        collectionId: savedCollection._id,
+      });
+    }
+
+    setOpenAddToList(false);
+  };
 
   return (
     <Modal
@@ -32,25 +81,32 @@ function AddToListForm(props) {
           bgcolor: "background.paper",
           borderRadius: "8px",
           boxShadow: 24,
-          p: 4,
-          "& .MuiTypography-root": {
-            lineHeight: 1.35,
-            marginBottom: "20px",
-            fontSize: { xs: "1.1rem", sm: "1.2rem" },
-            fontWeight: 550,
+          padding: {
+            xs: "20px",
+            sm: "24px",
+            md: "28px",
+            lg: "32px",
+            xl: "36px",
           },
+          // "& .MuiTypography-root": {
+          //   lineHeight: 1.35,
+          //   marginBottom: "20px",
+          //   fontSize: { xs: "1.1rem", sm: "1.2rem" },
+          //   fontWeight: 550,
+          // },
         }}
       >
         <Typography
           id="addToList-modal-title"
           sx={{
-            fontSize: "1.5rem",
-            fontWeight: 600,
+            fontSize: { xs: "1.3rem", md: "1.4rem", lg: "1.5rem" },
+            lineHeight: 1.25,
+            fontWeight: 550,
             textAlign: { xs: "left", md: "center" },
-            marginBottom: "32px",
+            marginBottom: { xs: "20px" },
           }}
         >
-          {itemTitle}
+          {item.title}
         </Typography>
 
         <Box sx={{ display: "flex", flexDirection: "column", gap: "16px" }}>
@@ -59,7 +115,7 @@ function AddToListForm(props) {
             setItemStatusOption={setItemStatusOption}
           />
 
-          <ItemStateDate
+          <ItemStartDate
             itemStartDate={itemStartDate}
             setItemStartDate={setItemStartDate}
           />
@@ -71,20 +127,23 @@ function AddToListForm(props) {
 
           <ItemNotes itemNotes={itemNotes} setItemNotes={setItemNotes} />
 
-          <Button
+          <Box
             sx={{
-              lineHeight: "100%",
-              padding: { xs: "8px 12px", sm: "8px 16px", md: "12px 20px" },
-              textTransform: "capitalize",
-              fontSize: { xs: "1.1rem", sm: "1.2rem" },
-              width: { xs: "100%" },
-              backgroundColor: "info.main",
-              color: "#fff",
+              display: "flex",
+              flexDirection: { xs: "column", md: "row" },
+              gap: "4px",
             }}
-            onClick={() => console.log("Saved!")}
           >
-            Save
-          </Button>
+            <AddToListFormButton onClick={handleSaveCollection}>
+              Save
+            </AddToListFormButton>
+
+            {savedCollection && (
+              <AddToListFormButton onClick={handleDeleteCollection}>
+                Delete
+              </AddToListFormButton>
+            )}
+          </Box>
         </Box>
       </Box>
     </Modal>

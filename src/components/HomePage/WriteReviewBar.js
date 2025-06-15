@@ -1,8 +1,9 @@
 import { Box, TextField } from "@mui/material";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 
 function WriteReviewBar() {
   const navigate = useNavigate();
+  const location = useLocation();
 
   return (
     <Box>
@@ -31,7 +32,11 @@ function WriteReviewBar() {
             },
           },
         }}
-        onClick={() => navigate("/home/reviews/editor")}
+        onClick={() =>
+          navigate("/home/reviews/editor", {
+            state: { from: location }, // save current location
+          })
+        }
       />
     </Box>
   );

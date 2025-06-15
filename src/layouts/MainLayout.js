@@ -3,11 +3,13 @@ import { Outlet, useLocation, useParams } from "react-router-dom";
 import MainHeader from "../components/common/MainHeader";
 import MainFooter from "../components/common/MainFooter";
 import { useState } from "react";
+import useUser from "../hooks/useUser";
 
 function MainLayout() {
   const [navHeight, setNavHeight] = useState(0);
   const location = useLocation();
   const { animeId, mangaId } = useParams();
+  const { isTokenExpired } = useUser();
 
   return (
     <Box
@@ -40,7 +42,9 @@ function MainLayout() {
       >
         <Outlet />
       </Box>
-      <MainFooter navHeight={navHeight} />
+      {isTokenExpired.tokenExpiryStatus === true && (
+        <MainFooter navHeight={navHeight} />
+      )}
     </Box>
   );
 }

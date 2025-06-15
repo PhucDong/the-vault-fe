@@ -4,12 +4,12 @@ import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import dayjs from "dayjs";
 import { useState } from "react";
 import KeyboardArrowRightIcon from "@mui/icons-material/KeyboardArrowRight";
+import AddToListFormLabel from "./AddToListFormLabel";
 
-function ItemStateDate(props) {
+function ItemStartDate(props) {
   const { itemStartDate, setItemStartDate, sx } = props;
 
   const handleChangeItemStartDate = (newDate) => {
-    console.log("Start date: ", itemStartDate);
     setItemStartDate(newDate);
   };
 
@@ -26,17 +26,9 @@ function ItemStateDate(props) {
 
   return (
     <Box sx={sx}>
-      <InputLabel
-        htmlFor="item-start-date-option"
-        sx={{
-          color: "#70787a",
-          fontWeight: 600,
-          fontSize: { xs: "0.875rem", md: "1rem" },
-          marginBottom: "4px",
-        }}
-      >
+      <AddToListFormLabel htmlFor="item-start-date-option">
         Start Date
-      </InputLabel>
+      </AddToListFormLabel>
       <LocalizationProvider dateAdapter={AdapterDayjs}>
         <DatePicker
           views={["year", "month", "day"]}
@@ -105,4 +97,4 @@ function ItemStateDate(props) {
   );
 }
 
-export default ItemStateDate;
+export default ItemStartDate;

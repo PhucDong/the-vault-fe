@@ -50,7 +50,7 @@ function DetailedItemReviewList(props) {
             display: "flex",
             flexDirection: { xs: "column", md: "row" },
             flexWrap: { xs: "nowrap", md: "wrap" },
-            justifyContent: "space-between",
+            // justifyContent: "space-between",
             gap: "8px",
           }}
         >

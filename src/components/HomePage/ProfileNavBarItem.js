@@ -4,18 +4,9 @@ import { useAppSelector } from "../../services/hooks";
 import { useSelector } from "react-redux";
 import { selectIsUserLoggedIn } from "../../store/slices/authentication/authenticationSlice";
 import { useState } from "react";
-import PersonIcon from "@mui/icons-material/Person";
-import LogoutIcon from "@mui/icons-material/Logout";
 import { useNavigate } from "react-router-dom";
 import useLogout from "../../hooks/useLogout";
-
-const profileDropdownMenuList = [
-  {
-    icon: <PersonIcon />,
-    label: "Profile",
-  },
-  { icon: <LogoutIcon />, label: "Log out" },
-];
+import profileDropdownMenuList from "../../utils/profileDropdownMenuList";
 
 function ProfileNavBarItem(props) {
   const { userProfilePic } = props;
@@ -46,15 +37,13 @@ function ProfileNavBarItem(props) {
     }
   };
 
-  console.log("User Profile Pic:", userProfilePic);
-
   return (
     <Box>
       <CustomStyledNavBarItem onClick={handleOpenProfileDropdownMenu}>
         <Box
           sx={{
-            width: "44px",
-            height: "44px",
+            width: { md: "44px", lg: "48px", xl: "52px" },
+            height: { md: "44px", lg: "48px", xl: "52px" },
             borderRadius: "50%",
             backgroundColor: userProfilePic ? "" : "#ABABAB",
           }}
@@ -77,8 +66,8 @@ function ProfileNavBarItem(props) {
       </CustomStyledNavBarItem>
 
       <Menu
-        id="profile-positioned-menu"
-        aria-labelledby="profile-positioned-button"
+        id="profile-dropdown-menu"
+        aria-labelledby="profile-dropdown-button"
         anchorEl={anchorEl}
         open={open}
         onClose={handleCloseProfileDropdownMenu}

@@ -8,12 +8,15 @@ import {
 import CustomPaddingLayout from "../common/CustomPaddingLayout";
 import CustomDetailedItemButton from "./CustomDetailedItemButton";
 import ReadMoreButton from "./ReadMoreButton";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import LogInAlertModal from "./LogInAlertModal";
 import { useSelector } from "react-redux";
 import AddToListForm from "./AddToListForm/AddToListForm";
 import { useNavigate } from "react-router-dom";
 import { selectIsUserLoggedIn } from "../../store/slices/authentication/authenticationSlice";
+// import { selectCollectionStatus } from "../../store/slices/collection/collectionSlice";
+import useUser from "../../hooks/useUser";
+import { useReviewAppDispatch } from "../../services/hooks";
 
 function DetailedAnimeMangaHeader({ item }) {
   const isSmallScreenWidthAndAbove = useMediaQuery((theme) =>
@@ -24,6 +27,9 @@ function DetailedAnimeMangaHeader({ item }) {
   const [openLogInAlert, setOpenLogInAlert] = useState(false);
   const [openAddToList, setOpenAddToList] = useState(false);
   const navigate = useNavigate();
+  // const status = useSelector(selectCollectionStatus);
+  const { isTokenExpired } = useUser();
+  const { updateTitle, updateTitleId, updateFormat } = useReviewAppDispatch();
 
   const handleOpenAddToList = () => {
     if (!isUserLoggedIn) {
@@ -37,16 +43,26 @@ function DetailedAnimeMangaHeader({ item }) {
     if (!isUserLoggedIn) {
       setOpenLogInAlert(true);
     } else {
-      navigate("/reviews/editor");
+      updateTitle(item.title);
+      updateTitleId(item._id);
+      updateFormat(item.format === "TV" ? "Anime" : "Manga");
+      navigate("/home/reviews/editor");
     }
   };
+
+  const savedCollection = useMemo(() => {
+    return item.collections.find(
+      (collection) =>
+        collection.itemId === item._id &&
+        collection.userId === isTokenExpired.currentUserId
+    );
+  }, [item._id, isTokenExpired.currentUserId, item.collections]);
 
   return (
     <Box sx={{ position: "relative" }}>
       {/* Cover image of anime */}
       <Box
         sx={{
-          // height: { xs: "180px", sm: "220px", md: "260px", lg: "300px" },
           width: "100%",
           aspectRatio: {
             xs: "16 / 7",
@@ -54,7 +70,6 @@ function DetailedAnimeMangaHeader({ item }) {
             md: "14 / 5",
             xl: "16 / 5",
           },
-          backgroundColor: "#D9D9D9",
         }}
       >
         <img
@@ -145,7 +160,7 @@ function DetailedAnimeMangaHeader({ item }) {
               }}
             >
               <CustomDetailedItemButton onClick={handleOpenAddToList}>
-                Add to collection
+                {savedCollection?.status || "Add to collection"}
               </CustomDetailedItemButton>
               <CustomDetailedItemButton onClick={handleOpenReview}>
                 Write review
@@ -156,8 +171,9 @@ function DetailedAnimeMangaHeader({ item }) {
                 setOpenLogInAlert={setOpenLogInAlert}
               />
               <AddToListForm
-                itemTitle={item.title}
+                item={item}
                 openAddToList={openAddToList}
+                savedCollection={savedCollection}
                 setOpenAddToList={setOpenAddToList}
               />
             </Box>

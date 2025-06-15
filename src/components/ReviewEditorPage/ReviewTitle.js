@@ -6,9 +6,7 @@ import {
   TextField,
 } from "@mui/material";
 import { useAppSelector, useReviewAppDispatch } from "../../services/hooks";
-import {
-  selectReviewTitleList,
-} from "../../store/slices/review/reviewSlice";
+import { selectReviewTitleList } from "../../store/slices/review/reviewSlice";
 import { useState } from "react";
 import KeyboardArrowRightIcon from "@mui/icons-material/KeyboardArrowRight";
 import { useSelector } from "react-redux";
@@ -17,6 +15,7 @@ function ReviewTitle(props) {
   const { errors, setErrors } = props;
   const titleList = useAppSelector(selectReviewTitleList);
   const title = useSelector((state) => state.review.title);
+  console.log("18, Title: ", title);
   const { updateTitle, updateTitleId } = useReviewAppDispatch();
   const [openTitleDropdownMenu, setOpenTitleDropdownMenu] = useState(false);
 
