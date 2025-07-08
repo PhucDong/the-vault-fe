@@ -1,7 +1,6 @@
 import { InputLabel } from "@mui/material";
-import React from "react";
 
-function AddToListFormLabel(props) {
+function AddToCollectionFormLabel(props) {
   const { children, htmlFor } = props;
 
   return (
@@ -19,4 +18,4 @@ function AddToListFormLabel(props) {
   );
 }
 
-export default AddToListFormLabel;
+export default AddToCollectionFormLabel;

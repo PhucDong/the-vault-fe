@@ -1,10 +1,10 @@
-import { Box, InputLabel } from "@mui/material";
+import { Box } from "@mui/material";
 import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import dayjs from "dayjs";
 import { useState } from "react";
 import KeyboardArrowRightIcon from "@mui/icons-material/KeyboardArrowRight";
-import AddToListFormLabel from "./AddToListFormLabel";
+import AddToCollectionFormLabel from "./AddToCollectionFormLabel";
 
 function ItemStartDate(props) {
   const { itemStartDate, setItemStartDate, sx } = props;
@@ -26,9 +26,9 @@ function ItemStartDate(props) {
 
   return (
     <Box sx={sx}>
-      <AddToListFormLabel htmlFor="item-start-date-option">
+      <AddToCollectionFormLabel htmlFor="item-start-date-option">
         Start Date
-      </AddToListFormLabel>
+      </AddToCollectionFormLabel>
       <LocalizationProvider dateAdapter={AdapterDayjs}>
         <DatePicker
           views={["year", "month", "day"]}

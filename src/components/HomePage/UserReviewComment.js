@@ -11,7 +11,7 @@ import apiService from "../../services/apiService";
 import useUser from "../../hooks/useUser";
 import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
 import getReviewDropdownMenu from "../../utils/getReviewDropdownMenu";
-import DeleteAlert from "./DeleteAlert";
+import DeleteAlert from "./DeleteReviewAlert";
 
 dayjs.extend(relativeTime);
 dayjs.extend(updateLocale);

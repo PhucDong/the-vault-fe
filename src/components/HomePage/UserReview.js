@@ -3,7 +3,7 @@ import dayjs from "dayjs";
 import { useSelector } from "react-redux";
 import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
 import { useState } from "react";
-import DeleteAlert from "./DeleteAlert";
+import DeleteReviewAlert from "./DeleteReviewAlert";
 import { NavLink, useNavigate } from "react-router-dom";
 import { RichTextReadOnly } from "mui-tiptap";
 import useExtensions from "../../hooks/useExtensions";
@@ -185,6 +185,7 @@ function UserReview(props) {
                     },
                   },
                 }}
+                onClick={() => console.log("Menu clicked")}
               >
                 {getReviewDropdownMenu().map((item) => (
                   <MenuItem
@@ -212,12 +213,15 @@ function UserReview(props) {
                   </MenuItem>
                 ))}
               </Menu>
-              <DeleteAlert
-                reviewId={review._id}
-                setReviewList={setReviewList}
-                openDeleteAlert={openDeleteAlert}
-                handleCloseDeleteAlert={handleCloseDeleteAlert}
-              />
+
+              {openDeleteAlert && (
+                <DeleteReviewAlert
+                  reviewId={review._id}
+                  setReviewList={setReviewList}
+                  openDeleteAlert={openDeleteAlert}
+                  handleCloseDeleteAlert={handleCloseDeleteAlert}
+                />
+              )}
             </Box>
           )}
         </Box>
@@ -237,7 +241,7 @@ function UserReview(props) {
           >{`${review?.targetType?.substring(
             0,
             review?.targetType?.length - 1
-          )}: ${review?.target?.title}`}</Typography>
+          )}: ${review?.targetId?.title}`}</Typography>
           <Typography>{`Score: ${review?.score}/10`}</Typography>
         </Box>
 
@@ -286,15 +290,6 @@ function UserReview(props) {
                 </NavLink>
               )}
             </Box>
-
-            {/* Image */}
-            {/* <Box
-              sx={{
-                width: "100%",
-                height: "120px",
-                backgroundColor: "#ababab",
-              }}
-            ></Box> */}
           </Box>
 
           {/* REACTION: like, dislike, comment */}

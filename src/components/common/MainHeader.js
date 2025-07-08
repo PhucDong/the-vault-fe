@@ -78,7 +78,9 @@ function MainHeader(props) {
   const handleClickProfileDropdownMenuItem = (item) => {
     if (item === "Profile") {
       navigate("/home/me");
+      handleCloseProfileDropdownMenu();
     } else if (item === "Log out") {
+      handleCloseProfileDropdownMenu();
       logout();
       navigate("/");
     }
@@ -96,11 +98,11 @@ function MainHeader(props) {
     )
       setNavBarItem("Manga");
     else if (location.pathname.startsWith("/login")) setNavBarItem("Log In");
-    else if (
-      location.pathname.startsWith("/") ||
-      location.pathname.startsWith("/home")
-    )
+    else if (location.pathname === "/" || location.pathname === "/home") {
       setNavBarItem("Home");
+    } else if (location.pathname === "/home/me") {
+      setNavBarItem("Profile");
+    }
   }, [location.pathname]);
 
   return (

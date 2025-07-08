@@ -1,8 +1,7 @@
 import styled from "@emotion/styled";
 import { Box, Modal, Typography } from "@mui/material";
-import CustomStyledDeleteAlertButton from "./CustomStyledDeleteAlertButton";
 import apiService from "../../services/apiService";
-import { useReviewAppDispatch } from "../../services/hooks";
+import CustomStyledDeleteAlertButton from "../HomePage/CustomStyledDeleteAlertButton";
 
 const CustomStyledDeleteAlert = styled(Box)(({ theme }) => ({
   position: "absolute",
@@ -44,47 +43,48 @@ const CustomStyledDeleteAlert = styled(Box)(({ theme }) => ({
   },
 }));
 
-function DeleteAlert(props) {
+function DeleteCollectionAlert(props) {
   const {
-    reviewId,
-    commentId,
-    openDeleteAlert,
-    handleCloseDeleteAlert,
-    setReviewList,
+    savedCollection,
+    openCollectionDeleteAlert,
+    handleCloseDeleteCollectionAlert,
+    setOpenAddToCollection,
   } = props;
-  const { updateComments } = useReviewAppDispatch();
 
-  const handleDeleteUserReview = async () => {
+  const handleDeleteCollection = async () => {
     try {
-      await apiService.delete(`/reviews/${reviewId}`);
-      handleCloseDeleteAlert();
-
-      const reviewListData = await apiService.get("/reviews");
-      setReviewList(reviewListData.reviewList);
+      console.log("Collection ID to delete:", savedCollection?._id);
+      await apiService.delete(`/collections/${savedCollection._id}`);
+      handleCloseDeleteCollectionAlert();
+      setOpenAddToCollection(false);
     } catch (error) {
       console.log(error);
     }
   };
 
-  const handleDeleteReviewComment = async () => {
-    try {
-      await apiService.delete(`/comments/${commentId}`);
-      handleCloseDeleteAlert();
+  // const handleDeleteReviewComment = async () => {
+  //   try {
+  //     await apiService.delete(`/comments/${commentId}`);
+  //     handleCloseDeleteCollectionAlert();
 
-      const commentListData = await apiService.get(`/comments?reviewId=${reviewId}`);
-      updateComments({ reviewId, comments: commentListData.commentList });
-    } catch (error) {
-      console.log(error);
-    }
-  };
+  //     const commentListData = await apiService.get(
+  //       `/comments?reviewId=${reviewId}`
+  //     );
+  //     updateComments({ reviewId, comments: commentListData.commentList });
+  //   } catch (error) {
+  //     console.log(error);
+  //   }
+  // };
 
   return (
-    <Modal open={openDeleteAlert} onClose={handleCloseDeleteAlert}>
+    <Modal
+      open={openCollectionDeleteAlert}
+      onClose={handleCloseDeleteCollectionAlert}
+      disableScrollLock
+    >
       <CustomStyledDeleteAlert>
         <Box className="delete-text">
-          <Typography>{`Are you sure you want to delete this ${
-            reviewId ? "review" : "comment"
-          }?`}</Typography>
+          <Typography>Are you sure you want to delete this item?</Typography>
         </Box>
 
         <Box
@@ -96,14 +96,12 @@ function DeleteAlert(props) {
             gap: "4px",
           }}
         >
-          <CustomStyledDeleteAlertButton onClick={handleCloseDeleteAlert}>
+          <CustomStyledDeleteAlertButton
+            onClick={handleCloseDeleteCollectionAlert}
+          >
             Cancel
           </CustomStyledDeleteAlertButton>
-          <CustomStyledDeleteAlertButton
-            onClick={
-              commentId ? handleDeleteReviewComment : handleDeleteUserReview
-            }
-          >
+          <CustomStyledDeleteAlertButton onClick={handleDeleteCollection}>
             Delete
           </CustomStyledDeleteAlertButton>
         </Box>
@@ -112,4 +110,4 @@ function DeleteAlert(props) {
   );
 }
 
-export default DeleteAlert;
+export default DeleteCollectionAlert;

@@ -28,6 +28,7 @@ const BASE_ROOT = {
   review: "reviews",
   anime: "animes",
   manga: "mangas",
+  user: "users",
 };
 
 const router = createBrowserRouter(
@@ -44,6 +45,7 @@ const router = createBrowserRouter(
       >
         <Route index element={<HomePage />} />
         <Route path="me" element={<ProfilePage />} />
+        {/* <Route path={`${BASE_ROOT.user}/:userId`} element={<ProfilePage />} /> */}
         <Route
           path={`${BASE_ROOT.review}/editor`}
           element={<ReviewEditorPage />}

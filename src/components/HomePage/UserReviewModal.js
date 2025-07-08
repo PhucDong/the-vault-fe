@@ -5,7 +5,7 @@ import { useState } from "react";
 import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
 import getReviewDropdownMenu from "../../utils/getReviewDropdownMenu";
 import { useNavigate } from "react-router-dom";
-import DeleteAlert from "./DeleteAlert";
+import DeleteAlert from "./DeleteReviewAlert";
 import { RichTextReadOnly } from "mui-tiptap";
 import useExtensions from "../../hooks/useExtensions";
 import ReviewReactions from "./ReviewReactions";

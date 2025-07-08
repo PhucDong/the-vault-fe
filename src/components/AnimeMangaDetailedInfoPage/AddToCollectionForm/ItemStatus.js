@@ -1,31 +1,30 @@
 import {
   Box,
   Checkbox,
-  InputLabel,
   ListItemText,
   MenuItem,
   TextField,
-  // Typography,
 } from "@mui/material";
 import { useState } from "react";
 import KeyboardArrowRightIcon from "@mui/icons-material/KeyboardArrowRight";
-import { useLocation, useParams } from "react-router-dom";
-import { Add } from "@mui/icons-material";
-import AddToListFormLabel from "./AddToListFormLabel";
+import { useParams } from "react-router-dom";
+import AddToCollectionFormLabel from "./AddToCollectionFormLabel";
 
 function ItemStatus(props) {
-  const { itemStatusOption, setItemStatusOption, sx } = props;
+  const { itemStatusOption, setItemStatusOption, sx, item } = props;
+  // console.log("Item Status Option: ", itemStatusOption);
   const handleChangeItemStatusOption = (event) =>
     setItemStatusOption(event.target.value);
   const { animeId, mangaId } = useParams();
 
   const getStatusOptionList = () => {
-    if (animeId) {
+    if (animeId || item.format === "TV") {
       return ["Watching", "Completed", "On Hold", "Dropped", "Plan To Watch"];
-    } else if (mangaId) {
+    } else if (mangaId || item.format === "Manga") {
       return ["Reading", "Completed", "On Hold", "Dropped", "Plan To Read"];
     }
   };
+  // console.log("Status Option List: ", getStatusOptionList());
 
   const [openAdvancedFilterDropdownMenu, setOpenAdvancedFilterDropdownMenu] =
     useState(false);
@@ -40,9 +39,9 @@ function ItemStatus(props) {
 
   return (
     <Box sx={sx}>
-      <AddToListFormLabel htmlFor="item-status-option">
+      <AddToCollectionFormLabel htmlFor="item-status-option">
         Status
-      </AddToListFormLabel>
+      </AddToCollectionFormLabel>
       <TextField
         id="item-status-option"
         required

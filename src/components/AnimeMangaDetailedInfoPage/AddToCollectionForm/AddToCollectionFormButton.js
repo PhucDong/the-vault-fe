@@ -1,6 +1,6 @@
 import { Button } from "@mui/material";
 
-function AddToListFormButton(props) {
+function AddToCollectionFormButton(props) {
   const { children, onClick } = props;
 
   return (
@@ -22,4 +22,4 @@ function AddToListFormButton(props) {
   );
 }
 
-export default AddToListFormButton;
+export default AddToCollectionFormButton;

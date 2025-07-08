@@ -11,7 +11,7 @@ import ReadMoreButton from "./ReadMoreButton";
 import { useMemo, useState } from "react";
 import LogInAlertModal from "./LogInAlertModal";
 import { useSelector } from "react-redux";
-import AddToListForm from "./AddToListForm/AddToListForm";
+import AddToCollectionForm from "./AddToCollectionForm/AddToCollectionForm";
 import { useNavigate } from "react-router-dom";
 import { selectIsUserLoggedIn } from "../../store/slices/authentication/authenticationSlice";
 // import { selectCollectionStatus } from "../../store/slices/collection/collectionSlice";
@@ -25,17 +25,17 @@ function DetailedAnimeMangaHeader({ item }) {
   const [expandedAccordion, setExpandedAccordion] = useState(false);
   const isUserLoggedIn = useSelector(selectIsUserLoggedIn);
   const [openLogInAlert, setOpenLogInAlert] = useState(false);
-  const [openAddToList, setOpenAddToList] = useState(false);
+  const [openAddToCollection, setOpenAddToCollection] = useState(false);
   const navigate = useNavigate();
   // const status = useSelector(selectCollectionStatus);
   const { isTokenExpired } = useUser();
   const { updateTitle, updateTitleId, updateFormat } = useReviewAppDispatch();
 
-  const handleOpenAddToList = () => {
+  const handleOpenAddToCollection = () => {
     if (!isUserLoggedIn) {
       setOpenLogInAlert(true);
     } else {
-      setOpenAddToList(true);
+      setOpenAddToCollection(true);
     }
   };
 
@@ -159,7 +159,7 @@ function DetailedAnimeMangaHeader({ item }) {
                 flexDirection: { xs: "row", sm: "column" },
               }}
             >
-              <CustomDetailedItemButton onClick={handleOpenAddToList}>
+              <CustomDetailedItemButton onClick={handleOpenAddToCollection}>
                 {savedCollection?.status || "Add to collection"}
               </CustomDetailedItemButton>
               <CustomDetailedItemButton onClick={handleOpenReview}>
@@ -170,11 +170,11 @@ function DetailedAnimeMangaHeader({ item }) {
                 openLogInAlert={openLogInAlert}
                 setOpenLogInAlert={setOpenLogInAlert}
               />
-              <AddToListForm
+              <AddToCollectionForm
                 item={item}
-                openAddToList={openAddToList}
+                openAddToCollection={openAddToCollection}
                 savedCollection={savedCollection}
-                setOpenAddToList={setOpenAddToList}
+                setOpenAddToCollection={setOpenAddToCollection}
               />
             </Box>
           </Box>

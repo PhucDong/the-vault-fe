@@ -7,6 +7,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import useLogout from "../../hooks/useLogout";
 import profileDropdownMenuList from "../../utils/profileDropdownMenuList";
+// import useUser from "../../hooks/useUser";
 
 function ProfileNavBarItem(props) {
   const { userProfilePic } = props;
@@ -19,6 +20,7 @@ function ProfileNavBarItem(props) {
   const open = Boolean(anchorEl);
   const navigate = useNavigate();
   const { logout } = useLogout();
+  // const { isTokenExpired } = useUser();
 
   const handleCloseProfileDropdownMenu = () => {
     setAnchorEl(null);
@@ -31,7 +33,11 @@ function ProfileNavBarItem(props) {
   const handleClickProfileDropdownMenuItem = (item) => {
     if (item === "Profile") {
       navigate("/home/me");
+      handleCloseProfileDropdownMenu();
+      // console.log("Current user id: ", isTokenExpired.currentUserId);
+      // navigate(`/users/${isTokenExpired.currentUserId}`);
     } else if (item === "Log out") {
+      handleCloseProfileDropdownMenu();
       logout();
       navigate("/");
     }

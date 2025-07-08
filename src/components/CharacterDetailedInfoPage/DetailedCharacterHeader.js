@@ -70,7 +70,7 @@ function DetailedCharacterHeader(props) {
         />
       </Box>
 
-      {/* Profile image, title, descriptio, & buttons */}
+      {/* Profile image, title, description, & buttons */}
       <CustomPaddingLayout
         sx={{
           width: "100%",

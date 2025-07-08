@@ -8,7 +8,7 @@ import useUser from "../hooks/useUser";
 function MainLayout() {
   const [navHeight, setNavHeight] = useState(0);
   const location = useLocation();
-  const { animeId, mangaId } = useParams();
+  const { animeId, mangaId, userId } = useParams();
   const { isTokenExpired } = useUser();
 
   return (
@@ -35,7 +35,9 @@ function MainLayout() {
           flexDirection: "column",
           gap:
             location.pathname.includes(animeId) ||
-            location.pathname.includes(mangaId)
+            location.pathname.includes(mangaId) ||
+            location.pathname.includes(userId) ||
+            location.pathname === "/home/me"
               ? 0
               : { xs: "52px", md: "60px", lg: "68px" },
         }}

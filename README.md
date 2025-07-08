@@ -1,6 +1,6 @@
 # The Vault FE
 
-Latest update: **15 June 2025**
+Latest update: **8 July 2025**
 
 ## Description
 
